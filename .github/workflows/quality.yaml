@@ -20,8 +20,9 @@ jobs:
         run: npm test --prefix frontend
       - name: Frontend | Playwright E2E
         run: |
-          npx playwright install --prefix frontend
-          npm run test:e2e --prefix frontend
+          cd frontend
+          npx playwright install --with-deps
+          npm run test:e2e
 
       # ---- AI service ----
       - name: AI Service | Dependencies
