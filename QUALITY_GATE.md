@@ -24,6 +24,7 @@ To prevent failed pushes from reaching main, enable these settings in GitHub:
 **Branch name pattern:** `main`
 
 **Required settings:**
+
 - [x] Require a pull request before merging
   - [x] Require approvals: 1
   - [x] Dismiss stale pull request approvals when new commits are pushed
@@ -41,6 +42,7 @@ To prevent failed pushes from reaching main, enable these settings in GitHub:
 ## Workflow
 
 ### Development Flow
+
 ```bash
 # 1. Create feature branch
 git checkout -b feature/your-feature
@@ -66,6 +68,7 @@ git push origin feature/your-feature
 ```
 
 ### Emergency Hotfix (Still requires passing tests)
+
 ```bash
 # 1. Create hotfix branch from main
 git checkout main
@@ -102,6 +105,7 @@ If you push and the Quality Gate fails:
 A pre-push Git hook is installed at `.git/hooks/pre-push` that runs quality checks before allowing a push. This prevents you from pushing broken code.
 
 **To bypass (NOT RECOMMENDED):**
+
 ```bash
 git push --no-verify
 ```
@@ -111,6 +115,7 @@ git push --no-verify
 ## CI/CD Pipeline Status
 
 You can check the status of your Quality Gate at:
+
 - GitHub Actions tab in the repository
 - PR checks section
 - Branch protection status
