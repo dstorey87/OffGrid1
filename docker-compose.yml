@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # MySQL Database for WordPress
@@ -7,10 +7,10 @@ services:
     container_name: offgrid-db
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpass}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME:-wordpress}
       MYSQL_USER: ${DB_USER:-wpuser}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-wppass}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
       - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -24,7 +24,9 @@ services:
 
   # WordPress Multisite CMS
   wordpress:
-    image: wordpress:6.4-php8.2-apache
+    build:
+      context: ./docker/wordpress
+      dockerfile: Dockerfile
     container_name: offgrid-wordpress
     restart: unless-stopped
     depends_on:
@@ -34,16 +36,10 @@ services:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
       WORDPRESS_DB_USER: ${DB_USER:-wpuser}
-      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-wppass}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      WP_ADMIN_USER: ${WP_ADMIN_USER:-admin}
+      WP_ADMIN_PASSWORD: ${WP_ADMIN_PASSWORD}
       WORDPRESS_CONFIG_EXTRA: |
-        /* Multisite */
-        define('WP_ALLOW_MULTISITE', true);
-        define('MULTISITE', true);
-        define('SUBDOMAIN_INSTALL', false);
-        define('DOMAIN_CURRENT_SITE', 'localhost');
-        define('PATH_CURRENT_SITE', '/');
-        define('SITE_ID_CURRENT_SITE', 1);
-        define('BLOG_ID_CURRENT_SITE', 1);
         /* Debug */
         define('WP_DEBUG', ${WP_DEBUG:-true});
         define('WP_DEBUG_LOG', true);
@@ -67,8 +63,6 @@ services:
     image: redis:7-alpine
     container_name: offgrid-redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
     networks:
@@ -88,12 +82,11 @@ services:
     restart: unless-stopped
     environment:
       REDIS_URL: redis://redis:6379
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
       ENVIRONMENT: ${ENVIRONMENT:-development}
       LOG_LEVEL: ${LOG_LEVEL:-info}
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./ai-service:/app
       - /app/__pycache__
@@ -118,12 +111,12 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: ${NODE_ENV:-development}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8001}
       NEXT_PUBLIC_WP_URL: ${NEXT_PUBLIC_WP_URL:-http://localhost:8080}
       WORDPRESS_API_URL: http://wordpress/wp-json
-      AI_SERVICE_URL: http://ai-service:8000
+      AI_SERVICE_URL: http://ai-service:8001
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./frontend:/app
       - /app/node_modules
