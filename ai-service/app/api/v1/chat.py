@@ -61,10 +61,10 @@ async def chat(request: ChatRequest, redis_client: redis.Redis = Depends(get_red
         # Get response from AI provider
         response = await ai_service.get_completion(
             messages=messages,
-            provider=request.provider,
+            provider=request.provider,  # type: ignore[arg-type]
             model=request.model,
-            temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            temperature=request.temperature,  # type: ignore[arg-type]
+            max_tokens=request.max_tokens,  # type: ignore[arg-type]
         )
 
         logger.info(

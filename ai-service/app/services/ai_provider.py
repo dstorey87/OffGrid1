@@ -70,7 +70,7 @@ class AIProviderService:
         try:
             response = await self.openai_client.chat.completions.create(
                 model=model,
-                messages=messages,
+                messages=messages,  # type: ignore[arg-type]
                 temperature=temperature,
                 max_tokens=max_tokens,
             )
@@ -80,9 +80,9 @@ class AIProviderService:
                 "provider": "openai",
                 "model": model,
                 "usage": {
-                    "prompt_tokens": response.usage.prompt_tokens,
-                    "completion_tokens": response.usage.completion_tokens,
-                    "total_tokens": response.usage.total_tokens,
+                    "prompt_tokens": response.usage.prompt_tokens,  # type: ignore[union-attr]
+                    "completion_tokens": response.usage.completion_tokens,  # type: ignore[union-attr]
+                    "total_tokens": response.usage.total_tokens,  # type: ignore[union-attr]
                 },
             }
         except Exception as e:
@@ -113,7 +113,7 @@ class AIProviderService:
                 chat_messages.append(msg)
 
         try:
-            response = await self.anthropic_client.messages.create(
+            response = await self.anthropic_client.messages.create(  # type: ignore[attr-defined]
                 model=model,
                 messages=chat_messages,
                 system=system_message,
