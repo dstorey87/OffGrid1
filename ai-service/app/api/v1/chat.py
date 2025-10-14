@@ -2,14 +2,15 @@
 Chat API endpoints
 """
 
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
 import logging
+from typing import List, Literal, Optional
 
-from app.services.ai_provider import AIProviderService
-from app.core.redis_client import get_redis_client
 import redis.asyncio as redis
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+
+from app.core.redis_client import get_redis_client
+from app.services.ai_provider import AIProviderService
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

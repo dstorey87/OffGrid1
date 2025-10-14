@@ -2,8 +2,10 @@
 Redis client for caching and rate limiting
 """
 
-import redis.asyncio as redis
 from typing import Optional
+
+import redis.asyncio as redis
+
 from app.core.config import settings
 
 _redis_client: Optional[redis.Redis] = None

@@ -2,10 +2,11 @@
 AI Provider Service - handles communication with different AI providers
 """
 
-from typing import List, Dict, Any, Optional
 import logging
-from openai import AsyncOpenAI
+from typing import Any, Dict, List, Optional
+
 from anthropic import AsyncAnthropic
+from openai import AsyncOpenAI
 
 from app.core.config import settings
 

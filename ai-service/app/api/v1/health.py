@@ -2,10 +2,12 @@
 Health check endpoints
 """
 
-from fastapi import APIRouter, Depends
 from datetime import datetime
-from app.core.redis_client import get_redis_client
+
 import redis.asyncio as redis
+from fastapi import APIRouter, Depends
+
+from app.core.redis_client import get_redis_client
 
 router = APIRouter()
 

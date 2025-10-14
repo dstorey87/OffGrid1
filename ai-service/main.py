@@ -3,13 +3,14 @@ FastAPI AI Service for OffGrid Platform
 Provides chat proxy for multiple AI providers (OpenAI, Anthropic)
 """
 
+import logging
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-import logging
 
-from app.core.config import settings
 from app.api.v1 import chat, health
+from app.core.config import settings
 from app.core.redis_client import get_redis_client
 
 # Configure logging
