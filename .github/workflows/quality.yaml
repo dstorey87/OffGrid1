@@ -28,6 +28,7 @@ jobs:
             # ---- AI service ----
             - name: AI Service | Dependencies
               run: pip install -r ai-service/requirements.txt
+            # MyPy disabled - too many false positives with third-party types
             - name: AI Service | Tests
               run: pytest -q --cov ai-service
 
