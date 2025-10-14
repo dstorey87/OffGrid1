@@ -3,7 +3,7 @@ FastAPI AI Service for OffGrid Platform
 Provides chat proxy for multiple AI providers (OpenAI, Anthropic)
 """
 
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import logging
