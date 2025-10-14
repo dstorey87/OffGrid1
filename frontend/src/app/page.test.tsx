@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Home from '../page';
+import Home from './page';
 
 // Mock the theme-toggle component
 jest.mock('@/components/theme-toggle', () => ({
