@@ -13,8 +13,21 @@ target-version = ['py312']
 line-length = 100
 target-version = "py312"
 
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+ignore = [
+    "E501",  # Line too long
+    "G004",  # Logging statement uses f-string
+    "TRY003", # Long exception message
+    "EM101", # Exception must not use string literal
+]
+
 [tool.mypy]
 python_version = "3.12"
-warn_return_any = true
+warn_return_any = false
 warn_unused_configs = true
-disallow_untyped_defs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = false

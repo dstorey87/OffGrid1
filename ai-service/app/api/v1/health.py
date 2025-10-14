@@ -2,10 +2,12 @@
 Health check endpoints
 """
 
-from fastapi import APIRouter, Depends
 from datetime import datetime
-from app.core.redis_client import get_redis_client
+
 import redis.asyncio as redis
+from fastapi import APIRouter, Depends
+
+from app.core.redis_client import get_redis_client
 
 router = APIRouter()
 
@@ -21,14 +23,12 @@ async def health_check(redis_client: redis.Redis = Depends(get_redis_client)):
         await redis_client.ping()
     except Exception as e:
         redis_status = f"unhealthy: {str(e)}"
-    
+
     return {
         "status": "healthy" if redis_status == "healthy" else "degraded",
         "timestamp": datetime.utcnow().isoformat(),
         "service": "ai-service",
-        "dependencies": {
-            "redis": redis_status
-        }
+        "dependencies": {"redis": redis_status},
     }
 
 

@@ -1,0 +1,22 @@
+[MESSAGES CONTROL]
+# Disable overly strict warnings for development
+disable=
+    C0111,  # missing-docstring
+    C0103,  # invalid-name
+    W1203,  # logging-fstring-interpolation (use lazy %)
+    W0703,  # broad-except (catching Exception is sometimes needed)
+    W0603,  # global-statement (needed for singletons like Redis)
+    R0801,  # duplicate-code
+    R0903,  # too-few-public-methods
+    C0114,  # missing-module-docstring
+    C0115,  # missing-class-docstring
+    C0116,  # missing-function-docstring
+    W0621,  # redefined-outer-name (common in fixtures)
+    R0913,  # too-many-arguments
+    R1705,  # no-else-return
+
+[BASIC]
+good-names=i,j,k,ex,_,e,app
+
+[FORMAT]
+max-line-length=100

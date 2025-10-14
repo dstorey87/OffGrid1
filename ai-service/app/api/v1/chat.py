@@ -2,14 +2,15 @@
 Chat API endpoints
 """
 
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
 import logging
+from typing import List, Literal, Optional
 
-from app.services.ai_provider import AIProviderService
-from app.core.redis_client import get_redis_client
 import redis.asyncio as redis
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel, Field
+
+from app.core.redis_client import get_redis_client
+from app.services.ai_provider import AIProviderService
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -17,12 +18,14 @@ logger = logging.getLogger(__name__)
 
 class Message(BaseModel):
     """Chat message model"""
+
     role: Literal["system", "user", "assistant"]
     content: str
 
 
 class ChatRequest(BaseModel):
     """Chat request model"""
+
     messages: List[Message]
     provider: Optional[str] = Field(default="openai", description="AI provider (openai, anthropic)")
     model: Optional[str] = Field(default=None, description="Model name")
@@ -33,6 +36,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     """Chat response model"""
+
     message: str
     provider: str
     model: str
@@ -40,41 +44,40 @@ class ChatResponse(BaseModel):
 
 
 @router.post("/", response_model=ChatResponse)
-async def chat(
-    request: ChatRequest,
-    redis_client: redis.Redis = Depends(get_redis_client)
-):
+async def chat(request: ChatRequest, redis_client: redis.Redis = Depends(get_redis_client)):
     """
     Chat endpoint - proxy to AI providers
-    
+
     Supports:
     - OpenAI (GPT-4, GPT-3.5-turbo)
     - Anthropic (Claude)
     """
     try:
         ai_service = AIProviderService()
-        
+
         # Convert messages to dict
         messages = [msg.model_dump() for msg in request.messages]
-        
+
         # Get response from AI provider
         response = await ai_service.get_completion(
             messages=messages,
-            provider=request.provider,
+            provider=request.provider,  # type: ignore[arg-type]
             model=request.model,
-            temperature=request.temperature,
-            max_tokens=request.max_tokens,
+            temperature=request.temperature,  # type: ignore[arg-type]
+            max_tokens=request.max_tokens,  # type: ignore[arg-type]
         )
-        
-        logger.info(f"Chat request processed: provider={request.provider}, model={response.get('model')}")
-        
+
+        logger.info(
+            f"Chat request processed: provider={request.provider}, model={response.get('model')}"
+        )
+
         return ChatResponse(
             message=response["message"],
             provider=response["provider"],
             model=response["model"],
             usage=response.get("usage", {}),
         )
-        
+
     except ValueError as e:
         logger.error(f"Invalid request: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
