@@ -36,6 +36,14 @@ const calculatorCategories = [
         popular: true,
       },
       {
+        name: 'Water Independence Build Guide',
+        description: 'Complete construction plans, shopping list & diagrams for water independence',
+        href: '/water-independence-guide',
+        difficulty: 'Medium',
+        time: '10 min',
+        popular: true,
+      },
+      {
         name: 'Rainwater Harvesting Calculator',
         description: 'Calculate cistern size, collection area, and annual water yield',
         href: '/green-calculators/rainwater-harvesting',

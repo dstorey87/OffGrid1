@@ -1,1122 +1,1504 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ExternalLink, ShoppingCart, Wrench, Ruler, Edit, MapPin } from 'lucide-react';
+
+type Region = 'uk' | 'portugal' | 'us';
+
+interface Supplier {
+  name: string;
+  location: string;
+  website?: string;
+  phone?: string;
+  notes: string;
+}
+
+interface RegionConfig {
+  currency: string;
+  currencySymbol: string;
+  lengthUnit: string;
+  volumeUnit: string;
+  amazonDomain: string;
+  IBCPrice: number;
+  gutterPrice: number;
+  pumpPrice: number;
+  linerPricePerSqM: number;
+  cisternPrice: number;
+  excavationPricePerCubicM: number;
+  localSuppliers?: Record<string, Supplier[]>;
+}
+
+const regionConfigs: Record<Region, RegionConfig> = {
+  uk: {
+    currency: 'GBP',
+    currencySymbol: '£',
+    lengthUnit: 'm',
+    volumeUnit: 'litres',
+    amazonDomain: 'amazon.co.uk',
+    IBCPrice: 65,
+    gutterPrice: 15,
+    pumpPrice: 120,
+    linerPricePerSqM: 12,
+    cisternPrice: 12000,
+    excavationPricePerCubicM: 18,
+  },
+  portugal: {
+    currency: 'EUR',
+    currencySymbol: '€',
+    lengthUnit: 'm',
+    volumeUnit: 'litres',
+    amazonDomain: 'amazon.es',
+    IBCPrice: 35, // Local used totes from farms
+    gutterPrice: 8, // Leroy Merlin Portugal
+    pumpPrice: 85, // Local agriculture suppliers
+    linerPricePerSqM: 7, // Direct from wholesalers
+    cisternPrice: 6500, // Local concrete suppliers
+    excavationPricePerCubicM: 12, // Local excavator hire DIY
+    localSuppliers: {
+      ibcTotes: [
+        {
+          name: 'Facebook Marketplace Central Portugal',
+          location: 'Coimbra, Leiria, Castelo Branco area',
+          notes: 'Used 1000L food-grade IBCs €25-40. Search "IBC 1000L" or "Deposito 1000L"',
+        },
+        {
+          name: 'OLX Portugal',
+          location: 'Nacional',
+          website: 'olx.pt',
+          notes: 'Used IBCs €30-50, check food-grade certification',
+        },
+        {
+          name: 'Local Olive Oil/Wine Producers',
+          location: 'Your area',
+          notes: 'Ask wineries and olive oil mills - they often sell used tanks cheap (€20-35)',
+        },
+      ],
+      building: [
+        {
+          name: 'Leroy Merlin',
+          location: 'Coimbra, Leiria',
+          website: 'leroymerlin.pt',
+          phone: '+351 239 801 900',
+          notes: 'PVC gutters €6-10/m, downspouts, fittings. Quality materials.',
+        },
+        {
+          name: 'Bricomarché',
+          location: 'Multiple locations',
+          website: 'bricomarche.pt',
+          notes: 'Cheaper alternative for PVC plumbing, gutters €5-8/m',
+        },
+        {
+          name: 'Ferreira & Santos',
+          location: 'Regional builders merchants',
+          notes: 'Wholesale prices if buying bulk. Timber, cement, aggregate.',
+        },
+      ],
+      pond: [
+        {
+          name: 'Geoplastic',
+          location: 'Santarém',
+          website: 'geoplastic.pt',
+          phone: '+351 243 329 030',
+          notes: 'EPDM liner €5-8/m² for bulk orders. Geotextile underlay.',
+        },
+        {
+          name: 'Agriloja',
+          location: 'Multiple agricultural stores',
+          website: 'agriloja.pt',
+          notes: 'Agricultural pond liners, cheaper quality €4-6/m²',
+        },
+        {
+          name: 'Local Excavator Hire',
+          location: 'Your area',
+          notes: 'Mini-digger hire €80-120/day. Ask local farmers for contacts. Much cheaper than contractors.',
+        },
+      ],
+      pumps: [
+        {
+          name: 'Agriloja / Casa do Agricultor',
+          location: 'Regional',
+          notes: '12V solar pumps €70-100. Agricultural irrigation equipment.',
+        },
+        {
+          name: 'AliExpress',
+          location: 'Online (ships to PT)',
+          website: 'aliexpress.com',
+          notes: '12V solar pumps €40-60 (slower shipping, but huge savings)',
+        },
+      ],
+    },
+  },
+  us: {
+    currency: 'USD',
+    currencySymbol: '$',
+    lengthUnit: 'ft',
+    volumeUnit: 'gallons',
+    amazonDomain: 'amazon.com',
+    IBCPrice: 80,
+    gutterPrice: 18,
+    pumpPrice: 130,
+    linerPricePerSqM: 15,
+    cisternPrice: 13000,
+    excavationPricePerCubicM: 25,
+  },
+};
+
+interface ShoppingItem {
+  id: string;
+  name: string;
+  searchTerm: string;
+  quantity: number;
+  price: number;
+  category: string;
+}
+
+interface CustomPrices {
+  [key: string]: number | null;
+}
 
 export default function WaterIndependenceGuide() {
+  const [region, setRegion] = useState<Region>('uk');
+  const [customPrices, setCustomPrices] = useState<CustomPrices>({});
+  const [editMode, setEditMode] = useState(false);
+  const [showLocalSuppliers, setShowLocalSuppliers] = useState(false);
+  const config = regionConfigs[region];
+
+  const formatVolume = (litres: number) => {
+    if (region === 'us') {
+      return `${Math.round(litres * 0.264172).toLocaleString()} gallons`;
+    }
+    return `${litres.toLocaleString()} litres`;
+  };
+
+  const formatLength = (metres: number) => {
+    if (region === 'us') {
+      return `${(metres * 3.281).toFixed(1)} ft`;
+    }
+    return `${metres} m`;
+  };
+
+  const formatArea = (sqMetres: number) => {
+    if (region === 'us') {
+      return `${Math.round(sqMetres * 10.764)} sq ft`;
+    }
+    return `${sqMetres} m²`;
+  };
+
+  const formatPrice = (amount: number) => {
+    return `${config.currencySymbol}${amount.toLocaleString()}`;
+  };
+
+  const getAmazonLink = (searchTerm: string) => {
+    return `https://www.${config.amazonDomain}/s?k=${encodeURIComponent(searchTerm)}`;
+  };
+
+  const getPrice = (itemId: string, defaultPrice: number): number => {
+    const custom = customPrices[itemId];
+    return custom !== undefined && custom !== null ? custom : defaultPrice;
+  };
+
+  const handlePriceChange = (itemId: string, value: string) => {
+    const numValue = value === '' ? null : parseFloat(value);
+    setCustomPrices((prev) => ({ ...prev, [itemId]: numValue }));
+  };
+
+  const shoppingList: ShoppingItem[] = [
+    {
+      id: 'ibc',
+      name: 'IBC Totes (1000L)',
+      searchTerm: '1000L IBC water tank food grade',
+      quantity: 50,
+      price: getPrice('ibc', config.IBCPrice),
+      category: 'storage',
+    },
+    {
+      id: 'gutter',
+      name: 'Guttering System',
+      searchTerm: 'PVC gutter system',
+      quantity: 100, // metres
+      price: getPrice('gutter', config.gutterPrice),
+      category: 'collection',
+    },
+    {
+      id: 'pump',
+      name: 'Solar Water Pump',
+      searchTerm: '12V solar submersible water pump',
+      quantity: 2,
+      price: getPrice('pump', config.pumpPrice),
+      category: 'equipment',
+    },
+    {
+      id: 'liner',
+      name: 'EPDM Pond Liner',
+      searchTerm: 'EPDM pond liner rubber',
+      quantity: 900, // sq metres
+      price: getPrice('liner', config.linerPricePerSqM),
+      category: 'pond',
+    },
+    {
+      id: 'firstFlush',
+      name: 'First Flush Diverter',
+      searchTerm: 'rainwater first flush diverter',
+      quantity: 6,
+      price: getPrice('firstFlush', 45),
+      category: 'collection',
+    },
+    {
+      id: 'ballValve',
+      name: 'Ball Valves (2" BSP)',
+      searchTerm: '2 inch ball valve water tank',
+      quantity: 60,
+      price: getPrice('ballValve', 8),
+      category: 'plumbing',
+    },
+    {
+      id: 'connectors',
+      name: 'Hose Connectors Kit',
+      searchTerm: 'IBC tote connection kit',
+      quantity: 10,
+      price: getPrice('connectors', 25),
+      category: 'plumbing',
+    },
+    {
+      id: 'floatValve',
+      name: 'Float Valve',
+      searchTerm: 'water tank float valve',
+      quantity: 6,
+      price: getPrice('floatValve', 15),
+      category: 'plumbing',
+    },
+    {
+      id: 'excavation',
+      name: 'Pond Excavation',
+      searchTerm: 'mini digger hire',
+      quantity: 3600, // cubic metres
+      price: getPrice('excavation', config.excavationPricePerCubicM),
+      category: 'pond',
+    },
+    {
+      id: 'geotextile',
+      name: 'Geotextile Underlay',
+      searchTerm: 'geotextile fabric pond',
+      quantity: 900, // sq metres
+      price: getPrice('geotextile', 2),
+      category: 'pond',
+    },
+    {
+      id: 'timber',
+      name: 'Timber & Hardware (IBC racks)',
+      searchTerm: 'pressure treated timber posts',
+      quantity: 1,
+      price: getPrice('timber', 1200),
+      category: 'storage',
+    },
+    {
+      id: 'pipes',
+      name: 'Pipes & Fittings',
+      searchTerm: 'PVC pipe fittings',
+      quantity: 1,
+      price: getPrice('pipes', 800),
+      category: 'plumbing',
+    },
+  ];
+
+  const totalMaterialsCost = shoppingList.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
-        {/* Header */}
+        {/* Header with Region Selector */}
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-6xl">
             Complete Water Independence
-            <span className="block text-primary">Visual Guide & Math Breakdown</span>
+            <span className="block text-primary">Build Plans, Shopping List & Diagrams</span>
           </h1>
           <p className="mx-auto max-w-3xl text-xl text-muted-foreground">
-            Real calculations for 4-person family + 3-acre farm in Portugal
+            Detailed construction guide for 4-person family + 3-acre farm
           </p>
+
+          {/* Region Selector */}
+          <div className="mt-8 flex justify-center gap-3">
+            <Button
+              variant={region === 'uk' ? 'default' : 'outline'}
+              onClick={() => setRegion('uk')}
+              size="lg"
+            >
+              🇬🇧 UK ({config.currencySymbol}, metres)
+            </Button>
+            <Button
+              variant={region === 'portugal' ? 'default' : 'outline'}
+              onClick={() => setRegion('portugal')}
+              size="lg"
+            >
+              🇵🇹 Portugal ({config.currencySymbol}, metros)
+            </Button>
+            <Button
+              variant={region === 'us' ? 'default' : 'outline'}
+              onClick={() => setRegion('us')}
+              size="lg"
+            >
+              🇺🇸 USA ({config.currencySymbol}, feet)
+            </Button>
+          </div>
+
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <Badge variant="outline">📊 Complete Math</Badge>
-            <Badge variant="outline">🎨 Visual Diagrams</Badge>
-            <Badge variant="outline">💡 Creative Solutions</Badge>
+            <Badge variant="outline">
+              <ShoppingCart className="mr-1 h-3 w-3" />
+              Shopping Links
+            </Badge>
+            <Badge variant="outline">
+              <Ruler className="mr-1 h-3 w-3" />
+              Detailed Measurements
+            </Badge>
+            <Badge variant="outline">
+              <Wrench className="mr-1 h-3 w-3" />
+              Build Instructions
+            </Badge>
           </div>
         </div>
 
-        {/* The Math Breakdown */}
-        <Card className="mb-12 border-2 border-primary">
-          <CardHeader className="bg-primary/5">
-            <CardTitle className="text-2xl">📐 The Math Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-8 pt-6">
-            {/* Annual Water Needs */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold text-blue-600">1️⃣ Annual Water Requirements</h3>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="rounded-lg bg-blue-50 p-4">
-                  <h4 className="mb-3 font-semibold text-blue-900">🏠 Household (4 people)</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Drinking/Cooking:</span>
-                      <span className="font-mono">4 × 20L × 365d = 29,200L</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Bathing/Showers:</span>
-                      <span className="font-mono">4 × 80L × 365d = 116,800L</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Toilets (low-flush):</span>
-                      <span className="font-mono">4 × 30L × 365d = 43,800L</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Laundry/Cleaning:</span>
-                      <span className="font-mono">4 × 20L × 365d = 29,200L</span>
-                    </div>
-                    <div className="flex justify-between border-t-2 border-blue-900 pt-2 font-bold text-blue-900">
-                      <span>Household Total:</span>
-                      <span className="font-mono">219,000L/year</span>
-                    </div>
-                    <div className="mt-2 text-xs text-blue-700">
-                      💡 With moderate conservation (low-flow): <strong>164,250L/year</strong>
-                      <br />
-                      💧 With aggressive conservation (composting toilet):{' '}
-                      <strong>120,450L/year</strong>
-                    </div>
-                  </div>
+        {/* System Overview */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold">System Overview</h2>
+          <Card>
+            <CardContent className="p-6">
+              <div className="grid gap-6 md:grid-cols-3">
+                <div className="rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                  <h3 className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+                    Annual Water Needs
+                  </h3>
+                  <p className="text-3xl font-bold text-blue-600">{formatVolume(2559000)}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {formatVolume(219000)} household + {formatVolume(2340000)} farm
+                  </p>
                 </div>
-
-                <div className="rounded-lg bg-green-50 p-4">
-                  <h4 className="mb-3 font-semibold text-green-900">
-                    🌾 Farm (3 acres = 12,140m²)
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Peak Season (May-Sept, 20 weeks):</span>
-                      <span className="font-mono">3 × 30,000L × 20 = 1,800,000L</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Shoulder Season (Mar-Apr, Oct, 12 weeks):</span>
-                      <span className="font-mono">3 × 15,000L × 12 = 540,000L</span>
-                    </div>
-                    <div className="flex justify-between border-t-2 border-green-900 pt-2 font-bold text-green-900">
-                      <span>Farm Total:</span>
-                      <span className="font-mono">2,340,000L/year</span>
-                    </div>
-                    <div className="mt-2 text-xs text-green-700">
-                      💡 With drip irrigation (90% efficiency):{' '}
-                      <strong>2,600,000L/year needed</strong>
-                      <br />
-                      🌊 With flood irrigation (50% efficiency):{' '}
-                      <strong>4,680,000L/year needed</strong>
-                    </div>
-                  </div>
+                <div className="rounded-lg bg-green-50 p-4 dark:bg-green-950">
+                  <h3 className="mb-2 font-semibold text-green-900 dark:text-green-100">
+                    Storage Required
+                  </h3>
+                  <p className="text-3xl font-bold text-green-600">{formatVolume(1050000)}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Accounts for dry season deficit
+                  </p>
+                </div>
+                <div className="rounded-lg bg-purple-50 p-4 dark:bg-purple-950">
+                  <h3 className="mb-2 font-semibold text-purple-900 dark:text-purple-100">
+                    Total System Cost
+                  </h3>
+                  <p className="text-3xl font-bold text-purple-600">{formatPrice(totalMaterialsCost)}</p>
+                  <p className="mt-2 text-sm text-muted-foreground">Materials only (DIY)</p>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              <div className="mt-4 rounded-lg border-4 border-orange-400 bg-orange-50 p-6 text-center">
-                <div className="text-3xl font-bold text-orange-900">
-                  TOTAL ANNUAL NEED: 2,559,000 Liters
-                </div>
-                <div className="mt-2 text-lg text-orange-700">
-                  = 2,559 cubic meters = 676,000 gallons = 7,011 liters/day average
-                </div>
-              </div>
+        {/* Complete Shopping List */}
+        <section className="mb-16">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-3xl font-bold">
+              <ShoppingCart className="mb-1 inline h-8 w-8 text-primary" /> Complete Shopping List
+            </h2>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setEditMode(!editMode)}
+                variant={editMode ? 'default' : 'outline'}
+                size="sm"
+              >
+                <Edit className="mr-2 h-4 w-4" />
+                {editMode ? 'Done Editing' : 'Edit Prices'}
+              </Button>
+              {region === 'portugal' && config.localSuppliers && (
+                <Button
+                  onClick={() => setShowLocalSuppliers(!showLocalSuppliers)}
+                  variant={showLocalSuppliers ? 'default' : 'outline'}
+                  size="sm"
+                >
+                  <MapPin className="mr-2 h-4 w-4" />
+                  {showLocalSuppliers ? 'Hide' : 'Show'} Local Suppliers
+                </Button>
+              )}
             </div>
-
-            {/* Rainfall Collection Reality */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold text-purple-600">
-                2️⃣ Portugal Rainfall Collection (Lisbon/Central Region)
-              </h3>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="rounded-lg bg-purple-50 p-4">
-                  <h4 className="mb-3 font-semibold text-purple-900">☔ Annual Rainfall Pattern</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span>Annual Rainfall:</span>
-                      <span className="font-mono font-bold">750mm</span>
-                    </div>
-                    <div className="mt-3 space-y-1 border-t pt-2">
-                      <div className="flex items-center justify-between">
-                        <span>Oct-May (Wet Season):</span>
-                        <span className="font-mono text-blue-600">650mm (87%)</span>
-                      </div>
-                      <div className="h-3 overflow-hidden rounded bg-gray-200">
-                        <div className="h-full w-[87%] bg-blue-500"></div>
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span>Jun-Sep (Dry Season):</span>
-                        <span className="font-mono text-orange-600">100mm (13%)</span>
-                      </div>
-                      <div className="h-3 overflow-hidden rounded bg-gray-200">
-                        <div className="h-full w-[13%] bg-orange-500"></div>
-                      </div>
-                    </div>
-                  </div>
+          </div>
+          <Card>
+            <CardContent className="p-6">
+              {editMode && (
+                <div className="mb-4 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                  <p className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                    ✏️ <strong>Custom Pricing:</strong> Enter your own prices below. Use 0 for
+                    materials you already have. Leave blank to use default pricing.
+                  </p>
                 </div>
-
-                <div className="rounded-lg bg-purple-50 p-4">
-                  <h4 className="mb-3 font-semibold text-purple-900">
-                    🏠 Collection from 200m² Roof
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Gross Rainfall:</span>
-                      <span className="font-mono">200m² × 750mm = 150,000L</span>
-                    </div>
-                    <div className="flex justify-between border-b pb-1">
-                      <span>Collection Loss (20%):</span>
-                      <span className="font-mono text-red-600">-30,000L</span>
-                    </div>
-                    <div className="flex justify-between border-t-2 pt-2 font-bold text-purple-900">
-                      <span>Net Collection:</span>
-                      <span className="font-mono">120,000L/year</span>
-                    </div>
-                    <div className="mt-3 rounded bg-red-100 p-2 text-center text-xs font-bold text-red-900">
-                      ⚠️ COVERS ONLY 4.7% OF TOTAL NEED!
-                    </div>
-                  </div>
-                </div>
+              )}
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b-2">
+                      <th className="p-3 text-left">Item</th>
+                      <th className="p-3 text-center">Quantity</th>
+                      <th className="p-3 text-right">Unit Price</th>
+                      <th className="p-3 text-right">Total</th>
+                      <th className="p-3 text-center">Shop</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shoppingList.map((item) => {
+                      const defaultPrice =
+                        item.id === 'ibc'
+                          ? config.IBCPrice
+                          : item.id === 'gutter'
+                            ? config.gutterPrice
+                            : item.id === 'pump'
+                              ? config.pumpPrice
+                              : item.id === 'liner'
+                                ? config.linerPricePerSqM
+                                : item.id === 'excavation'
+                                  ? config.excavationPricePerCubicM
+                                  : item.id === 'firstFlush'
+                                    ? 45
+                                    : item.id === 'ballValve'
+                                      ? 8
+                                      : item.id === 'connectors'
+                                        ? 25
+                                        : item.id === 'floatValve'
+                                          ? 15
+                                          : item.id === 'geotextile'
+                                            ? 2
+                                            : item.id === 'timber'
+                                              ? 1200
+                                              : 800;
+                      return (
+                        <tr key={item.id} className="border-b hover:bg-muted/50">
+                          <td className="p-3 font-medium">{item.name}</td>
+                          <td className="p-3 text-center font-mono">{item.quantity}</td>
+                          <td className="p-3 text-right">
+                            {editMode ? (
+                              <div className="flex items-center justify-end gap-2">
+                                <Input
+                                  type="number"
+                                  min="0"
+                                  step="0.01"
+                                  placeholder={formatPrice(defaultPrice)}
+                                  value={
+                                    customPrices[item.id] !== undefined &&
+                                    customPrices[item.id] !== null
+                                      ? String(customPrices[item.id])
+                                      : ''
+                                  }
+                                  onChange={(e) => handlePriceChange(item.id, e.target.value)}
+                                  className="w-24 text-right"
+                                />
+                              </div>
+                            ) : (
+                              <span className="font-mono">{formatPrice(item.price)}</span>
+                            )}
+                          </td>
+                          <td className="p-3 text-right font-mono font-semibold text-primary">
+                            {formatPrice(item.quantity * item.price)}
+                          </td>
+                          <td className="p-3 text-center">
+                            <Button size="sm" variant="outline" asChild>
+                              <a
+                                href={getAmazonLink(item.searchTerm)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <ExternalLink className="mr-1 h-3 w-3" />
+                                Amazon
+                              </a>
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr className="border-t-2 bg-muted/50 font-bold">
+                      <td colSpan={3} className="p-3 text-right">
+                        TOTAL MATERIALS:
+                      </td>
+                      <td className="p-3 text-right text-xl text-primary">
+                        {formatPrice(totalMaterialsCost)}
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-
-              <div className="mt-4 rounded-lg border-4 border-red-400 bg-red-50 p-4">
-                <div className="text-center font-bold text-red-900">
-                  <div className="text-2xl">🚨 ROOF AREA NEEDED FOR 100% COLLECTION:</div>
-                  <div className="mt-2 text-4xl">4,267 m² (45,941 sq ft)</div>
-                  <div className="mt-2 text-lg">= 21 average houses OR massive warehouse</div>
+              {region === 'portugal' && (
+                <div className="mt-4 rounded-lg bg-green-50 p-4 dark:bg-green-950">
+                  <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                    🇵🇹 <strong>Portugal Savings:</strong> These prices already reflect local
+                    suppliers (€35 used IBCs vs €75 Amazon). Click &quot;Show Local
+                    Suppliers&quot; to see where to buy!
+                  </p>
                 </div>
+              )}
+              <div className="mt-4 rounded-lg bg-amber-50 p-4 dark:bg-amber-950">
+                <p className="text-sm font-medium text-amber-900 dark:text-amber-100">
+                  💡 <strong>Pro Tip:</strong> Buy used IBC totes locally to save ~50%. Search
+                  Facebook Marketplace, Gumtree, or local farm supply stores for food-grade tanks.
+                </p>
               </div>
-            </div>
+            </CardContent>
+          </Card>
 
-            {/* Correct Storage Calculation */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold text-green-600">
-                3️⃣ CORRECT Storage Calculation (Key Insight!)
-              </h3>
-              <div className="rounded-lg bg-green-50 p-6">
-                <div className="mb-4 rounded bg-yellow-100 p-4 text-center">
-                  <div className="text-lg font-bold text-yellow-900">
-                    💡 KEY PRINCIPLE: You don&apos;t store the FULL YEAR of water!
-                  </div>
-                  <div className="mt-2 text-yellow-800">
-                    You only need to store enough to survive the DRY SEASON (Jun-Sep)
-                    <br />
-                    Because wet season (Oct-May) REPLENISHES your tanks!
-                  </div>
-                </div>
-
-                <div className="space-y-3 text-sm">
-                  <div className="rounded bg-white p-3">
-                    <div className="mb-2 font-semibold">Dry Season Usage (4 months):</div>
-                    <div className="font-mono">2,559,000L ÷ 12 months × 4 months = 853,000L</div>
-                  </div>
-
-                  <div className="rounded bg-white p-3">
-                    <div className="mb-2 font-semibold">
-                      Minus: Rain Collected During Dry Season:
-                    </div>
-                    <div className="font-mono">200m² × 100mm × 0.80 efficiency = 16,000L</div>
-                  </div>
-
-                  <div className="rounded bg-white p-3">
-                    <div className="mb-2 font-semibold">Net Storage Needed:</div>
-                    <div className="font-mono">853,000L - 16,000L = 837,000L</div>
-                  </div>
-
-                  <div className="rounded border-4 border-green-600 bg-green-100 p-4">
-                    <div className="text-center">
-                      <div className="text-xl font-bold text-green-900">
-                        ✅ RECOMMENDED STORAGE (with 25% buffer):
+          {/* Local Suppliers Section for Portugal */}
+          {region === 'portugal' && showLocalSuppliers && config.localSuppliers && (
+            <Card className="mt-6">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-6 w-6 text-green-600" />
+                  Local Suppliers in Central Portugal
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* IBC Totes Suppliers */}
+                  {config.localSuppliers.ibcTotes && (
+                    <div>
+                      <h3 className="mb-3 text-lg font-semibold text-blue-600">
+                        IBC Totes (€25-50 each)
+                      </h3>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {config.localSuppliers.ibcTotes.map((supplier, idx) => (
+                          <div
+                            key={idx}
+                            className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-950"
+                          >
+                            <h4 className="font-semibold text-blue-900 dark:text-blue-100">
+                              {supplier.name}
+                            </h4>
+                            <p className="mt-1 text-sm text-blue-700 dark:text-blue-300">
+                              📍 {supplier.location}
+                            </p>
+                            {supplier.website && (
+                              <a
+                                href={supplier.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex items-center text-sm text-blue-600 hover:underline dark:text-blue-400"
+                              >
+                                <ExternalLink className="mr-1 h-3 w-3" />
+                                Visit Website
+                              </a>
+                            )}
+                            {supplier.phone && (
+                              <p className="mt-1 text-sm font-mono text-blue-800 dark:text-blue-200">
+                                📞 {supplier.phone}
+                              </p>
+                            )}
+                            <p className="mt-2 text-xs text-blue-600 dark:text-blue-400">
+                              {supplier.notes}
+                            </p>
+                          </div>
+                        ))}
                       </div>
-                      <div className="mt-2 text-4xl font-bold text-green-900">
-                        ~1,050,000 Liters
-                      </div>
-                      <div className="mt-1 text-lg">(277,000 gallons)</div>
                     </div>
+                  )}
+
+                  {/* Building Materials Suppliers */}
+                  {config.localSuppliers.building && (
+                    <div>
+                      <h3 className="mb-3 text-lg font-semibold text-green-600">
+                        Gutters & Building Materials (€5-10/m)
+                      </h3>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {config.localSuppliers.building.map((supplier, idx) => (
+                          <div
+                            key={idx}
+                            className="rounded-lg border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-950"
+                          >
+                            <h4 className="font-semibold text-green-900 dark:text-green-100">
+                              {supplier.name}
+                            </h4>
+                            <p className="mt-1 text-sm text-green-700 dark:text-green-300">
+                              📍 {supplier.location}
+                            </p>
+                            {supplier.website && (
+                              <a
+                                href={supplier.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex items-center text-sm text-green-600 hover:underline dark:text-green-400"
+                              >
+                                <ExternalLink className="mr-1 h-3 w-3" />
+                                Visit Website
+                              </a>
+                            )}
+                            {supplier.phone && (
+                              <p className="mt-1 text-sm font-mono text-green-800 dark:text-green-200">
+                                📞 {supplier.phone}
+                              </p>
+                            )}
+                            <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                              {supplier.notes}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pond Materials Suppliers */}
+                  {config.localSuppliers.pond && (
+                    <div>
+                      <h3 className="mb-3 text-lg font-semibold text-purple-600">
+                        Pond Liner & Excavation (€4-8/m²)
+                      </h3>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {config.localSuppliers.pond.map((supplier, idx) => (
+                          <div
+                            key={idx}
+                            className="rounded-lg border-2 border-purple-200 bg-purple-50 p-4 dark:border-purple-800 dark:bg-purple-950"
+                          >
+                            <h4 className="font-semibold text-purple-900 dark:text-purple-100">
+                              {supplier.name}
+                            </h4>
+                            <p className="mt-1 text-sm text-purple-700 dark:text-purple-300">
+                              📍 {supplier.location}
+                            </p>
+                            {supplier.website && (
+                              <a
+                                href={supplier.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex items-center text-sm text-purple-600 hover:underline dark:text-purple-400"
+                              >
+                                <ExternalLink className="mr-1 h-3 w-3" />
+                                Visit Website
+                              </a>
+                            )}
+                            {supplier.phone && (
+                              <p className="mt-1 text-sm font-mono text-purple-800 dark:text-purple-200">
+                                📞 {supplier.phone}
+                              </p>
+                            )}
+                            <p className="mt-2 text-xs text-purple-600 dark:text-purple-400">
+                              {supplier.notes}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Pump Suppliers */}
+                  {config.localSuppliers.pumps && (
+                    <div>
+                      <h3 className="mb-3 text-lg font-semibold text-orange-600">
+                        Solar Water Pumps (€40-100)
+                      </h3>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        {config.localSuppliers.pumps.map((supplier, idx) => (
+                          <div
+                            key={idx}
+                            className="rounded-lg border-2 border-orange-200 bg-orange-50 p-4 dark:border-orange-800 dark:bg-orange-950"
+                          >
+                            <h4 className="font-semibold text-orange-900 dark:text-orange-100">
+                              {supplier.name}
+                            </h4>
+                            <p className="mt-1 text-sm text-orange-700 dark:text-orange-300">
+                              📍 {supplier.location}
+                            </p>
+                            {supplier.website && (
+                              <a
+                                href={supplier.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="mt-2 inline-flex items-center text-sm text-orange-600 hover:underline dark:text-orange-400"
+                              >
+                                <ExternalLink className="mr-1 h-3 w-3" />
+                                Visit Website
+                              </a>
+                            )}
+                            {supplier.phone && (
+                              <p className="mt-1 text-sm font-mono text-orange-800 dark:text-orange-200">
+                                📞 {supplier.phone}
+                              </p>
+                            )}
+                            <p className="mt-2 text-xs text-orange-600 dark:text-orange-400">
+                              {supplier.notes}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="mt-6 rounded-lg bg-yellow-50 p-4 dark:bg-yellow-950">
+                    <p className="text-sm font-medium text-yellow-900 dark:text-yellow-100">
+                      💰 <strong>Cost Comparison:</strong>
+                    </p>
+                    <ul className="mt-2 space-y-1 text-sm text-yellow-800 dark:text-yellow-200">
+                      <li>• IBC Totes: Amazon €75 → Local €35 (53% savings!)</li>
+                      <li>• Gutters: Amazon €12/m → Leroy Merlin €8/m (33% savings)</li>
+                      <li>• Pond Liner: Amazon €10/m² → Geoplastic €7/m² (30% savings)</li>
+                      <li>• Total Estimated Savings: ~€4,000-€6,000 using local suppliers</li>
+                    </ul>
                   </div>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          )}
+        </section>
 
-        {/* Visual System Diagrams */}
-        <Card className="mb-12 border-2 border-blue-500">
-          <CardHeader className="bg-blue-50">
-            <CardTitle className="text-2xl">🎨 System Diagrams & Visual Layouts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-8 pt-6">
-            {/* Diagram 1: The Problem */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold">Option 1: &quot;Roof Only&quot; Approach ❌</h3>
-              <div className="rounded-lg bg-gray-100 p-8">
-                <div className="mx-auto max-w-4xl">
-                  <div className="text-center text-sm font-semibold text-gray-600">
-                    IMPOSSIBLE SCENARIO - NEEDS 4,267m² ROOF
-                  </div>
-                  <svg viewBox="0 0 800 400" className="w-full">
-                    {/* Giant warehouse roof */}
-                    <rect
-                      x="50"
-                      y="120"
-                      width="700"
-                      height="200"
-                      fill="#8B4513"
-                      stroke="#654321"
-                      strokeWidth="3"
+        {/* COMPONENT 1: IBC Tote System */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold">
+            <Wrench className="mb-1 inline h-8 w-8 text-primary" /> Component 1: IBC Tote Bank
+          </h2>
+          <Card>
+            <CardHeader>
+              <CardTitle>50× 1000L IBC Totes = {formatVolume(50000)} Storage</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* Diagram */}
+                <div className="rounded-lg border-2 border-muted p-4">
+                  <h3 className="mb-4 font-semibold">Configuration Diagram</h3>
+                  <svg viewBox="0 0 600 400" className="w-full">
+                    {/* Ground */}
+                    <rect x="0" y="350" width="600" height="50" fill="#8b7355" />
+                    <text x="300" y="380" textAnchor="middle" fill="white" fontSize="14">
+                      Ground Level
+                    </text>
+
+                    {/* IBC Rack - 2 rows, 5 columns */}
+                    {[0, 1].map((row) =>
+                      [0, 1, 2, 3, 4].map((col) => {
+                        const x = 80 + col * 100;
+                        const y = 220 - row * 130;
+                        return (
+                          <g key={`${row}-${col}`}>
+                            {/* IBC Tote */}
+                            <rect
+                              x={x}
+                              y={y}
+                              width="80"
+                              height="100"
+                              fill="#4a90e2"
+                              stroke="#2563eb"
+                              strokeWidth="2"
+                              opacity="0.8"
+                            />
+                            {/* Cage frame */}
+                            <rect
+                              x={x}
+                              y={y}
+                              width="80"
+                              height="100"
+                              fill="none"
+                              stroke="#333"
+                              strokeWidth="1"
+                              strokeDasharray="4"
+                            />
+                            {/* Valve */}
+                            <circle cx={x + 40} cy={y + 105} r="4" fill="#e74c3c" />
+                          </g>
+                        );
+                      })
+                    )}
+
+                    {/* Connecting Pipes */}
+                    <line x1="80" y1="325" x2="560" y2="325" stroke="#666" strokeWidth="4" />
+                    <line x1="80" y1="195" x2="560" y2="195" stroke="#666" strokeWidth="4" />
+
+                    {/* Main Feed */}
+                    <line x1="300" y1="195" x2="300" y2="50" stroke="#2563eb" strokeWidth="6" />
+                    <text x="310" y="120" fontSize="12" fill="#2563eb" fontWeight="bold">
+                      To House
+                    </text>
+                    <circle cx="300" cy="50" r="8" fill="#2563eb" />
+
+                    {/* Dimensions */}
+                    <line
+                      x1="70"
+                      y1="90"
+                      x2="70"
+                      y2="220"
+                      stroke="#e74c3c"
+                      strokeWidth="1"
+                      markerStart="url(#arrowRed)"
+                      markerEnd="url(#arrowRed)"
                     />
-                    <polygon
-                      points="50,120 400,20 750,120"
-                      fill="#DC143C"
-                      stroke="#8B0000"
-                      strokeWidth="3"
+                    <text x="35" y="160" fontSize="12" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(2.4)}
+                    </text>
+
+                    <line
+                      x1="80"
+                      y1="360"
+                      x2="560"
+                      y2="360"
+                      stroke="#e74c3c"
+                      strokeWidth="1"
+                      markerStart="url(#arrowRed)"
+                      markerEnd="url(#arrowRed)"
                     />
-
-                    {/* Gutters */}
-                    <rect x="40" y="315" width="720" height="15" fill="#666" />
-                    <line x1="400" y1="330" x2="400" y2="370" stroke="#666" strokeWidth="8" />
-
-                    {/* Huge cistern */}
-                    <ellipse cx="400" cy="370" rx="150" ry="20" fill="#4169E1" opacity="0.5" />
-                    <rect
-                      x="250"
-                      y="370"
-                      width="300"
-                      height="25"
-                      fill="#4169E1"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <text
-                      x="400"
-                      y="387"
-                      textAnchor="middle"
-                      fontSize="16"
-                      fontWeight="bold"
-                      fill="#fff"
-                    >
-                      1,050,000L STORAGE
+                    <text x="290" y="385" fontSize="12" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(6)}
                     </text>
 
-                    {/* Labels */}
-                    <text
-                      x="400"
-                      y="230"
-                      textAnchor="middle"
-                      fontSize="24"
-                      fontWeight="bold"
-                      fill="#fff"
-                    >
-                      4,267m² WAREHOUSE
-                    </text>
-                    <text x="400" y="260" textAnchor="middle" fontSize="18" fill="#fff">
-                      (65m × 65m building)
-                    </text>
-
-                    {/* Cost */}
-                    <text
-                      x="400"
-                      y="50"
-                      textAnchor="middle"
-                      fontSize="20"
-                      fontWeight="bold"
-                      fill="#DC143C"
-                    >
-                      ❌ UNREALISTIC: €500,000+ for building alone
-                    </text>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Diagram 2: Hybrid Solution */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold">Option 2: Hybrid Collection System ✅</h3>
-              <div className="rounded-lg bg-gradient-to-b from-sky-100 to-green-100 p-8">
-                <div className="mx-auto max-w-4xl">
-                  <div className="text-center text-sm font-semibold text-green-700">
-                    REALISTIC SOLUTION - Multiple Collection Sources
-                  </div>
-                  <svg viewBox="0 0 800 600" className="w-full">
-                    {/* Sky */}
-                    <rect x="0" y="0" width="800" height="300" fill="#87CEEB" opacity="0.3" />
-
-                    {/* Rain clouds */}
-                    <circle cx="150" cy="40" r="25" fill="#ccc" />
-                    <circle cx="180" cy="40" r="30" fill="#ccc" />
-                    <circle cx="210" cy="40" r="25" fill="#ccc" />
-                    <circle cx="650" cy="60" r="25" fill="#ccc" />
-                    <circle cx="680" cy="60" r="30" fill="#ccc" />
-                    <circle cx="710" cy="60" r="25" fill="#ccc" />
-
-                    {/* Rain lines */}
-                    {[...Array(10)].map((_, i) => (
-                      <line
-                        key={i}
-                        x1={140 + i * 10}
-                        y1="70"
-                        x2={135 + i * 10}
-                        y2="110"
-                        stroke="#4169E1"
-                        strokeWidth="2"
-                        opacity="0.5"
-                      />
-                    ))}
-
-                    {/* House */}
-                    <rect
-                      x="80"
-                      y="180"
-                      width="120"
-                      height="80"
-                      fill="#D2691E"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <polygon
-                      points="80,180 140,140 200,180"
-                      fill="#8B0000"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <text x="140" y="225" textAnchor="middle" fontSize="12" fontWeight="bold">
-                      HOUSE
-                    </text>
-                    <text x="140" y="240" textAnchor="middle" fontSize="10">
-                      200m²
-                    </text>
-                    <text x="140" y="252" textAnchor="middle" fontSize="10" fill="#4169E1">
-                      120,000L
-                    </text>
-
-                    {/* Barn */}
-                    <rect
-                      x="250"
-                      y="160"
-                      width="180"
-                      height="100"
-                      fill="#8B4513"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <polygon
-                      points="250,160 340,120 430,160"
-                      fill="#DC143C"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <text x="340" y="210" textAnchor="middle" fontSize="14" fontWeight="bold">
-                      BARN
-                    </text>
-                    <text x="340" y="228" textAnchor="middle" fontSize="11">
-                      500m²
-                    </text>
-                    <text x="340" y="242" textAnchor="middle" fontSize="11" fill="#4169E1">
-                      300,000L
-                    </text>
-
-                    {/* Greenhouse */}
-                    <path
-                      d="M 480 180 Q 530 140 580 180 L 580 240 L 480 240 Z"
-                      fill="#90EE90"
-                      opacity="0.6"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <text x="530" y="215" textAnchor="middle" fontSize="12" fontWeight="bold">
-                      GREENHOUSE
-                    </text>
-                    <text x="530" y="230" textAnchor="middle" fontSize="10">
-                      200m²
-                    </text>
-
-                    {/* Downspouts */}
-                    <line x1="140" y1="260" x2="140" y2="300" stroke="#666" strokeWidth="4" />
-                    <line x1="340" y1="260" x2="340" y2="300" stroke="#666" strokeWidth="4" />
-                    <line x1="530" y1="240" x2="530" y2="300" stroke="#666" strokeWidth="4" />
-
-                    {/* Underground cistern */}
-                    <ellipse
-                      cx="250"
-                      cy="380"
-                      rx="100"
-                      ry="15"
-                      fill="#1E90FF"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <rect
-                      x="150"
-                      y="380"
-                      width="200"
-                      height="60"
-                      fill="#4169E1"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <ellipse
-                      cx="250"
-                      cy="440"
-                      rx="100"
-                      ry="15"
-                      fill="#00008B"
-                      stroke="#000"
-                      strokeWidth="2"
-                    />
-                    <text
-                      x="250"
-                      y="410"
-                      textAnchor="middle"
-                      fontSize="14"
-                      fontWeight="bold"
-                      fill="#fff"
-                    >
-                      UNDERGROUND
-                    </text>
-                    <text x="250" y="427" textAnchor="middle" fontSize="12" fill="#fff">
-                      100,000L Cistern
-                    </text>
-
-                    {/* IBC Totes */}
-                    {[...Array(8)].map((_, i) => (
-                      <g key={i}>
-                        <rect
-                          x={480 + (i % 4) * 35}
-                          y={340 + Math.floor(i / 4) * 50}
-                          width="30"
-                          height="40"
-                          fill="#4682B4"
-                          stroke="#000"
-                          strokeWidth="1.5"
-                        />
-                      </g>
-                    ))}
-                    <text x="550" y="445" textAnchor="middle" fontSize="11" fontWeight="bold">
-                      50× IBC Totes
-                    </text>
-                    <text x="550" y="458" textAnchor="middle" fontSize="10">
-                      50,000L
-                    </text>
-
-                    {/* Farm Pond */}
-                    <ellipse
-                      cx="600"
-                      cy="500"
-                      rx="120"
-                      ry="50"
-                      fill="#1E90FF"
-                      opacity="0.7"
-                      stroke="#2F4F4F"
-                      strokeWidth="3"
-                    />
-                    <text
-                      x="600"
-                      y="495"
-                      textAnchor="middle"
-                      fontSize="14"
-                      fontWeight="bold"
-                      fill="#fff"
-                    >
-                      FARM POND
-                    </text>
-                    <text x="600" y="512" textAnchor="middle" fontSize="12" fill="#fff">
-                      900,000L
-                    </text>
-
-                    {/* Arrows showing water flow */}
-                    <path
-                      d="M 140 300 L 180 350"
-                      stroke="#4169E1"
-                      strokeWidth="3"
-                      markerEnd="url(#arrowblue)"
-                    />
-                    <path
-                      d="M 340 300 L 300 350"
-                      stroke="#4169E1"
-                      strokeWidth="3"
-                      markerEnd="url(#arrowblue)"
-                    />
-                    <path
-                      d="M 530 300 L 560 440"
-                      stroke="#4169E1"
-                      strokeWidth="3"
-                      markerEnd="url(#arrowblue)"
-                    />
-
-                    {/* Arrow marker */}
+                    {/* Arrow markers */}
                     <defs>
                       <marker
-                        id="arrowblue"
+                        id="arrowRed"
                         markerWidth="10"
                         markerHeight="10"
-                        refX="9"
-                        refY="3"
+                        refX="5"
+                        refY="5"
                         orient="auto"
-                        markerUnits="strokeWidth"
                       >
-                        <path d="M0,0 L0,6 L9,3 z" fill="#4169E1" />
+                        <polygon points="0,0 10,5 0,10" fill="#e74c3c" />
                       </marker>
                     </defs>
 
-                    {/* Total at bottom */}
-                    <rect
-                      x="200"
-                      y="560"
-                      width="400"
-                      height="35"
-                      fill="#228B22"
-                      stroke="#000"
-                      strokeWidth="2"
-                      rx="5"
-                    />
-                    <text
-                      x="400"
-                      y="582"
-                      textAnchor="middle"
-                      fontSize="18"
-                      fontWeight="bold"
-                      fill="#fff"
-                    >
-                      TOTAL STORAGE: 1,050,000L ✅
+                    {/* Labels */}
+                    <text x="300" y="30" textAnchor="middle" fontSize="16" fontWeight="bold">
+                      2 Rows × 5 Columns = 10 Totes per Section
                     </text>
                   </svg>
                 </div>
-              </div>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
-                <div className="rounded-lg bg-blue-50 p-4">
-                  <h4 className="mb-2 font-bold text-blue-900">💧 Potable Water (Household)</h4>
-                  <p className="text-sm">Underground cistern with filtration</p>
-                  <p className="mt-2 font-mono text-lg font-bold text-blue-600">100,000L</p>
-                </div>
-                <div className="rounded-lg bg-green-50 p-4">
-                  <h4 className="mb-2 font-bold text-green-900">🚿 Non-Potable (Distribution)</h4>
-                  <p className="text-sm">IBC totes for easy access</p>
-                  <p className="mt-2 font-mono text-lg font-bold text-green-600">50,000L</p>
-                </div>
-                <div className="rounded-lg bg-teal-50 p-4">
-                  <h4 className="mb-2 font-bold text-teal-900">🌾 Farm Irrigation</h4>
-                  <p className="text-sm">Natural pond/reservoir</p>
-                  <p className="mt-2 font-mono text-lg font-bold text-teal-600">900,000L</p>
-                </div>
-              </div>
-            </div>
+                {/* Build Instructions */}
+                <div>
+                  <h3 className="mb-4 font-semibold">Build Instructions</h3>
+                  <ol className="space-y-3 text-sm">
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        1
+                      </span>
+                      <div>
+                        <strong>Prepare Level Ground:</strong> Clear {formatArea(36)} area,
+                        compact soil, lay 15cm gravel base for drainage.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        2
+                      </span>
+                      <div>
+                        <strong>Build Rack Structure:</strong> Use 100×100mm pressure-treated
+                        timber posts. Space {formatLength(1.2)} apart to support each IBC.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        3
+                      </span>
+                      <div>
+                        <strong>Install IBCs:</strong> Position totes in 2×5 grid. Each section =
+                        10 totes. Build 5 sections total = 50 totes.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        4
+                      </span>
+                      <div>
+                        <strong>Connect Plumbing:</strong> Install 2&quot; ball valve on each IBC
+                        bottom outlet. Connect to 50mm main pipe running length of rack.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        5
+                      </span>
+                      <div>
+                        <strong>Add Inlet System:</strong> Install 32mm pipe to top of each IBC
+                        from roof guttering. Add mesh filter (5mm) at each inlet.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        6
+                      </span>
+                      <div>
+                        <strong>Install Overflow:</strong> Add overflow pipe at 90cm height on each
+                        IBC, directing to pond or soakaway.
+                      </div>
+                    </li>
+                  </ol>
 
-            {/* Diagram 3: Farm Pond Cross-Section */}
-            <div>
-              <h3 className="mb-4 text-xl font-bold">Farm Pond Cross-Section Design</h3>
-              <div className="rounded-lg bg-gradient-to-b from-sky-200 to-amber-100 p-8">
-                <svg viewBox="0 0 800 400" className="w-full">
-                  {/* Ground level */}
-                  <rect x="0" y="200" width="800" height="200" fill="#8B7355" />
-                  <rect x="0" y="200" width="800" height="20" fill="#6B8E23" />
-
-                  {/* Pond excavation */}
-                  <path
-                    d="M 150 200 L 200 280 L 600 280 L 650 200 Z"
-                    fill="#1E90FF"
-                    opacity="0.8"
-                    stroke="#00008B"
-                    strokeWidth="3"
-                  />
-
-                  {/* Liner */}
-                  <path
-                    d="M 150 200 L 200 280 L 600 280 L 650 200"
-                    fill="none"
-                    stroke="#000"
-                    strokeWidth="2"
-                    strokeDasharray="5,5"
-                  />
-
-                  {/* Water level */}
-                  <line
-                    x1="200"
-                    y1="240"
-                    x2="600"
-                    y2="240"
-                    stroke="#fff"
-                    strokeWidth="2"
-                    opacity="0.6"
-                  />
-
-                  {/* Dimensions */}
-                  <line
-                    x1="150"
-                    y1="190"
-                    x2="650"
-                    y2="190"
-                    stroke="#000"
-                    strokeWidth="2"
-                    markerStart="url(#arrowleft)"
-                    markerEnd="url(#arrowright)"
-                  />
-                  <text x="400" y="180" textAnchor="middle" fontSize="16" fontWeight="bold">
-                    30m width
-                  </text>
-
-                  <line
-                    x1="670"
-                    y1="200"
-                    x2="670"
-                    y2="280"
-                    stroke="#000"
-                    strokeWidth="2"
-                    markerStart="url(#arrowup)"
-                    markerEnd="url(#arrowdown)"
-                  />
-                  <text x="710" y="245" fontSize="16" fontWeight="bold">
-                    4m depth
-                  </text>
-
-                  {/* Labels */}
-                  <text
-                    x="400"
-                    y="260"
-                    textAnchor="middle"
-                    fontSize="18"
-                    fontWeight="bold"
-                    fill="#fff"
-                  >
-                    900,000L Capacity
-                  </text>
-                  <text x="400" y="280" textAnchor="middle" fontSize="12" fill="#fff">
-                    30m × 30m × 4m deep
-                  </text>
-
-                  {/* Inlet pipe */}
-                  <rect x="100" y="195" width="50" height="10" fill="#666" />
-                  <text x="75" y="192" fontSize="12" fontWeight="bold">
-                    From Barn ↓
-                  </text>
-
-                  {/* Outlet pipe */}
-                  <rect x="250" y="275" width="10" height="30" fill="#666" />
-                  <text x="265" y="300" fontSize="12" fontWeight="bold">
-                    → To Irrigation
-                  </text>
-
-                  {/* Cost */}
-                  <rect
-                    x="250"
-                    y="330"
-                    width="300"
-                    height="50"
-                    fill="#228B22"
-                    stroke="#000"
-                    strokeWidth="2"
-                    rx="5"
-                  />
-                  <text
-                    x="400"
-                    y="352"
-                    textAnchor="middle"
-                    fontSize="14"
-                    fontWeight="bold"
-                    fill="#fff"
-                  >
-                    Excavation + Liner Cost
-                  </text>
-                  <text
-                    x="400"
-                    y="370"
-                    textAnchor="middle"
-                    fontSize="18"
-                    fontWeight="bold"
-                    fill="#fff"
-                  >
-                    €8,000 - €12,000
-                  </text>
-
-                  {/* Arrow markers */}
-                  <defs>
-                    <marker
-                      id="arrowleft"
-                      markerWidth="10"
-                      markerHeight="10"
-                      refX="1"
-                      refY="3"
-                      orient="auto"
-                    >
-                      <path d="M9,0 L9,6 L0,3 z" fill="#000" />
-                    </marker>
-                    <marker
-                      id="arrowright"
-                      markerWidth="10"
-                      markerHeight="10"
-                      refX="9"
-                      refY="3"
-                      orient="auto"
-                    >
-                      <path d="M0,0 L0,6 L9,3 z" fill="#000" />
-                    </marker>
-                    <marker
-                      id="arrowup"
-                      markerWidth="10"
-                      markerHeight="10"
-                      refX="3"
-                      refY="1"
-                      orient="auto"
-                    >
-                      <path d="M0,9 L6,9 L3,0 z" fill="#000" />
-                    </marker>
-                    <marker
-                      id="arrowdown"
-                      markerWidth="10"
-                      markerHeight="10"
-                      refX="3"
-                      refY="9"
-                      orient="auto"
-                    >
-                      <path d="M0,0 L6,0 L3,9 z" fill="#000" />
-                    </marker>
-                  </defs>
-                </svg>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Cost Comparison */}
-        <Card className="mb-12 border-2 border-green-500">
-          <CardHeader className="bg-green-50">
-            <CardTitle className="text-2xl">💰 Complete Cost Breakdown</CardTitle>
-            <div className="mt-2 flex gap-2">
-              <Badge variant="outline" className="bg-blue-100">Materials Only</Badge>
-              <Badge variant="outline" className="bg-orange-100">+ Labor if Hired</Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-3 text-left">Component</th>
-                    <th className="border p-3 text-left">Specification</th>
-                    <th className="border p-3 text-right">Materials (€)</th>
-                    <th className="border p-3 text-right">Labor (€)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-blue-50">
-                    <td className="border p-3 font-semibold" colSpan={3}>
-                      🏠 COLLECTION SYSTEM
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">House Gutters & Downspouts</td>
-                    <td className="border p-3">200m² roof, PVC system</td>
-                    <td className="border p-3 text-right font-mono">€600</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€800</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Barn Gutters & Downspouts</td>
-                    <td className="border p-3">500m² roof, heavy-duty</td>
-                    <td className="border p-3 text-right font-mono">€1,800</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€2,000</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Greenhouse Collection</td>
-                    <td className="border p-3">200m² polycarbonate roof</td>
-                    <td className="border p-3 text-right font-mono">€400</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€500</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">First Flush Diverters (6×)</td>
-                    <td className="border p-3">100L capacity each</td>
-                    <td className="border p-3 text-right font-mono">€270</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€300</td>
-                  </tr>
-
-                  <tr className="bg-purple-50">
-                    <td className="border p-3 font-semibold" colSpan={3}>
-                      🏗️ STORAGE SYSTEM
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Underground Cistern</td>
-                    <td className="border p-3">100,000L concrete tank</td>
-                    <td className="border p-3 text-right font-mono">€8,000</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€7,000</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">IBC Totes (50×)</td>
-                    <td className="border p-3">1000L used food-grade @ €75</td>
-                    <td className="border p-3 text-right font-mono">€3,750</td>
-                    <td className="border p-3 text-right font-mono text-green-600">€0 (DIY)</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Farm Pond Excavation</td>
-                    <td className="border p-3">30×30×4m deep, 900,000L</td>
-                    <td className="border p-3 text-right font-mono">€0</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€8,000</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Pond Liner (EPDM)</td>
-                    <td className="border p-3">1.2mm thickness, 1000m²</td>
-                    <td className="border p-3 text-right font-mono">€4,000</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€1,500</td>
-                  </tr>
-
-                  <tr className="bg-orange-50">
-                    <td className="border p-3 font-semibold" colSpan={3}>
-                      🔧 PLUMBING & DISTRIBUTION
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">PVC Piping & Manifolds</td>
-                    <td className="border p-3">Complete distribution network</td>
-                    <td className="border p-3 text-right font-mono">€2,500</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€3,500</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Agricultural Pump (2HP)</td>
-                    <td className="border p-3">100L/min, pressure switch</td>
-                    <td className="border p-3 text-right font-mono">€850</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€400</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Household Pressure System</td>
-                    <td className="border p-3">Pump + tank + controls</td>
-                    <td className="border p-3 text-right font-mono">€1,200</td>
-                    <td className="border p-3 text-right font-mono text-orange-600">€600</td>
-                  </tr>
-
-                  <tr className="bg-yellow-50">
-                    <td className="border p-3 font-semibold" colSpan={3}>
-                      💧 FILTRATION & TREATMENT
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Household Filtration</td>
-                    <td className="border p-3">UV + Carbon + Sediment (potable)</td>
-                    <td className="border p-3 text-right font-mono">€2,500</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Pre-Filters (3×)</td>
-                    <td className="border p-3">200 micron mesh for tanks</td>
-                    <td className="border p-3 text-right font-mono">€180</td>
-                  </tr>
-
-                  <tr className="bg-green-50">
-                    <td className="border p-3 font-semibold" colSpan={3}>
-                      🌾 IRRIGATION SYSTEM
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Drip Irrigation Kit</td>
-                    <td className="border p-3">3 acres complete system</td>
-                    <td className="border p-3 text-right font-mono">€1,200</td>
-                  </tr>
-                  <tr>
-                    <td className="border p-3">Timer & Controllers</td>
-                    <td className="border p-3">Automatic scheduling</td>
-                    <td className="border p-3 text-right font-mono">€350</td>
-                  </tr>
-
-                  <tr className="border-t-4 border-green-600 bg-green-100">
-                    <td className="border p-4 text-xl font-bold" colSpan={2}>
-                      TOTAL INVESTMENT:
-                    </td>
-                    <td className="border p-4 text-right text-2xl font-bold text-green-900">
-                      €42,600
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-3">
-              <div className="rounded-lg bg-blue-50 p-4">
-                <h4 className="mb-2 text-sm font-semibold text-blue-900">
-                  💧 Municipal Water Cost
-                </h4>
-                <div className="text-3xl font-bold text-blue-600">€5,118</div>
-                <div className="text-sm text-blue-700">per year at €2/m³</div>
-              </div>
-              <div className="rounded-lg bg-green-50 p-4">
-                <h4 className="mb-2 text-sm font-semibold text-green-900">💰 Annual Savings</h4>
-                <div className="text-3xl font-bold text-green-600">€4,918</div>
-                <div className="text-sm text-green-700">after €200 maintenance</div>
-              </div>
-              <div className="rounded-lg bg-purple-50 p-4">
-                <h4 className="mb-2 text-sm font-semibold text-purple-900">⏱️ Payback Period</h4>
-                <div className="text-3xl font-bold text-purple-600">8.7 years</div>
-                <div className="text-sm text-purple-700">Then free water forever!</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Creative Solutions */}
-        <Card className="mb-12 border-2 border-orange-500">
-          <CardHeader className="bg-orange-50">
-            <CardTitle className="text-2xl">💡 Creative Optimization Ideas</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6 pt-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-lg border-2 border-green-400 bg-green-50 p-6">
-                <h3 className="mb-3 text-lg font-bold text-green-900">🌾 Reduce Farm Water 60%</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Drip irrigation:</strong> 90% efficiency vs 50% flood
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Mulching:</strong> Reduces evaporation by 50%
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Drought-tolerant crops:</strong> 30% less water
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Soil improvement:</strong> Compost holds 5× water
-                    </span>
-                  </li>
-                </ul>
-                <div className="mt-4 rounded bg-green-200 p-3 text-center">
-                  <div className="font-bold text-green-900">New farm need: 936,000L/year</div>
-                  <div className="text-sm text-green-800">Storage reduces to 390,000L!</div>
+                  <div className="mt-6 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                    <h4 className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+                      Materials for This Component:
+                    </h4>
+                    <ul className="space-y-1 text-sm text-blue-900 dark:text-blue-100">
+                      <li>• 50× IBC Totes = {formatPrice(50 * config.IBCPrice)}</li>
+                      <li>• 60× Ball Valves = {formatPrice(60 * 8)}</li>
+                      <li>• Timber & Hardware = {formatPrice(1200)}</li>
+                      <li className="border-t pt-1 font-bold">
+                        Total: {formatPrice(50 * config.IBCPrice + 60 * 8 + 1200)}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              <div className="rounded-lg border-2 border-blue-400 bg-blue-50 p-6">
-                <h3 className="mb-3 text-lg font-bold text-blue-900">🚿 Reduce Household 70%</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Composting toilet:</strong> Saves 43,800L/year
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Navy showers:</strong> 5min max = 58,400L saved
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Greywater reuse:</strong> Toilets/irrigation 35%
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Low-flow everything:</strong> 25% reduction
-                    </span>
-                  </li>
-                </ul>
-                <div className="mt-4 rounded bg-blue-200 p-3 text-center">
-                  <div className="font-bold text-blue-900">New household: 65,700L/year</div>
-                  <div className="text-sm text-blue-800">That&apos;s 80L per person per day!</div>
+        {/* COMPONENT 2: Roof Collection System */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold">
+            <Wrench className="mb-1 inline h-8 w-8 text-primary" /> Component 2: Roof Collection
+            System
+          </h2>
+          <Card>
+            <CardHeader>
+              <CardTitle>900m² Total Collection Area</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* Diagram */}
+                <div className="rounded-lg border-2 border-muted p-4">
+                  <h3 className="mb-4 font-semibold">House Collection Detail</h3>
+                  <svg viewBox="0 0 600 500" className="w-full">
+                    {/* House */}
+                    <rect x="150" y="200" width="300" height="200" fill="#d4a574" stroke="#8b6f47" strokeWidth="2" />
+                    {/* Roof */}
+                    <polygon points="150,200 300,100 450,200" fill="#8b0000" stroke="#600" strokeWidth="2" />
+                    
+                    {/* Rain */}
+                    {[...Array(30)].map((_, i) => (
+                      <line
+                        key={i}
+                        x1={50 + i * 20}
+                        y1="20"
+                        x2={55 + i * 20}
+                        y2="80"
+                        stroke="#4a90e2"
+                        strokeWidth="2"
+                        opacity="0.6"
+                      />
+                    ))}
+                    
+                    {/* Gutters */}
+                    <rect x="130" y="200" width="340" height="15" fill="#666" stroke="#333" strokeWidth="1" />
+                    
+                    {/* Downspouts */}
+                    <rect x="140" y="200" width="20" height="200" fill="#666" />
+                    <rect x="440" y="200" width="20" height="200" fill="#666" />
+                    
+                    {/* First Flush Diverters */}
+                    <rect x="135" y="420" width="30" height="60" fill="#e74c3c" stroke="#c0392b" strokeWidth="2" />
+                    <rect x="435" y="420" width="30" height="60" fill="#e74c3c" stroke="#c0392b" strokeWidth="2" />
+                    <text x="150" y="455" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                      FIRST
+                    </text>
+                    <text x="150" y="468" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                      FLUSH
+                    </text>
+                    <text x="450" y="455" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                      FIRST
+                    </text>
+                    <text x="450" y="468" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                      FLUSH
+                    </text>
+                    
+                    {/* Storage Pipes */}
+                    <line x1="150" y1="480" x2="150" y2="520" stroke="#2563eb" strokeWidth="6" />
+                    <line x1="450" y1="480" x2="450" y2="520" stroke="#2563eb" strokeWidth="6" />
+                    <text x="150" y="540" textAnchor="middle" fontSize="12" fill="#2563eb" fontWeight="bold">
+                      To Storage
+                    </text>
+                    <text x="450" y="540" textAnchor="middle" fontSize="12" fill="#2563eb" fontWeight="bold">
+                      To Storage
+                    </text>
+                    
+                    {/* Dimensions */}
+                    <line x1="100" y1="200" x2="100" y2="400" stroke="#e74c3c" strokeWidth="1" />
+                    <text x="70" y="310" fontSize="12" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(4)}
+                    </text>
+                    
+                    <line x1="150" y1="180" x2="450" y2="180" stroke="#e74c3c" strokeWidth="1" />
+                    <text x="290" y="170" fontSize="12" fill="#e74c3c" fontWeight="bold" textAnchor="middle">
+                      {formatLength(10)} width
+                    </text>
+                    
+                    {/* Labels */}
+                    <text x="300" y="30" textAnchor="middle" fontSize="16" fontWeight="bold">
+                      House: {formatArea(200)} Roof
+                    </text>
+                    <text x="300" y="55" textAnchor="middle" fontSize="14" fill="#2563eb">
+                      Collects ~{formatVolume(120000)}/year
+                    </text>
+                  </svg>
+                </div>
+
+                {/* Build Instructions */}
+                <div>
+                  <h3 className="mb-4 font-semibold">Build Instructions</h3>
+                  <ol className="space-y-3 text-sm">
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        1
+                      </span>
+                      <div>
+                        <strong>Install Gutters:</strong> Fix 150mm PVC gutters to all roof edges
+                        with fall of 1:100 towards downspouts. Use brackets every {formatLength(1)}.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        2
+                      </span>
+                      <div>
+                        <strong>Position Downspouts:</strong> Install 100mm downspouts at corners
+                        and mid-points. Maximum {formatLength(8)} spacing.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        3
+                      </span>
+                      <div>
+                        <strong>Add First Flush Diverters:</strong> Install 100L diverter on each
+                        downspout. This removes first dirty water (bird droppings, dust) before
+                        storage.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        4
+                      </span>
+                      <div>
+                        <strong>Connect to Storage:</strong> Run 50mm pipes from each first flush
+                        diverter to nearest IBC tote or cistern.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        5
+                      </span>
+                      <div>
+                        <strong>Add Mesh Filters:</strong> Install 5mm stainless steel mesh at all
+                        gutter outlets to prevent leaves entering system.
+                      </div>
+                    </li>
+                  </ol>
+
+                  <div className="mt-6 rounded-lg bg-green-50 p-4 dark:bg-green-950">
+                    <h4 className="mb-2 font-semibold text-green-900 dark:text-green-100">
+                      Collection Efficiency:
+                    </h4>
+                    <div className="space-y-2 text-sm text-green-900 dark:text-green-100">
+                      <div className="flex justify-between">
+                        <span>House ({formatArea(200)}):</span>
+                        <span className="font-mono font-semibold">{formatVolume(120000)}/yr</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Barn ({formatArea(500)}):</span>
+                        <span className="font-mono font-semibold">{formatVolume(300000)}/yr</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Greenhouse ({formatArea(200)}):</span>
+                        <span className="font-mono font-semibold">{formatVolume(120000)}/yr</span>
+                      </div>
+                      <div className="flex justify-between border-t pt-1 font-bold">
+                        <span>TOTAL COLLECTION:</span>
+                        <span className="font-mono">{formatVolume(540000)}/yr</span>
+                      </div>
+                      <p className="mt-2 text-xs italic">
+                        Based on 750mm/year rainfall (Lisbon) × 80% efficiency
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                    <h4 className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+                      Materials for This Component:
+                    </h4>
+                    <ul className="space-y-1 text-sm text-blue-900 dark:text-blue-100">
+                      <li>• Guttering System = {formatPrice(100 * config.gutterPrice)}</li>
+                      <li>• 6× First Flush Diverters = {formatPrice(6 * 45)}</li>
+                      <li>• Pipes & Fittings = {formatPrice(800)}</li>
+                      <li className="border-t pt-1 font-bold">
+                        Total: {formatPrice(100 * config.gutterPrice + 6 * 45 + 800)}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              <div className="rounded-lg border-2 border-purple-400 bg-purple-50 p-6">
-                <h3 className="mb-3 text-lg font-bold text-purple-900">
-                  ☔ Increase Collection 300%
-                </h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Barn roof:</strong> +500m² = +300,000L/year
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Greenhouse:</strong> +200m² = +120,000L/year
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Shed/garage:</strong> +100m² = +60,000L/year
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Solar array frame:</strong> +200m² bonus!
-                    </span>
-                  </li>
-                </ul>
-                <div className="mt-4 rounded bg-purple-200 p-3 text-center">
-                  <div className="font-bold text-purple-900">Total collection: 600,000L/year</div>
-                  <div className="text-sm text-purple-800">From 1,000m² total surface!</div>
+        {/* COMPONENT 3: Farm Pond */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold">
+            <Wrench className="mb-1 inline h-8 w-8 text-primary" /> Component 3: Farm Pond
+          </h2>
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {formatLength(30)} × {formatLength(30)} × {formatLength(4)} Deep ={' '}
+                {formatVolume(3600000)} Maximum Storage
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-6 lg:grid-cols-2">
+                {/* Diagram */}
+                <div className="rounded-lg border-2 border-muted p-4">
+                  <h3 className="mb-4 font-semibold">Pond Cross-Section</h3>
+                  <svg viewBox="0 0 600 450" className="w-full">
+                    {/* Ground Level */}
+                    <line x1="50" y1="100" x2="550" y2="100" stroke="#8b7355" strokeWidth="3" />
+                    <text x="30" y="105" fontSize="12" fill="#8b7355" fontWeight="bold">
+                      Ground Level
+                    </text>
+
+                    {/* Excavated Pond Shape (trapezoid for sloped sides) */}
+                    <polygon
+                      points="150,100 450,100 500,350 100,350"
+                      fill="#4a90e2"
+                      stroke="#2563eb"
+                      strokeWidth="3"
+                      opacity="0.7"
+                    />
+
+                    {/* EPDM Liner */}
+                    <polyline
+                      points="140,90 480,90 520,360 80,360 140,90"
+                      fill="none"
+                      stroke="#2c3e50"
+                      strokeWidth="4"
+                      strokeDasharray="8,4"
+                    />
+
+                    {/* Soil Layers */}
+                    <rect x="50" y="100" width="100" height="50" fill="#d4a574" opacity="0.7" />
+                    <rect x="50" y="150" width="100" height="200" fill="#a67c52" opacity="0.7" />
+                    <text x="60" y="130" fontSize="10" fill="#333">
+                      Topsoil
+                    </text>
+                    <text x="60" y="260" fontSize="10" fill="#333">
+                      Subsoil
+                    </text>
+
+                    <rect x="450" y="100" width="100" height="50" fill="#d4a574" opacity="0.7" />
+                    <rect x="450" y="150" width="100" height="200" fill="#a67c52" opacity="0.7" />
+
+                    {/* Dimensions */}
+                    <line
+                      x1="70"
+                      y1="100"
+                      x2="70"
+                      y2="350"
+                      stroke="#e74c3c"
+                      strokeWidth="2"
+                      markerStart="url(#arrowRed2)"
+                      markerEnd="url(#arrowRed2)"
+                    />
+                    <text x="35" y="230" fontSize="14" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(4)}
+                    </text>
+
+                    <line
+                      x1="150"
+                      y1="80"
+                      x2="450"
+                      y2="80"
+                      stroke="#e74c3c"
+                      strokeWidth="2"
+                      markerStart="url(#arrowRed2)"
+                      markerEnd="url(#arrowRed2)"
+                    />
+                    <text x="280" y="70" fontSize="14" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(30)} (top)
+                    </text>
+
+                    <line
+                      x1="100"
+                      y1="370"
+                      x2="500"
+                      y2="370"
+                      stroke="#e74c3c"
+                      strokeWidth="2"
+                      markerStart="url(#arrowRed2)"
+                      markerEnd="url(#arrowRed2)"
+                    />
+                    <text x="280" y="395" fontSize="14" fill="#e74c3c" fontWeight="bold">
+                      {formatLength(40)} (bottom with slope)
+                    </text>
+
+                    {/* Inlet Pipe */}
+                    <rect x="280" y="30" width="40" height="70" fill="#666" />
+                    <text x="300" y="20" textAnchor="middle" fontSize="11" fontWeight="bold">
+                      Inlet
+                    </text>
+                    <polygon points="280,100 320,100 300,120" fill="#2563eb" />
+
+                    {/* Overflow Pipe */}
+                    <rect x="460" y="180" width="60" height="20" fill="#666" />
+                    <text x="520" y="175" fontSize="11" fontWeight="bold">
+                      Overflow
+                    </text>
+                    <polygon points="520,190 540,180 540,200" fill="#e74c3c" />
+
+                    {/* Pump */}
+                    <rect x="380" y="320" width="40" height="30" fill="#27ae60" stroke="#229954" strokeWidth="2" />
+                    <text x="400" y="340" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                      Pump
+                    </text>
+                    <line x1="400" y1="320" x2="400" y2="100" stroke="#27ae60" strokeWidth="3" strokeDasharray="4" />
+
+                    {/* Arrow markers */}
+                    <defs>
+                      <marker
+                        id="arrowRed2"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="5"
+                        refY="5"
+                        orient="auto"
+                      >
+                        <polygon points="0,0 10,5 0,10" fill="#e74c3c" />
+                      </marker>
+                    </defs>
+
+                    {/* Labels */}
+                    <text x="300" y="220" textAnchor="middle" fontSize="16" fontWeight="bold" fill="white">
+                      {formatVolume(3600000)}
+                    </text>
+                    <text x="300" y="240" textAnchor="middle" fontSize="12" fill="white">
+                      Maximum Capacity
+                    </text>
+                  </svg>
+                </div>
+
+                {/* Build Instructions */}
+                <div>
+                  <h3 className="mb-4 font-semibold">Build Instructions</h3>
+                  <ol className="space-y-3 text-sm">
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        1
+                      </span>
+                      <div>
+                        <strong>Excavation:</strong> Hire mini-digger. Dig {formatLength(30)} ×{' '}
+                        {formatLength(30)} area to {formatLength(4)} depth. Slope sides at 45°
+                        angle for stability. Total excavation: ~{formatVolume(3600000)} soil.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        2
+                      </span>
+                      <div>
+                        <strong>Prepare Base:</strong> Remove all sharp rocks, roots, stones.
+                        Compact bottom. Add 10cm sand layer as cushion for liner.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        3
+                      </span>
+                      <div>
+                        <strong>Install Underlay:</strong> Lay geotextile fabric (300g/m²) over
+                        entire surface including slopes. Overlap seams by 30cm.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        4
+                      </span>
+                      <div>
+                        <strong>Lay EPDM Liner:</strong> Use 1mm EPDM rubber pond liner. Need ~
+                        {formatArea(900)} to cover bottom, sides, and overlap edges. Join multiple
+                        sheets with EPDM tape.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        5
+                      </span>
+                      <div>
+                        <strong>Secure Edges:</strong> Dig 30cm trench around perimeter. Fold
+                        liner into trench, backfill with soil, compact firmly.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        6
+                      </span>
+                      <div>
+                        <strong>Install Plumbing:</strong> Fit inlet pipe from IBC overflow. Add
+                        overflow pipe at {formatLength(3.8)} height. Install 12V solar submersible
+                        pump at deepest point.
+                      </div>
+                    </li>
+                    <li className="flex gap-3">
+                      <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs text-white">
+                        7
+                      </span>
+                      <div>
+                        <strong>Fill & Test:</strong> Slowly fill with collected rainwater over
+                        several days. Monitor for leaks. Liner will settle and stretch naturally.
+                      </div>
+                    </li>
+                  </ol>
+
+                  <div className="mt-6 rounded-lg bg-purple-50 p-4 dark:bg-purple-950">
+                    <h4 className="mb-2 font-semibold text-purple-900 dark:text-purple-100">
+                      Purpose & Benefits:
+                    </h4>
+                    <ul className="space-y-1 text-sm text-purple-900 dark:text-purple-100">
+                      <li>✓ Primary irrigation storage for farm</li>
+                      <li>✓ Captures IBC tote overflow</li>
+                      <li>✓ Natural cooling in summer heat</li>
+                      <li>✓ Wildlife habitat (frogs eat pests!)</li>
+                      <li>✓ Fire suppression water reserve</li>
+                    </ul>
+                  </div>
+
+                  <div className="mt-4 rounded-lg bg-blue-50 p-4 dark:bg-blue-950">
+                    <h4 className="mb-2 font-semibold text-blue-900 dark:text-blue-100">
+                      Materials for This Component:
+                    </h4>
+                    <ul className="space-y-1 text-sm text-blue-900 dark:text-blue-100">
+                      <li>
+                        • Excavation ({formatLength(30)}×{formatLength(30)}×{formatLength(4)}) ={' '}
+                        {formatPrice(config.excavationPricePerCubicM * 3600)}
+                      </li>
+                      <li>
+                        • EPDM Liner ({formatArea(900)}) ={' '}
+                        {formatPrice(900 * config.linerPricePerSqM)}
+                      </li>
+                      <li>• Geotextile Underlay = {formatPrice(1800)}</li>
+                      <li>• 2× Solar Pumps = {formatPrice(2 * config.pumpPrice)}</li>
+                      <li>• Plumbing & Fittings = {formatPrice(600)}</li>
+                      <li className="border-t pt-1 font-bold">
+                        Total:{' '}
+                        {formatPrice(
+                          config.excavationPricePerCubicM * 3600 +
+                            900 * config.linerPricePerSqM +
+                            1800 +
+                            2 * config.pumpPrice +
+                            600
+                        )}
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              <div className="rounded-lg border-2 border-teal-400 bg-teal-50 p-6">
-                <h3 className="mb-3 text-lg font-bold text-teal-900">🌊 Natural Water Retention</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Swales:</strong> Catch runoff, recharge groundwater
+        {/* System Summary & Total Cost */}
+        <section className="mb-16">
+          <h2 className="mb-6 text-3xl font-bold">Complete System Summary</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle>Storage Breakdown</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between rounded-lg bg-blue-50 p-3 dark:bg-blue-950">
+                    <span className="font-medium">IBC Totes (50×):</span>
+                    <span className="font-mono font-semibold">{formatVolume(50000)}</span>
+                  </div>
+                  <div className="flex justify-between rounded-lg bg-green-50 p-3 dark:bg-green-950">
+                    <span className="font-medium">Farm Pond:</span>
+                    <span className="font-mono font-semibold">{formatVolume(3600000)}</span>
+                  </div>
+                  <div className="flex justify-between rounded-lg bg-purple-50 p-3 dark:bg-purple-950">
+                    <span className="font-medium text-purple-900 dark:text-purple-100">
+                      <strong>TOTAL CAPACITY:</strong>
                     </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Multiple small ponds:</strong> Reduce evaporation
+                    <span className="font-mono text-lg font-bold text-purple-600">
+                      {formatVolume(3650000)}
                     </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Shade ponds:</strong> Trees reduce loss 40%
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">✅</span>
-                    <span>
-                      <strong>Aquatic plants:</strong> Natural filtration
-                    </span>
-                  </li>
-                </ul>
-                <div className="mt-4 rounded bg-teal-200 p-3 text-center">
-                  <div className="font-bold text-teal-900">Bonus: Biodiversity habitat!</div>
-                  <div className="text-sm text-teal-800">Frogs, dragonflies, birds</div>
+                  </div>
+                  <p className="mt-4 text-sm text-muted-foreground">
+                    This exceeds your {formatVolume(1050000)} requirement by 3.5×, providing
+                    excellent security against drought years.
+                  </p>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
 
-            <div className="rounded-lg border-4 border-yellow-400 bg-yellow-50 p-6">
-              <h3 className="mb-4 text-center text-2xl font-bold text-yellow-900">
-                🎯 OPTIMIZED SYSTEM (All Strategies Combined)
-              </h3>
-              <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded bg-white p-4 text-center">
-                  <div className="text-sm font-semibold text-gray-600">New Annual Need</div>
-                  <div className="text-3xl font-bold text-yellow-900">1,002,000L</div>
-                  <div className="text-sm text-green-600">↓ 61% reduction!</div>
+            <Card>
+              <CardHeader>
+                <CardTitle>DIY Total Cost</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between border-b pb-2">
+                    <span>IBC Tote System:</span>
+                    <span className="font-mono">
+                      {formatPrice(50 * config.IBCPrice + 60 * 8 + 1200)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b pb-2">
+                    <span>Roof Collection:</span>
+                    <span className="font-mono">
+                      {formatPrice(100 * config.gutterPrice + 6 * 45 + 800)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between border-b pb-2">
+                    <span>Farm Pond:</span>
+                    <span className="font-mono">
+                      {formatPrice(
+                        config.excavationPricePerCubicM * 3600 +
+                          900 * config.linerPricePerSqM +
+                          1800 +
+                          2 * config.pumpPrice +
+                          600
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between rounded-lg bg-primary/10 p-4">
+                    <span className="text-lg font-bold">TOTAL MATERIALS:</span>
+                    <span className="text-2xl font-bold text-primary">
+                      {formatPrice(totalMaterialsCost)}
+                    </span>
+                  </div>
+                  <p className="mt-4 text-xs text-muted-foreground">
+                    Professional installation would add ~{formatPrice(Math.round(totalMaterialsCost * 0.9))}{' '}
+                    labor. Hybrid approach (you do 60%) saves ~{formatPrice(Math.round(totalMaterialsCost * 0.4))}.
+                  </p>
                 </div>
-                <div className="rounded bg-white p-4 text-center">
-                  <div className="text-sm font-semibold text-gray-600">New Collection</div>
-                  <div className="text-3xl font-bold text-yellow-900">600,000L</div>
-                  <div className="text-sm text-green-600">↑ 400% increase!</div>
-                </div>
-                <div className="rounded bg-white p-4 text-center">
-                  <div className="text-sm font-semibold text-gray-600">Storage Needed</div>
-                  <div className="text-3xl font-bold text-yellow-900">334,000L</div>
-                  <div className="text-sm text-green-600">↓ 68% less!</div>
-                </div>
-              </div>
-              <div className="mt-4 rounded bg-green-600 p-4 text-center text-white">
-                <div className="text-2xl font-bold">NEW TOTAL COST: €28,500</div>
-                <div className="text-lg">Payback: 5.8 years • ROI: 17.2% annually</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
 
-        {/* CTA */}
-        <div className="rounded-lg border-2 border-primary bg-gradient-to-r from-primary/10 to-accent/10 p-8 text-center">
-          <h2 className="mb-4 text-3xl font-bold">Ready to Design Your System?</h2>
-          <p className="mb-6 text-lg text-muted-foreground">
-            Use our interactive calculator with all these insights built-in
-          </p>
-          <Link
-            href="/green-calculators/total-water-independence"
-            className="inline-block rounded-lg bg-primary px-8 py-4 text-xl font-semibold text-primary-foreground hover:bg-primary/90"
-          >
-            🚀 Launch Water Independence Calculator
-          </Link>
-        </div>
+        {/* Call to Action */}
+        <section className="mb-16">
+          <Card className="border-2 border-primary">
+            <CardContent className="p-8 text-center">
+              <h2 className="mb-4 text-3xl font-bold">Ready to Build?</h2>
+              <p className="mx-auto mb-6 max-w-2xl text-muted-foreground">
+                You now have complete build plans, measurements, and shopping links for your region.
+                Start with the roof collection system (easiest), then add IBC totes, and finally
+                the farm pond as budget allows.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button size="lg" asChild>
+                  <Link href="/green-calculators/total-water-independence">
+                    📊 Use Interactive Calculator
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <a href="#shopping-list">
+                    <ShoppingCart className="mr-2 h-5 w-5" />
+                    View Shopping List Again
+                  </a>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       </div>
     </main>
   );
