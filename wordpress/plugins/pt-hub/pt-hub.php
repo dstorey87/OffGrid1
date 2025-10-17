@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name: PT Hub
- * Plugin URI: https://offgrid.example.com
- * Description: Directory and calculator functionality for WordPress multisite
+ * Plugin Name: Our Offgrid Journey Hub
+ * Plugin URI: https://ouroffgridjourney.com
+ * Description: Directory and calculator functionality for Our Offgrid Journey platform
  * Version: 0.1.0
- * Author: OffGrid Team
+ * Author: Our Offgrid Journey Team
  * License: GPL v2 or later
  * Network: true
  * Text Domain: pt-hub

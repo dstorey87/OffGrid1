@@ -1,6 +1,11 @@
 # OffGrid Platform
 
-A comprehensive, monetizable multi-site platform combining modern web technologies with AI capabilities. Built for scalability, performance, and easy deployment.
+[![CI/CD Pipeline](https://github.com/dstorey87/OffGrid1/actions/workflows/ci.yml/badge.svg)](https://github.com/dstorey87/OffGrid1/actions/workflows/ci.yml)
+[![Quality Gate](https://github.com/dstorey87/OffGrid1/actions/workflows/quality.yaml/badge.svg)](https://github.com/dstorey87/OffGrid1/actions/workflows/quality.yaml)
+
+# Our Offgrid Journey
+
+> A comprehensive platform for sustainable living enthusiasts, combining content discovery, interactive calculators, AI guidance, and community resources. Built for scalability, performance, and easy deployment.
 
 ## 🚀 Features
 
@@ -34,6 +39,11 @@ A comprehensive, monetizable multi-site platform combining modern web technologi
 │Port 3306│
 └─────────┘
 ```
+
+**Development Workflow**
+
+This repository uses `TASKS.md` for active work tracking and `AI_INSTRUCTIONS.md` for build agent rules.  
+ No changes are considered complete until all automated tests and Playwright runs pass.
 
 ## 🛠️ Tech Stack
 
@@ -74,6 +84,66 @@ A comprehensive, monetizable multi-site platform combining modern web technologi
 - **Database**: MySQL 8.0
 - **Cache**: Redis 7
 - **Reverse Proxy**: Nginx Ingress (K8s)
+- **Secrets Management**: HashiCorp Vault with AppRole authentication
+
+## 🔐 Secrets Management with Vault
+
+This project uses HashiCorp Vault for secure secrets management. All sensitive credentials (database passwords, API keys, etc.) are stored in Vault and loaded at runtime.
+
+### Vault Setup
+
+1. **Start Vault Server** (in a separate workspace):
+
+   ```powershell
+   docker run -d --name offgrid-vault \
+     -p 8200:8200 -p 8201:8201 \
+     --cap-add=IPC_LOCK \
+     hashicorp/vault:1.15 server -dev
+   ```
+
+2. **Configure Vault** (follow `VAULT_SETUP_ACTIONS.md` for complete steps):
+
+   - Initialize and unseal Vault
+   - Enable KV v2 secrets engine at `offgrid/`
+   - Store secrets in 8 paths (database, wordpress, ai-service, frontend, stripe, etc.)
+   - Create AppRole policies and roles
+   - Generate AppRole credentials
+
+3. **Create `.env.vault`** (copy from `.env.vault.example`):
+   ```bash
+   VAULT_ADDR=http://localhost:8200
+   AI_SERVICE_ROLE_ID=your-ai-service-role-id
+   AI_SERVICE_SECRET_ID=your-ai-service-secret-id
+   FRONTEND_ROLE_ID=your-frontend-role-id
+   FRONTEND_SECRET_ID=your-frontend-secret-id
+   WORDPRESS_ROLE_ID=your-wordpress-role-id
+   WORDPRESS_SECRET_ID=your-wordpress-secret-id
+   MYSQL_ROLE_ID=your-mysql-role-id
+   MYSQL_SECRET_ID=your-mysql-secret-id
+   ```
+
+### Vault Integration
+
+**Services authenticate to Vault using AppRole** and automatically load secrets on startup:
+
+- **AI Service** (`ai-service/app/core/vault.py`): Loads OpenAI/Anthropic API keys
+- **Frontend** (`frontend/src/lib/vault.ts`): Loads Stripe keys, JWT secrets
+- **WordPress**: Loads database passwords, admin credentials, auth keys
+- **MySQL**: Loads root password from Vault
+
+**Health Checks**: All services verify Vault connectivity at `/health` endpoints
+
+**Secret Paths in Vault**:
+
+```
+offgrid/database       → DB_ROOT_PASSWORD, DB_PASSWORD
+offgrid/wordpress      → WP_ADMIN_PASSWORD, WP_AUTH_KEY, etc.
+offgrid/ai-service     → OPENAI_API_KEY, ANTHROPIC_API_KEY
+offgrid/frontend       → STRIPE_PUBLISHABLE_KEY, JWT_SECRET
+offgrid/stripe         → STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+```
+
+**Security**: `.env.vault` is in `.gitignore` to prevent committing AppRole credentials
 
 ## 🚀 Quick Start
 
@@ -91,18 +161,22 @@ A comprehensive, monetizable multi-site platform combining modern web technologi
 git clone https://github.com/yourusername/offgrid.git
 cd offgrid
 
-# Copy environment file
-Copy-Item .env.example .env
+# Setup Vault credentials (see "Secrets Management with Vault" section above)
+Copy-Item .env.vault.example .env.vault
+# Edit .env.vault with your Vault AppRole credentials
+notepad .env.vault
 
-# Edit .env with your actual values
-notepad .env
+# Optional: Copy environment examples for reference
+Copy-Item .env.example .env.local
 ```
 
 ### 2. Start with Docker Compose
 
 ```powershell
-# Build and start all services
-docker-compose up -d
+# Ensure Vault server is running (see Vault Setup section)
+
+# Build and start all services with Vault integration
+docker-compose --env-file .env.vault up -d
 
 # View logs
 docker-compose logs -f
