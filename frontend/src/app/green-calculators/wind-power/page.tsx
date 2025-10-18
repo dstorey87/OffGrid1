@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { householdPresets } from '@/lib/householdPresets';
 
 interface WindPowerResults {
   averageWindSpeed: number;
@@ -56,7 +57,7 @@ export default function WindPowerCalculator() {
     const windSpeed = parseFloat(averageWindSpeed);
     const height = parseFloat(towerHeight);
     const energyNeed = parseFloat(dailyEnergyNeed);
-    const obstacles = parseFloat(obstacleDistance);
+    const _obstacles = parseFloat(obstacleDistance);
     const rate = parseFloat(electricityRate);
 
     if (!windSpeed || !height || !energyNeed) {
@@ -80,8 +81,8 @@ export default function WindPowerCalculator() {
 
     // Power calculation using wind power formula: P = 0.5 * ρ * A * V³ * Cp
     // Simplified for residential turbines with typical efficiency
-    const airDensity = 1.225; // kg/m³ at sea level
-    const efficiency = 0.35; // Typical small wind turbine efficiency
+    // const airDensity = 1.225; // kg/m³ at sea level
+    // const efficiency = 0.35; // Typical small wind turbine efficiency
 
     // Determine turbine size based on energy needs and wind resource
     let turbineSize, rotorDiameter, ratedPower;
@@ -105,23 +106,8 @@ export default function WindPowerCalculator() {
     }
 
     // Calculate actual power production
-    const sweptArea = Math.PI * Math.pow(rotorDiameter / 2, 2); // m²
-
-    // Power curve calculation (simplified)
-    let powerOutput;
-    if (effectiveWindSpeed < 3) {
-      powerOutput = 0; // Below cut-in speed
-    } else if (effectiveWindSpeed < 12) {
-      // Power increases cubically with wind speed up to rated speed
-      powerOutput = Math.min(
-        0.5 * airDensity * sweptArea * Math.pow(effectiveWindSpeed, 3) * efficiency * 0.001,
-        ratedPower
-      );
-    } else if (effectiveWindSpeed < 25) {
-      powerOutput = ratedPower; // Rated power region
-    } else {
-      powerOutput = 0; // Above cut-out speed
-    }
+    // const sweptArea = Math.PI * Math.pow(rotorDiameter / 2, 2); // m²
+    // Power curve calculation happens internally - using capacity factor for production estimates
 
     // Annual energy production (accounting for wind variability)
     const capacityFactor = Math.min(0.4, (effectiveWindSpeed / 12) * 0.3); // Realistic capacity factor
@@ -230,6 +216,34 @@ export default function WindPowerCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
+        {/* Auto-Fill Energy Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 text-xl font-semibold">⚡ Quick Start: Energy Needs</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Estimate daily energy requirements based on household size
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(householdPresets).map(([key, preset]) => {
+              const dailyKwh = preset.appliances
+                .reduce((sum, app) => sum + (app.watts * app.hoursPerDay) / 1000, 0)
+                .toFixed(1);
+              return (
+                <button
+                  key={key}
+                  onClick={() => setDailyEnergyNeed(dailyKwh)}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.description}</div>
+                  <div className="mt-2 text-sm font-medium text-foreground">
+                    ~{dailyKwh} kWh/day
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-6xl">
@@ -254,7 +268,8 @@ export default function WindPowerCalculator() {
             <CardHeader>
               <CardTitle>Wind Resource Assessment</CardTitle>
               <CardDescription>
-                Enter your location's wind data and energy requirements for optimal turbine sizing
+                Enter your location&apos;s wind data and energy requirements for optimal turbine
+                sizing
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -510,7 +525,9 @@ export default function WindPowerCalculator() {
                           <div className="flex-1">
                             <p className="font-medium">{product.name}</p>
                             <p className="text-xs text-muted-foreground">{product.category}</p>
-                            <p className="text-xs text-gray-600">{product.specs}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              {product.specs}
+                            </p>
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-primary">{product.price}</p>
@@ -568,7 +585,7 @@ export default function WindPowerCalculator() {
           <p>
             <strong>Small wind turbines</strong> can be an excellent complement to solar power
             systems, especially in areas with consistent wind resources. Our calculator evaluates
-            your site's wind potential and recommends optimal turbine sizing for maximum energy
+            your site&apos;s wind potential and recommends optimal turbine sizing for maximum energy
             production.
           </p>
 
@@ -590,7 +607,7 @@ export default function WindPowerCalculator() {
 
           <p>
             Wind and solar are complementary technologies - wind often produces power when solar
-            doesn't (at night, during storms). A hybrid system using our{' '}
+            doesn&apos;t (at night, during storms). A hybrid system using our{' '}
             <Link href="/solar-calculators">solar calculators</Link> and wind power calculator can
             provide more consistent renewable energy production than either technology alone.
           </p>

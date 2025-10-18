@@ -203,7 +203,7 @@ export default function Blog() {
                       <span
                         className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
                           categories.find((cat) => cat.name === post.category)?.color ||
-                          'bg-gray-100 text-gray-800'
+                          'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
                         }`}
                       >
                         {post.category}

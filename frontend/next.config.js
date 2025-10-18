@@ -2,12 +2,19 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
-  experimental: {
-    // Disable strict mode during development to reduce hydration issues
-    strictMode: process.env.NODE_ENV === 'production',
+
+  // Performance optimizations
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
+
+  // Optimize for development
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-select', '@radix-ui/react-label'],
+  },
+
   images: {
-    domains: ['localhost'],
     remotePatterns: [
       {
         protocol: 'http',
@@ -15,7 +22,13 @@ const nextConfig = {
         port: '8080',
         pathname: '/wp-content/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
   async rewrites() {
     return [

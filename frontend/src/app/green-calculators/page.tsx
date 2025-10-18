@@ -1,30 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { Metadata } from 'next';
-import { generateSEOMetadata, SEO_KEYWORDS } from '@/lib/seo';
+import Image from 'next/image';
+import { WaterIcon, PlantIcon, TargetIcon } from '@/components/icons';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-export const metadata: Metadata = generateSEOMetadata({
-  title: 'Green Technology Calculators - Sustainable Living Tools',
-  description:
-    'Comprehensive collection of green technology calculators. Rainwater harvesting, greywater systems, wind power, hydroponics, composting toilets, and more sustainable solutions.',
-  keywords: [
-    ...SEO_KEYWORDS.GREEN_SOLUTIONS,
-    ...SEO_KEYWORDS.WATER_SYSTEMS,
-    ...SEO_KEYWORDS.SUSTAINABLE_LIVING,
-    'green technology calculators',
-    'sustainable living tools',
-    'eco friendly calculators',
-    'renewable energy calculators',
-    'water conservation calculators',
-    'waste management calculators',
-  ],
-  canonicalUrl: 'https://offgrid1.com/green-calculators',
-});
+// Metadata moved to layout or separate metadata export
 
 const calculatorCategories = [
   {
-    title: '💧 Water Systems',
+    title: 'Water Systems',
+    icon: WaterIcon,
     description: 'Rainwater harvesting, greywater recycling, and water storage solutions',
     calculators: [
       {
@@ -108,7 +95,8 @@ const calculatorCategories = [
     ],
   },
   {
-    title: '🌱 Growing Systems',
+    title: 'Growing Systems',
+    icon: PlantIcon,
     description: 'Hydroponics, aquaponics, and greenhouse calculations',
     calculators: [
       {
@@ -215,35 +203,73 @@ export default function GreenCalculators() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
-        {/* Header */}
-        <div className="mb-16 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight lg:text-6xl">
-            Green Technology
-            <span className="block text-primary">Calculators & Tools</span>
-          </h1>
-          <p className="mx-auto max-w-4xl text-xl text-muted-foreground">
-            <strong>Comprehensive sustainable living calculators</strong> for rainwater harvesting,
-            greywater systems, wind power, hydroponics, composting toilets, and more{' '}
-            <em>eco-friendly solutions</em>. Plan your complete off-grid and sustainable lifestyle
-            with our expert tools.
-          </p>
+        {/* Hero Header with Image */}
+        <div className="relative mb-16 overflow-hidden rounded-3xl">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1200&q=80"
+              alt="Sustainable green technology and water systems"
+              fill
+              className="object-cover opacity-10"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/70 to-background"></div>
+          </div>
+
+          <div className="relative z-10 px-4 py-16 text-center md:px-8 md:py-20">
+            <h1 className="mb-6 text-4xl font-bold tracking-tight lg:text-6xl">
+              Green Technology
+              <span className="block text-primary">Calculators & Tools</span>
+            </h1>
+            <p className="mx-auto max-w-4xl text-xl text-foreground">
+              <strong>Comprehensive sustainable living calculators</strong> for rainwater
+              harvesting, greywater systems, wind power, hydroponics, composting toilets, and more{' '}
+              <em>eco-friendly solutions</em>. Plan your complete off-grid and sustainable lifestyle
+              with our expert tools.
+            </p>
+          </div>
         </div>
 
         {/* Popular Calculators */}
         <div className="mb-16">
-          <h2 className="mb-8 text-3xl font-bold">🔥 Most Popular Tools</h2>
+          <h2 className="mb-8 flex items-center gap-3 text-3xl font-bold">
+            <TargetIcon size="md" />
+            Most Popular Tools
+          </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {popularCalculators.map((calculator, index) => (
               <Link key={index} href={calculator.href} className="group">
-                <Card className="h-full transition-all hover:shadow-lg group-hover:-translate-y-1">
-                  <CardHeader>
+                <Card className="relative h-full overflow-hidden transition-all hover:shadow-lg group-hover:-translate-y-1">
+                  <div className="absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10">
+                    <Image
+                      src={
+                        index === 0
+                          ? 'https://images.unsplash.com/photo-1563410959-f99e14e49e09?w=400&q=80'
+                          : index === 1
+                            ? 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80'
+                            : index === 2
+                              ? 'https://images.unsplash.com/photo-1563005147-cc73a7094f93?w=400&q=80'
+                              : index === 3
+                                ? 'https://images.unsplash.com/photo-1597655601841-214a4cfe8b2c?w=400&q=80'
+                                : index === 4
+                                  ? 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=400&q=80'
+                                  : index === 5
+                                    ? 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&q=80'
+                                    : 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&q=80'
+                      }
+                      alt={calculator.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <CardHeader className="relative z-10">
                     <div className="flex items-center justify-between">
                       <Badge variant="secondary">{calculator.difficulty}</Badge>
                       <span className="text-sm text-muted-foreground">{calculator.time}</span>
                     </div>
                     <CardTitle className="group-hover:text-primary">{calculator.name}</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="relative z-10">
                     <CardDescription>{calculator.description}</CardDescription>
                   </CardContent>
                 </Card>
@@ -256,14 +282,45 @@ export default function GreenCalculators() {
         <div className="space-y-16">
           {calculatorCategories.map((category, categoryIndex) => (
             <div key={categoryIndex}>
-              <h2 className="mb-4 text-3xl font-bold">{category.title}</h2>
+              <h2 className="mb-4 flex items-center gap-3 text-3xl font-bold">
+                {category.icon && <category.icon size="lg" />}
+                {category.title}
+              </h2>
               <p className="mb-8 text-lg text-muted-foreground">{category.description}</p>
 
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {category.calculators.map((calculator, calcIndex) => (
                   <Link key={calcIndex} href={calculator.href} className="group">
-                    <Card className="h-full transition-all hover:shadow-lg group-hover:-translate-y-1">
-                      <CardHeader>
+                    <Card className="relative h-full overflow-hidden transition-all hover:shadow-lg group-hover:-translate-y-1">
+                      <div className="absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10">
+                        <Image
+                          src={
+                            categoryIndex === 0 && calcIndex === 0
+                              ? 'https://images.unsplash.com/photo-1563410959-f99e14e49e09?w=400&q=80'
+                              : categoryIndex === 0 && calcIndex === 1
+                                ? 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&q=80'
+                                : categoryIndex === 0 && calcIndex === 2
+                                  ? 'https://images.unsplash.com/photo-1563005147-cc73a7094f93?w=400&q=80'
+                                  : categoryIndex === 0 && calcIndex === 3
+                                    ? 'https://images.unsplash.com/photo-1597655601841-214a4cfe8b2c?w=400&q=80'
+                                    : categoryIndex === 1 && calcIndex === 0
+                                      ? 'https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=400&q=80'
+                                      : categoryIndex === 1 && calcIndex === 1
+                                        ? 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=400&q=80'
+                                        : categoryIndex === 2 && calcIndex === 0
+                                          ? 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80'
+                                          : categoryIndex === 2 && calcIndex === 1
+                                            ? 'https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=400&q=80'
+                                            : categoryIndex === 3
+                                              ? 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&q=80'
+                                              : 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=400&q=80'
+                          }
+                          alt={calculator.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <CardHeader className="relative z-10">
                         <div className="flex items-center justify-between">
                           <Badge
                             variant={
@@ -287,7 +344,7 @@ export default function GreenCalculators() {
                           {calculator.name}
                         </CardTitle>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="relative z-10">
                         <CardDescription>{calculator.description}</CardDescription>
                       </CardContent>
                     </Card>
@@ -300,7 +357,10 @@ export default function GreenCalculators() {
 
         {/* CTA Section */}
         <div className="mt-16 rounded-lg border-2 border-primary bg-gradient-to-r from-primary/10 to-accent/10 p-8 text-center">
-          <h2 className="mb-4 text-2xl font-bold">🌱 Start Your Sustainable Journey</h2>
+          <h2 className="mb-4 flex items-center justify-center gap-2 text-2xl font-bold">
+            <PlantIcon size="md" />
+            Start Your Sustainable Journey
+          </h2>
           <p className="mb-6 text-lg text-muted-foreground">
             Need help choosing the right green technologies? Our <strong>solar calculators</strong>{' '}
             work perfectly with these sustainable solutions for complete off-grid living.

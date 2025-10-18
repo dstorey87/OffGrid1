@@ -20,28 +20,28 @@ Description: Alert if ANY charges appear on Always Free account
 
 Target:
   Compartment: root (entire account)
-  
+
 Budget Amount:
   Type: Monthly
   Amount: $0.01 USD
-  
+
 Alert Rules:
   1. Alert Name: "50% Budget Alert"
      Threshold: 50% of budget ($0.005)
      Email: darrenstorey87@gmail.com
-     
-  2. Alert Name: "75% Budget Alert"  
+
+  2. Alert Name: "75% Budget Alert"
      Threshold: 75% of budget ($0.0075)
      Email: darrenstorey87@gmail.com
-     
+
   3. Alert Name: "90% Budget Alert"
      Threshold: 90% of budget ($0.009)
      Email: darrenstorey87@gmail.com
-     
+
   4. Alert Name: "100% Budget Alert"
      Threshold: 100% of budget ($0.01)
      Email: darrenstorey87@gmail.com
-     
+
   5. Alert Name: "Forecast Alert"
      Type: Forecast
      Threshold: 100%
@@ -58,11 +58,11 @@ Description: Daily monitoring for unexpected charges
 
 Target:
   Compartment: root
-  
+
 Budget Amount:
   Type: Daily
   Amount: $0.001 USD (one tenth of a cent per day)
-  
+
 Alert Rules:
   1. Alert Name: "Daily Charge Detected"
      Threshold: 100%
@@ -90,6 +90,7 @@ Review your costs: [Link to Cost Analysis]
 ### IMMEDIATE ACTIONS:
 
 1. **Check Cost Analysis**
+
    ```
    Governance → Cost Management → Cost Analysis
    View: Last 7 days
@@ -97,10 +98,12 @@ Review your costs: [Link to Cost Analysis]
    ```
 
 2. **Identify Billable Resource**
+
    - Look for any service showing non-zero cost
    - Note the resource name and type
 
 3. **Terminate Billable Resource**
+
    ```
    Navigate to that service
    Find the resource
@@ -109,6 +112,7 @@ Review your costs: [Link to Cost Analysis]
    ```
 
 4. **Verify Termination**
+
    ```
    Wait 1 hour
    Re-check Cost Analysis
@@ -158,7 +162,7 @@ Tags:
   - Always-Free: Yes/No
   - Environment: Production
   - Project: WordPress
-  
+
 Apply tag "Always-Free: Yes" to all resources
 Filter cost reports by tag to ensure only Always Free resources exist
 ```
@@ -209,6 +213,7 @@ fi
 When creating resources, look for these indicators:
 
 ✅ **SAFE** - Shows "Always Free" or "Always Free-eligible":
+
 ```
 ┌─────────────────────────────────────┐
 │ VM.Standard.E2.1.Micro             │
@@ -219,6 +224,7 @@ When creating resources, look for these indicators:
 ```
 
 ❌ **DANGER** - No "Always Free" badge:
+
 ```
 ┌─────────────────────────────────────┐
 │ VM.Standard2.1                      │
@@ -230,6 +236,7 @@ When creating resources, look for these indicators:
 ## Summary
 
 **Critical Setup (Do NOW):**
+
 1. ✅ Create budget with $0.01 monthly limit
 2. ✅ Add 5 alert rules (50%, 75%, 90%, 100%, Forecast)
 3. ✅ Verify email notifications work
@@ -238,6 +245,7 @@ When creating resources, look for these indicators:
 **If you follow this guide, you will NEVER be charged.**
 
 The Always Free tier is genuinely free forever, but you must:
+
 - Only use Always Free shapes
 - Stay within Always Free limits
 - Monitor costs weekly
@@ -246,6 +254,7 @@ The Always Free tier is genuinely free forever, but you must:
 ---
 
 **Next Steps:**
+
 1. Complete budget setup above
 2. Return to `SAFETY-CHECKLIST.md` for VM deployment
 3. Only create resources with "Always Free" badge

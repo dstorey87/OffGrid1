@@ -23,7 +23,7 @@ export default function SolarShop() {
           <div className="mb-4 text-6xl">🚧</div>
           <h2 className="mb-4 text-2xl font-bold">Shop Coming Soon!</h2>
           <p className="mb-6 text-muted-foreground">
-            We're building an intelligent shopping system that automatically generates product
+            We&apos;re building an intelligent shopping system that automatically generates product
             recommendations based on your calculator results. Each product will include:
           </p>
           <div className="mb-6 space-y-2 text-left">

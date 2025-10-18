@@ -548,7 +548,9 @@ export default function HydroponicsCalculator() {
                           <div className="flex-1">
                             <p className="font-medium">{product.name}</p>
                             <p className="text-xs text-muted-foreground">{product.category}</p>
-                            <p className="text-xs text-gray-600">{product.specs}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              {product.specs}
+                            </p>
                           </div>
                           <div className="text-right">
                             <p className="font-bold text-primary">{product.price}</p>

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BatteryIcon, EnergyIcon, TargetIcon } from '@/components/icons';
+import { householdPresets } from '@/lib/householdPresets';
 
 interface BatteryResults {
   batteryCapacityAh: number;
@@ -163,7 +165,6 @@ export default function BatterySizingCalculator() {
     if (!results) return [];
 
     const recommendations = [];
-    const batterySpec = batterySpecs[inputs.batteryChemistry];
     const capacity = results.batteryCapacityAh;
 
     // Budget recommendation
@@ -247,6 +248,35 @@ export default function BatterySizingCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
+        {/* Auto-Fill Household Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 text-xl font-semibold flex items-center gap-2"><BatteryIcon size="sm" /> Quick Start: Critical Load Presets</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Estimate critical backup power needs (essential appliances only)
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(householdPresets).map(([key, preset]) => {
+              const criticalKwh = preset.appliances
+                .filter((app) => app.critical)
+                .reduce((sum, app) => sum + (app.watts * app.hoursPerDay) / 1000, 0)
+                .toFixed(1);
+              return (
+                <button
+                  key={key}
+                  onClick={() => setInputs({ ...inputs, dailyCriticalLoad: criticalKwh })}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.description}</div>
+                  <div className="mt-2 text-sm font-medium text-foreground">
+                    ~{criticalKwh} kWh/day critical
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <Link
@@ -468,7 +498,7 @@ export default function BatterySizingCalculator() {
 
             {showRecommendations && batteryRecommendations.length > 0 && (
               <div className="rounded-lg border bg-card p-6">
-                <h2 className="mb-4 text-xl font-semibold">🔋 Recommended Battery Products</h2>
+                <h2 className="mb-4 text-xl font-semibold flex items-center gap-2"><BatteryIcon size="sm" /> Recommended Battery Products</h2>
                 <p className="mb-4 text-sm text-muted-foreground">
                   Curated {batterySpecs[inputs.batteryChemistry].chemistry} batteries with affiliate
                   pricing:
@@ -525,10 +555,10 @@ export default function BatterySizingCalculator() {
               <div className="rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">
                 <h3 className="mb-2 text-lg font-semibold">Complete Your System</h3>
                 <div className="space-y-2 text-sm">
-                  <div>✅ Calculated battery storage requirements</div>
-                  <div>⚙️ Size inverter for power conversion</div>
-                  <div>⚡ Calculate electrical components and wiring</div>
-                  <div>🎯 Create complete system design with all components</div>
+                  <div className="flex items-center gap-2">✅ Calculated battery storage requirements</div>
+                  <div className="flex items-center gap-2">⚙️ Size inverter for power conversion</div>
+                  <div className="flex items-center gap-2"><EnergyIcon size="sm" /> Calculate electrical components and wiring</div>
+                  <div className="flex items-center gap-2"><TargetIcon size="sm" /> Create complete system design with all components</div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <Link

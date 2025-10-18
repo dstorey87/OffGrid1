@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { EnergyIcon, TargetIcon } from '@/components/icons';
+import { householdPresets } from '@/lib/householdPresets';
 
 interface InverterResults {
   continuousWatts: number;
@@ -98,7 +100,7 @@ export default function InverterSizingCalculator() {
     }));
 
     const largestSurge = Math.max(...surgeLoads.map((load) => load.surge));
-    const otherContinuous = surgeLoads.reduce((total, load, index) => {
+    const otherContinuous = surgeLoads.reduce((total, load, _index) => {
       const isLargestSurge = load.surge === largestSurge;
       return total + (isLargestSurge ? 0 : load.continuous);
     }, 0);
@@ -217,6 +219,40 @@ export default function InverterSizingCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
+        {/* Auto-Fill Appliance Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 text-xl font-semibold flex items-center gap-2"><EnergyIcon size="sm" /> Quick Start: Load Presets</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Auto-fill with typical appliances for your household size
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(householdPresets).map(([key, preset]) => {
+              return (
+                <button
+                  key={key}
+                  onClick={() => {
+                    const newAppliances: ApplianceLoad[] = preset.appliances.map((app) => ({
+                      name: app.name,
+                      watts: app.watts,
+                      startupMultiplier: app.category === 'appliances' ? 3 : 1.2,
+                      quantity: 1,
+                      runtime: app.hoursPerDay,
+                    }));
+                    setAppliances(newAppliances);
+                  }}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.description}</div>
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    {preset.appliances.length} appliances
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <Link
@@ -492,10 +528,10 @@ export default function InverterSizingCalculator() {
               <div className="rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">
                 <h3 className="mb-2 text-lg font-semibold">Complete Your Solar System</h3>
                 <div className="space-y-2 text-sm">
-                  <div>✅ Calculated inverter power requirements</div>
-                  <div>⚡ Size electrical components and wiring</div>
-                  <div>🎯 Create complete system with all components</div>
-                  <div>🛒 Generate final shopping basket with installation guide</div>
+                  <div className="flex items-center gap-2">✅ Calculated inverter power requirements</div>
+                  <div className="flex items-center gap-2"><EnergyIcon size="sm" /> Size electrical components and wiring</div>
+                  <div className="flex items-center gap-2"><TargetIcon size="sm" /> Create complete system with all components</div>
+                  <div className="flex items-center gap-2">�️ Generate final shopping basket with installation guide</div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <Link

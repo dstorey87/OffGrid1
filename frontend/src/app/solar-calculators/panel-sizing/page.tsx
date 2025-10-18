@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { BuildingIcon, BatteryIcon, EnergyIcon, TargetIcon } from '@/components/icons';
+import { householdPresets } from '@/lib/householdPresets';
 
 interface PanelResults {
   dailySolarProduction: number;
@@ -156,7 +158,7 @@ export default function PanelSizingCalculator() {
 
     // Panel configuration for string sizing
     const systemVoltage = parseInt(systemInputs.systemVoltage);
-    const panelVoltage = systemVoltage === 12 ? 12 : systemVoltage === 24 ? 24 : 48;
+    const _panelVoltage = systemVoltage === 12 ? 12 : systemVoltage === 24 ? 24 : 48;
     const maxPanelsPerString = Math.floor(600 / 40); // Max 600V system, ~40V per panel
     const strings = Math.ceil(panelsNeeded / maxPanelsPerString);
     const panelsPerString = Math.ceil(panelsNeeded / strings);
@@ -235,6 +237,36 @@ export default function PanelSizingCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
+        {/* Auto-Fill Household Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+            <BuildingIcon size="sm" /> Quick Start: Auto-Fill Daily Energy
+          </h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Start with estimated daily energy needs based on household size
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(householdPresets).map(([key, preset]) => {
+              const dailyKwh = preset.appliances
+                .reduce((sum, app) => sum + (app.watts * app.hoursPerDay) / 1000, 0)
+                .toFixed(1);
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSystemInputs({ ...systemInputs, dailyEnergyNeed: dailyKwh })}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.description}</div>
+                  <div className="mt-2 text-sm font-medium text-foreground">
+                    ~{dailyKwh} kWh/day
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-8 text-center">
           <Link
@@ -306,7 +338,7 @@ export default function PanelSizingCalculator() {
                       href="/solar-calculators/load-analysis"
                       className="text-primary hover:underline"
                     >
-                      → Don't know your daily energy need? Use Load Analysis Calculator first
+                      → Don&apos;t know your daily energy need? Use Load Analysis Calculator first
                     </Link>
                   </div>
                 </div>
@@ -526,11 +558,19 @@ export default function PanelSizingCalculator() {
               <div className="rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">
                 <h3 className="mb-2 text-lg font-semibold">Next Steps</h3>
                 <div className="space-y-2 text-sm">
-                  <div>✅ Calculated your panel requirements</div>
-                  <div>🔋 Size battery storage for backup power</div>
-                  <div>⚙️ Calculate inverter requirements</div>
-                  <div>⚡ Verify electrical components and wiring</div>
-                  <div>🎯 Create complete system design</div>
+                  <div className="flex items-center gap-2">
+                    ✅ Calculated your panel requirements
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <BatteryIcon size="sm" /> Size battery storage for backup power
+                  </div>
+                  <div className="flex items-center gap-2">⚙️ Calculate inverter requirements</div>
+                  <div className="flex items-center gap-2">
+                    <EnergyIcon size="sm" /> Verify electrical components and wiring
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <TargetIcon size="sm" /> Create complete system design
+                  </div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <Link

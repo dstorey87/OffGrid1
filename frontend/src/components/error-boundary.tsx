@@ -50,13 +50,19 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 }
 
 function DefaultErrorFallback({ error, reset }: { error: Error; reset: () => void }) {
-  // Don't show error UI for DOM manipulation errors - just retry
-  if (error.message?.includes('removeChild') || error.message?.includes('Node')) {
-    React.useEffect(() => {
+  // Use useEffect at the top level
+  const isDOMError = error.message?.includes('removeChild') || error.message?.includes('Node');
+
+  React.useEffect(() => {
+    // Only auto-retry for DOM manipulation errors
+    if (isDOMError) {
       const timer = setTimeout(reset, 100);
       return () => clearTimeout(timer);
-    }, [reset]);
+    }
+  }, [isDOMError, reset]);
 
+  // Don't show error UI for DOM manipulation errors - just retry
+  if (isDOMError) {
     return null; // Render nothing while retrying
   }
 

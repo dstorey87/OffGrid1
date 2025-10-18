@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import {
@@ -265,10 +266,13 @@ export default function DirectoryPage() {
                   >
                     {/* Portugal-themed image header */}
                     <div className="relative h-32 overflow-hidden">
-                      <img
+                      <Image
                         src={getPortugalImage(post.id, post.title.rendered).url}
                         alt={getPortugalImage(post.id, post.title.rendered).alt}
+                        width={400}
+                        height={128}
                         className="h-full w-full object-cover"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     </div>

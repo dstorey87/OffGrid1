@@ -116,7 +116,8 @@ const regionConfigs: Record<Region, RegionConfig> = {
         {
           name: 'Local Excavator Hire',
           location: 'Your area',
-          notes: 'Mini-digger hire €80-120/day. Ask local farmers for contacts. Much cheaper than contractors.',
+          notes:
+            'Mini-digger hire €80-120/day. Ask local farmers for contacts. Much cheaper than contractors.',
         },
       ],
       pumps: [
@@ -307,7 +308,10 @@ export default function WaterIndependenceGuide() {
     },
   ];
 
-  const totalMaterialsCost = shoppingList.reduce((sum, item) => sum + item.quantity * item.price, 0);
+  const totalMaterialsCost = shoppingList.reduce(
+    (sum, item) => sum + item.quantity * item.price,
+    0
+  );
 
   return (
     <main className="min-h-screen bg-background">
@@ -391,7 +395,9 @@ export default function WaterIndependenceGuide() {
                   <h3 className="mb-2 font-semibold text-purple-900 dark:text-purple-100">
                     Total System Cost
                   </h3>
-                  <p className="text-3xl font-bold text-purple-600">{formatPrice(totalMaterialsCost)}</p>
+                  <p className="text-3xl font-bold text-purple-600">
+                    {formatPrice(totalMaterialsCost)}
+                  </p>
                   <p className="mt-2 text-sm text-muted-foreground">Materials only (DIY)</p>
                 </div>
               </div>
@@ -533,8 +539,8 @@ export default function WaterIndependenceGuide() {
                 <div className="mt-4 rounded-lg bg-green-50 p-4 dark:bg-green-950">
                   <p className="text-sm font-medium text-green-900 dark:text-green-100">
                     🇵🇹 <strong>Portugal Savings:</strong> These prices already reflect local
-                    suppliers (€35 used IBCs vs €75 Amazon). Click &quot;Show Local
-                    Suppliers&quot; to see where to buy!
+                    suppliers (€35 used IBCs vs €75 Amazon). Click &quot;Show Local Suppliers&quot;
+                    to see where to buy!
                   </p>
                 </div>
               )}
@@ -588,7 +594,7 @@ export default function WaterIndependenceGuide() {
                               </a>
                             )}
                             {supplier.phone && (
-                              <p className="mt-1 text-sm font-mono text-blue-800 dark:text-blue-200">
+                              <p className="mt-1 font-mono text-sm text-blue-800 dark:text-blue-200">
                                 📞 {supplier.phone}
                               </p>
                             )}
@@ -631,7 +637,7 @@ export default function WaterIndependenceGuide() {
                               </a>
                             )}
                             {supplier.phone && (
-                              <p className="mt-1 text-sm font-mono text-green-800 dark:text-green-200">
+                              <p className="mt-1 font-mono text-sm text-green-800 dark:text-green-200">
                                 📞 {supplier.phone}
                               </p>
                             )}
@@ -674,7 +680,7 @@ export default function WaterIndependenceGuide() {
                               </a>
                             )}
                             {supplier.phone && (
-                              <p className="mt-1 text-sm font-mono text-purple-800 dark:text-purple-200">
+                              <p className="mt-1 font-mono text-sm text-purple-800 dark:text-purple-200">
                                 📞 {supplier.phone}
                               </p>
                             )}
@@ -717,7 +723,7 @@ export default function WaterIndependenceGuide() {
                               </a>
                             )}
                             {supplier.phone && (
-                              <p className="mt-1 text-sm font-mono text-orange-800 dark:text-orange-200">
+                              <p className="mt-1 font-mono text-sm text-orange-800 dark:text-orange-200">
                                 📞 {supplier.phone}
                               </p>
                             )}
@@ -874,8 +880,8 @@ export default function WaterIndependenceGuide() {
                         1
                       </span>
                       <div>
-                        <strong>Prepare Level Ground:</strong> Clear {formatArea(36)} area,
-                        compact soil, lay 15cm gravel base for drainage.
+                        <strong>Prepare Level Ground:</strong> Clear {formatArea(36)} area, compact
+                        soil, lay 15cm gravel base for drainage.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -883,8 +889,8 @@ export default function WaterIndependenceGuide() {
                         2
                       </span>
                       <div>
-                        <strong>Build Rack Structure:</strong> Use 100×100mm pressure-treated
-                        timber posts. Space {formatLength(1.2)} apart to support each IBC.
+                        <strong>Build Rack Structure:</strong> Use 100×100mm pressure-treated timber
+                        posts. Space {formatLength(1.2)} apart to support each IBC.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -892,8 +898,8 @@ export default function WaterIndependenceGuide() {
                         3
                       </span>
                       <div>
-                        <strong>Install IBCs:</strong> Position totes in 2×5 grid. Each section =
-                        10 totes. Build 5 sections total = 50 totes.
+                        <strong>Install IBCs:</strong> Position totes in 2×5 grid. Each section = 10
+                        totes. Build 5 sections total = 50 totes.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -910,8 +916,8 @@ export default function WaterIndependenceGuide() {
                         5
                       </span>
                       <div>
-                        <strong>Add Inlet System:</strong> Install 32mm pipe to top of each IBC
-                        from roof guttering. Add mesh filter (5mm) at each inlet.
+                        <strong>Add Inlet System:</strong> Install 32mm pipe to top of each IBC from
+                        roof guttering. Add mesh filter (5mm) at each inlet.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -961,10 +967,23 @@ export default function WaterIndependenceGuide() {
                   <h3 className="mb-4 font-semibold">House Collection Detail</h3>
                   <svg viewBox="0 0 600 500" className="w-full">
                     {/* House */}
-                    <rect x="150" y="200" width="300" height="200" fill="#d4a574" stroke="#8b6f47" strokeWidth="2" />
+                    <rect
+                      x="150"
+                      y="200"
+                      width="300"
+                      height="200"
+                      fill="#d4a574"
+                      stroke="#8b6f47"
+                      strokeWidth="2"
+                    />
                     {/* Roof */}
-                    <polygon points="150,200 300,100 450,200" fill="#8b0000" stroke="#600" strokeWidth="2" />
-                    
+                    <polygon
+                      points="150,200 300,100 450,200"
+                      fill="#8b0000"
+                      stroke="#600"
+                      strokeWidth="2"
+                    />
+
                     {/* Rain */}
                     {[...Array(30)].map((_, i) => (
                       <line
@@ -978,51 +997,124 @@ export default function WaterIndependenceGuide() {
                         opacity="0.6"
                       />
                     ))}
-                    
+
                     {/* Gutters */}
-                    <rect x="130" y="200" width="340" height="15" fill="#666" stroke="#333" strokeWidth="1" />
-                    
+                    <rect
+                      x="130"
+                      y="200"
+                      width="340"
+                      height="15"
+                      fill="#666"
+                      stroke="#333"
+                      strokeWidth="1"
+                    />
+
                     {/* Downspouts */}
                     <rect x="140" y="200" width="20" height="200" fill="#666" />
                     <rect x="440" y="200" width="20" height="200" fill="#666" />
-                    
+
                     {/* First Flush Diverters */}
-                    <rect x="135" y="420" width="30" height="60" fill="#e74c3c" stroke="#c0392b" strokeWidth="2" />
-                    <rect x="435" y="420" width="30" height="60" fill="#e74c3c" stroke="#c0392b" strokeWidth="2" />
-                    <text x="150" y="455" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                    <rect
+                      x="135"
+                      y="420"
+                      width="30"
+                      height="60"
+                      fill="#e74c3c"
+                      stroke="#c0392b"
+                      strokeWidth="2"
+                    />
+                    <rect
+                      x="435"
+                      y="420"
+                      width="30"
+                      height="60"
+                      fill="#e74c3c"
+                      stroke="#c0392b"
+                      strokeWidth="2"
+                    />
+                    <text
+                      x="150"
+                      y="455"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       FIRST
                     </text>
-                    <text x="150" y="468" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                    <text
+                      x="150"
+                      y="468"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       FLUSH
                     </text>
-                    <text x="450" y="455" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                    <text
+                      x="450"
+                      y="455"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       FIRST
                     </text>
-                    <text x="450" y="468" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                    <text
+                      x="450"
+                      y="468"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       FLUSH
                     </text>
-                    
+
                     {/* Storage Pipes */}
                     <line x1="150" y1="480" x2="150" y2="520" stroke="#2563eb" strokeWidth="6" />
                     <line x1="450" y1="480" x2="450" y2="520" stroke="#2563eb" strokeWidth="6" />
-                    <text x="150" y="540" textAnchor="middle" fontSize="12" fill="#2563eb" fontWeight="bold">
+                    <text
+                      x="150"
+                      y="540"
+                      textAnchor="middle"
+                      fontSize="12"
+                      fill="#2563eb"
+                      fontWeight="bold"
+                    >
                       To Storage
                     </text>
-                    <text x="450" y="540" textAnchor="middle" fontSize="12" fill="#2563eb" fontWeight="bold">
+                    <text
+                      x="450"
+                      y="540"
+                      textAnchor="middle"
+                      fontSize="12"
+                      fill="#2563eb"
+                      fontWeight="bold"
+                    >
                       To Storage
                     </text>
-                    
+
                     {/* Dimensions */}
                     <line x1="100" y1="200" x2="100" y2="400" stroke="#e74c3c" strokeWidth="1" />
                     <text x="70" y="310" fontSize="12" fill="#e74c3c" fontWeight="bold">
                       {formatLength(4)}
                     </text>
-                    
+
                     <line x1="150" y1="180" x2="450" y2="180" stroke="#e74c3c" strokeWidth="1" />
-                    <text x="290" y="170" fontSize="12" fill="#e74c3c" fontWeight="bold" textAnchor="middle">
+                    <text
+                      x="290"
+                      y="170"
+                      fontSize="12"
+                      fill="#e74c3c"
+                      fontWeight="bold"
+                      textAnchor="middle"
+                    >
                       {formatLength(10)} width
                     </text>
-                    
+
                     {/* Labels */}
                     <text x="300" y="30" textAnchor="middle" fontSize="16" fontWeight="bold">
                       House: {formatArea(200)} Roof
@@ -1244,11 +1336,34 @@ export default function WaterIndependenceGuide() {
                     <polygon points="520,190 540,180 540,200" fill="#e74c3c" />
 
                     {/* Pump */}
-                    <rect x="380" y="320" width="40" height="30" fill="#27ae60" stroke="#229954" strokeWidth="2" />
-                    <text x="400" y="340" textAnchor="middle" fontSize="10" fontWeight="bold" fill="white">
+                    <rect
+                      x="380"
+                      y="320"
+                      width="40"
+                      height="30"
+                      fill="#27ae60"
+                      stroke="#229954"
+                      strokeWidth="2"
+                    />
+                    <text
+                      x="400"
+                      y="340"
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       Pump
                     </text>
-                    <line x1="400" y1="320" x2="400" y2="100" stroke="#27ae60" strokeWidth="3" strokeDasharray="4" />
+                    <line
+                      x1="400"
+                      y1="320"
+                      x2="400"
+                      y2="100"
+                      stroke="#27ae60"
+                      strokeWidth="3"
+                      strokeDasharray="4"
+                    />
 
                     {/* Arrow markers */}
                     <defs>
@@ -1265,7 +1380,14 @@ export default function WaterIndependenceGuide() {
                     </defs>
 
                     {/* Labels */}
-                    <text x="300" y="220" textAnchor="middle" fontSize="16" fontWeight="bold" fill="white">
+                    <text
+                      x="300"
+                      y="220"
+                      textAnchor="middle"
+                      fontSize="16"
+                      fontWeight="bold"
+                      fill="white"
+                    >
                       {formatVolume(3600000)}
                     </text>
                     <text x="300" y="240" textAnchor="middle" fontSize="12" fill="white">
@@ -1284,8 +1406,8 @@ export default function WaterIndependenceGuide() {
                       </span>
                       <div>
                         <strong>Excavation:</strong> Hire mini-digger. Dig {formatLength(30)} ×{' '}
-                        {formatLength(30)} area to {formatLength(4)} depth. Slope sides at 45°
-                        angle for stability. Total excavation: ~{formatVolume(3600000)} soil.
+                        {formatLength(30)} area to {formatLength(4)} depth. Slope sides at 45° angle
+                        for stability. Total excavation: ~{formatVolume(3600000)} soil.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -1321,8 +1443,8 @@ export default function WaterIndependenceGuide() {
                         5
                       </span>
                       <div>
-                        <strong>Secure Edges:</strong> Dig 30cm trench around perimeter. Fold
-                        liner into trench, backfill with soil, compact firmly.
+                        <strong>Secure Edges:</strong> Dig 30cm trench around perimeter. Fold liner
+                        into trench, backfill with soil, compact firmly.
                       </div>
                     </li>
                     <li className="flex gap-3">
@@ -1464,8 +1586,9 @@ export default function WaterIndependenceGuide() {
                     </span>
                   </div>
                   <p className="mt-4 text-xs text-muted-foreground">
-                    Professional installation would add ~{formatPrice(Math.round(totalMaterialsCost * 0.9))}{' '}
-                    labor. Hybrid approach (you do 60%) saves ~{formatPrice(Math.round(totalMaterialsCost * 0.4))}.
+                    Professional installation would add ~
+                    {formatPrice(Math.round(totalMaterialsCost * 0.9))} labor. Hybrid approach (you
+                    do 60%) saves ~{formatPrice(Math.round(totalMaterialsCost * 0.4))}.
                   </p>
                 </div>
               </CardContent>
@@ -1480,8 +1603,8 @@ export default function WaterIndependenceGuide() {
               <h2 className="mb-4 text-3xl font-bold">Ready to Build?</h2>
               <p className="mx-auto mb-6 max-w-2xl text-muted-foreground">
                 You now have complete build plans, measurements, and shopping links for your region.
-                Start with the roof collection system (easiest), then add IBC totes, and finally
-                the farm pond as budget allows.
+                Start with the roof collection system (easiest), then add IBC totes, and finally the
+                farm pond as budget allows.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button size="lg" asChild>

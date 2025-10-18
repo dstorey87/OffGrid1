@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { waterPresets } from '@/lib/waterPresets';
 
 interface WaterIndependenceResults {
   annualNeeds: {
@@ -348,6 +349,31 @@ export default function TotalWaterIndependenceCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
+        {/* Auto-Fill Water Usage Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 text-xl font-semibold">💧 Quick Start: Household Water Needs</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Estimate daily household water usage based on family size
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(waterPresets).map(([key, preset]) => {
+              return (
+                <button
+                  key={key}
+                  onClick={() => setOccupants(preset.people.toString())}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.people} people</div>
+                  <div className="mt-2 text-sm font-medium text-foreground">
+                    ~{preset.totalDaily} L/day
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-6xl">
@@ -718,7 +744,7 @@ export default function TotalWaterIndependenceCalculator() {
                             <p className="text-xs text-muted-foreground">
                               {product.category} • {product.specs}
                             </p>
-                            <p className="text-xs text-gray-600">
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
                               Quantity: {product.quantity} × {product.price} ={' '}
                               <strong>{product.total}</strong>
                             </p>

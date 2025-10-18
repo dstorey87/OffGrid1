@@ -5,6 +5,7 @@
 ## ✅ Pre-Deployment Checklist
 
 ### 1. Always Free Tier Limits - DO NOT EXCEED
+
 - ✅ **Compute**: 2 AMD VMs (1/8 OCPU, 1GB RAM each) OR 4 ARM VMs (24GB RAM total)
 - ✅ **Block Storage**: 200GB total (including boot volumes)
 - ✅ **Object Storage**: 20GB total (Standard + Infrequent + Archive combined)
@@ -15,6 +16,7 @@
 ### 2. Account Configuration - MANDATORY STEPS
 
 #### A. Set Account Budget Alerts
+
 ```
 1. Go to: Account Management → Budgets
 2. Click "Create Budget"
@@ -25,6 +27,7 @@
 ```
 
 #### B. Verify Free Tier Status
+
 ```
 1. Go to: Governance → Tenancy Details
 2. Check: "Account Type" shows "Free Tier"
@@ -32,6 +35,7 @@
 ```
 
 #### C. Disable Pay-As-You-Go Resources
+
 ```
 1. Go to: Governance → Cost Management → Cost Tracking
 2. Review all services
@@ -41,6 +45,7 @@
 ## 🚫 NEVER Create These Resources (They Cost Money)
 
 ### Compute - AVOID:
+
 - ❌ Any VM shape except: `VM.Standard.E2.1.Micro` (AMD Always Free)
 - ❌ Any VM shape except: `VM.Standard.A1.Flex` (ARM Always Free)
 - ❌ GPU instances
@@ -48,12 +53,14 @@
 - ❌ More than 2 AMD VMs OR more than 4 ARM VMs total
 
 ### Storage - AVOID:
+
 - ❌ Block volumes over 200GB total
 - ❌ Object storage over 20GB total
 - ❌ Archive storage over 20GB total
 - ❌ Performance storage (use "Balanced" only)
 
 ### Database - AVOID:
+
 - ❌ More than 2 Autonomous Databases
 - ❌ Databases over 20GB each
 - ❌ Exadata infrastructure
@@ -61,6 +68,7 @@
 - ❌ NoSQL storage over 25GB per table
 
 ### Networking - AVOID:
+
 - ❌ FastConnect
 - ❌ Load balancers over 10 Mbps
 - ❌ More than 1 load balancer
@@ -68,6 +76,7 @@
 - ❌ Data transfer over 10TB/month
 
 ### Other Services - AVOID:
+
 - ❌ AI services (Vision, Speech, Language, etc.)
 - ❌ Analytics Cloud
 - ❌ Integration services
@@ -79,6 +88,7 @@
 ### 1. Compute Instance (Choose ONE option)
 
 **Option A: AMD VM (Recommended for simplicity)**
+
 ```yaml
 Shape: VM.Standard.E2.1.Micro
 OCPU: 1/8
@@ -88,6 +98,7 @@ Cost: $0 forever
 ```
 
 **Option B: ARM VM (Better performance, more complex)**
+
 ```yaml
 Shape: VM.Standard.A1.Flex
 OCPU: 1-4 (allocate 2 OCPUs)
@@ -97,6 +108,7 @@ Cost: $0 forever (within 3000 OCPU hours, 18000 GB hours/month)
 ```
 
 ### 2. Block Storage
+
 ```yaml
 Boot Volume: 47GB (for OS)
 WordPress Volume: 50GB (for WordPress files)
@@ -107,6 +119,7 @@ Cost: $0 forever
 ```
 
 ### 3. Networking
+
 ```yaml
 VCN: 1 Virtual Cloud Network
 Subnet: 1 public subnet
@@ -118,35 +131,38 @@ Cost: $0 forever
 ## 🛡️ WordPress Deployment - Always Free Configuration
 
 ### Modified docker-compose.prod.yml
+
 Use the version I created in `deploy/oracle-cloud/docker-compose.prod.yml` - it's already configured for minimal resource usage.
 
 ### VM Provisioning Steps (Always Free Only)
 
 1. **Login to Oracle Cloud Console**
+
    - URL: https://cloud.oracle.com
 
 2. **Create Compute Instance**
+
    ```
    Navigation: Compute → Instances → Create Instance
-   
+
    Name: offgrid-wordpress-prod
-   
+
    Image: Ubuntu 22.04 (Always Free eligible)
-   
-   Shape: 
+
+   Shape:
    - Click "Change Shape"
    - Select "Specialty and previous generation"
    - Choose: VM.Standard.E2.1.Micro (Always Free)
    - OR choose: VM.Standard.A1.Flex (Always Free, allocate 2 OCPU, 12GB RAM)
-   
+
    Networking:
    - Create new VCN: offgrid-vcn
    - Create new subnet: offgrid-public-subnet
    - Assign public IPv4 address: YES
-   
+
    Boot Volume:
    - Size: 47GB (default for Always Free)
-   
+
    SSH Keys:
    - Generate SSH key pair → Download both keys
    ```
@@ -164,6 +180,7 @@ Use the version I created in `deploy/oracle-cloud/docker-compose.prod.yml` - it'
 ### If You See ANY Charges:
 
 1. **Immediate Actions**
+
    ```
    1. Go to: Governance → Cost Management
    2. Click: "Cost Analysis"
@@ -172,6 +189,7 @@ Use the version I created in `deploy/oracle-cloud/docker-compose.prod.yml` - it'
    ```
 
 2. **Delete All Billable Resources**
+
    ```
    1. Go to: Compute → Instances
    2. For each non-Always-Free instance:
@@ -190,16 +208,17 @@ Use the version I created in `deploy/oracle-cloud/docker-compose.prod.yml` - it'
 ## 📊 Monthly Monitoring Routine
 
 ### Every Week, Check:
+
 ```
 1. Governance → Cost Management → Cost Analysis
    - Verify: $0.00 total
-   
+
 2. Compute → Instances
    - Verify: All instances show "Always Free" badge
-   
+
 3. Block Storage → Block Volumes
    - Verify: Total < 200GB
-   
+
 4. Networking → Load Balancers
    - Verify: ≤ 1 load balancer at 10 Mbps
 ```
@@ -232,6 +251,7 @@ curl http://localhost
 ## 🎯 Final Safety Summary
 
 ### ALWAYS:
+
 - ✅ Use VM.Standard.E2.1.Micro (AMD) or VM.Standard.A1.Flex (ARM)
 - ✅ Keep total block storage under 200GB
 - ✅ Monitor costs weekly
@@ -239,6 +259,7 @@ curl http://localhost
 - ✅ Set budget alerts at $0.01
 
 ### NEVER:
+
 - ❌ Create more than 1 WordPress VM (you only need one)
 - ❌ Upgrade shapes to paid tiers
 - ❌ Enable AI, Analytics, or Trial services after 30 days
@@ -248,11 +269,13 @@ curl http://localhost
 ## 📞 Support Contacts
 
 **Oracle Cloud Support (Free Tier)**
+
 - Community Forums: https://cloudcustomerconnect.oracle.com/
 - Documentation: https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier.htm
 - Email: Check your account dashboard for support options
 
 **Emergency Contact (if charged)**
+
 - Immediately open support ticket through console
 - Reference: Oracle Cloud Free Tier Terms of Service
 - Dispute any charges related to Always Free resources

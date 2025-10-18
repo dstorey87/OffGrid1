@@ -2,21 +2,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Metadata } from 'next';
+import Image from 'next/image';
+import { useCurrency } from '@/contexts/CurrencyContext';
 
-// SEO metadata for load analysis calculator
-export const metadata: Metadata = {
-  title: 'Free Load Analysis Calculator - Calculate Your Solar Power Needs',
-  description:
-    'Calculate your exact power consumption for off-grid solar systems. FREE load analysis calculator determines appliance energy usage, seasonal variations, and equipment requirements.',
-  keywords:
-    'load analysis calculator, solar power calculator, energy consumption calculator, off grid power needs, appliance power usage, solar system sizing',
-  openGraph: {
-    title: 'Free Solar Load Analysis Calculator',
-    description: 'Calculate your power needs for off-grid solar systems',
-    url: 'https://offgrid1.com/solar-calculators/load-analysis',
-  },
-};
+import CurrencySelector from '@/components/CurrencySelector';
+import UnitsSelector from '@/components/UnitsSelector';
+import { BuildingIcon } from '@/components/icons';
+import { householdPresets } from '@/lib/householdPresets';
+
+// Note: Metadata exports removed - client components cannot export metadata
+// SEO will be handled by parent layout or server component wrapper if needed
 
 interface Appliance {
   id: string;
@@ -35,7 +30,17 @@ interface LoadResults {
   recommendedSystemSize: number;
 }
 
+interface ProductOverrides {
+  solarPanelPrice: string;
+  batteryPrice: string;
+  inverterPricePerWatt: string;
+  controllerPricePerAmp: string;
+  monitorPrice: string;
+  useCustomPricing: boolean;
+}
+
 export default function LoadAnalysisCalculator() {
+  const { formatPrice } = useCurrency();
   const [appliances, setAppliances] = useState<Appliance[]>([]);
   const [customAppliance, setCustomAppliance] = useState({
     name: '',
@@ -46,6 +51,14 @@ export default function LoadAnalysisCalculator() {
   });
   const [results, setResults] = useState<LoadResults | null>(null);
   const [showShoppingBasket, setShowShoppingBasket] = useState(false);
+  const [productOverrides, setProductOverrides] = useState<ProductOverrides>({
+    solarPanelPrice: '200',
+    batteryPrice: '400',
+    inverterPricePerWatt: '0.8',
+    controllerPricePerAmp: '8',
+    monitorPrice: '150',
+    useCustomPricing: false,
+  });
 
   // Common appliances database for quick adding
   const commonAppliances = [
@@ -77,6 +90,18 @@ export default function LoadAnalysisCalculator() {
       critical: appliance.critical,
     };
     setAppliances([...appliances, newAppliance]);
+  };
+
+  const autoFillPreset = (presetKey: string) => {
+    const preset = householdPresets[presetKey];
+    if (preset) {
+      const newAppliances: Appliance[] = preset.appliances.map((app, index) => ({
+        id: `${Date.now()}_${index}`,
+        ...app,
+      }));
+      setAppliances(newAppliances);
+      // calculateLoad will be called automatically via the useEffect or user can click Calculate
+    }
   };
 
   const addCustomAppliance = () => {
@@ -150,13 +175,35 @@ export default function LoadAnalysisCalculator() {
 
     const basket = [];
 
+    // Get pricing (use overrides if enabled, otherwise defaults)
+    const pricing = productOverrides.useCustomPricing
+      ? {
+          solarPanel: parseFloat(productOverrides.solarPanelPrice) || 200,
+          battery: parseFloat(productOverrides.batteryPrice) || 400,
+          inverterPerWatt: parseFloat(productOverrides.inverterPricePerWatt) || 0.8,
+          controllerPerAmp: parseFloat(productOverrides.controllerPricePerAmp) || 8,
+          monitor: parseFloat(productOverrides.monitorPrice) || 150,
+        }
+      : {
+          solarPanel: 200,
+          battery: 400,
+          inverterPerWatt: 0.8,
+          controllerPerAmp: 8,
+          monitor: 150,
+        };
+
     // Solar panels (assume 4 peak sun hours, 20% system losses)
     const panelsNeeded = Math.ceil(results.recommendedSystemSize / (0.4 * 0.8)); // 400W panels
     basket.push({
       category: 'Solar Panels',
       item: `${panelsNeeded}x 400W Monocrystalline Solar Panels`,
-      affiliate: 'https://amzn.to/solar-panels-400w', // Example affiliate link
-      price: panelsNeeded * 200,
+      affiliates: [
+        { source: 'Amazon', url: 'https://amzn.to/solar-panels-400w' },
+        { source: 'eBay', url: 'https://ebay.us/solar-panel-400w' },
+        { source: 'Signature Solar', url: 'https://signaturesolar.com/solar-panels' },
+        { source: 'Current Connected', url: 'https://currentconnected.com/solar-panels' },
+      ],
+      price: panelsNeeded * pricing.solarPanel,
       priority: 'essential',
     });
 
@@ -166,8 +213,13 @@ export default function LoadAnalysisCalculator() {
     basket.push({
       category: 'Battery Storage',
       item: `${batteriesNeeded}x 100Ah LiFePO4 Battery`,
-      affiliate: 'https://amzn.to/lifepo4-100ah',
-      price: batteriesNeeded * 400,
+      affiliates: [
+        { source: 'Amazon', url: 'https://amzn.to/lifepo4-100ah' },
+        { source: 'eBay', url: 'https://ebay.us/lifepo4-battery' },
+        { source: 'AliExpress', url: 'https://s.click.aliexpress.com/lifepo4-100ah' },
+        { source: 'SOK Battery', url: 'https://sokbattery.com/lifepo4' },
+      ],
+      price: batteriesNeeded * pricing.battery,
       priority: 'essential',
     });
 
@@ -176,8 +228,13 @@ export default function LoadAnalysisCalculator() {
     basket.push({
       category: 'Inverter',
       item: `${inverterSize}W Pure Sine Wave Inverter`,
-      affiliate: 'https://amzn.to/pure-sine-inverter',
-      price: inverterSize * 0.8, // ~$0.80 per watt
+      affiliates: [
+        { source: 'Amazon', url: 'https://amzn.to/pure-sine-inverter' },
+        { source: 'eBay', url: 'https://ebay.us/inverter-pure-sine' },
+        { source: 'Victron Energy', url: 'https://www.victronenergy.com/inverters' },
+        { source: 'Aims Power', url: 'https://aimscorp.net/inverters' },
+      ],
+      price: inverterSize * pricing.inverterPerWatt,
       priority: 'essential',
     });
 
@@ -186,8 +243,13 @@ export default function LoadAnalysisCalculator() {
     basket.push({
       category: 'Charge Controller',
       item: `${chargeControllerAmps}A MPPT Charge Controller`,
-      affiliate: 'https://amzn.to/mppt-controller',
-      price: chargeControllerAmps * 8, // ~$8 per amp
+      affiliates: [
+        { source: 'Amazon', url: 'https://amzn.to/mppt-controller' },
+        { source: 'eBay', url: 'https://ebay.us/mppt-charge-controller' },
+        { source: 'Renogy', url: 'https://www.renogy.com/charge-controllers' },
+        { source: 'Victron Energy', url: 'https://www.victronenergy.com/solar-charge-controllers' },
+      ],
+      price: chargeControllerAmps * pricing.controllerPerAmp,
       priority: 'essential',
     });
 
@@ -195,8 +257,12 @@ export default function LoadAnalysisCalculator() {
     basket.push({
       category: 'Monitoring',
       item: 'Battery Monitor with Bluetooth',
-      affiliate: 'https://amzn.to/battery-monitor',
-      price: 150,
+      affiliates: [
+        { source: 'Amazon', url: 'https://amzn.to/battery-monitor' },
+        { source: 'eBay', url: 'https://ebay.us/battery-monitor' },
+        { source: 'Victron Energy', url: 'https://www.victronenergy.com/battery-monitors' },
+      ],
+      price: pricing.monitor,
       priority: 'recommended',
     });
 
@@ -209,23 +275,71 @@ export default function LoadAnalysisCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8 text-center">
-          <Link
-            href="/solar-calculators"
-            className="mb-4 inline-block text-primary hover:underline"
-          >
-            ← Back to Solar Calculators
-          </Link>
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">
-            Free Load Analysis Calculator - Solar Power Needs
-          </h1>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            <strong>Calculate your exact power consumption</strong> for accurate off-grid solar
-            system sizing. The foundation of solar design - analyze appliances, seasonal usage, and
-            get personalized
-            <em>solar equipment recommendations</em> with instant shopping baskets.
+        {/* Hero Header with Image */}
+        <div className="relative mb-8 overflow-hidden rounded-2xl">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=1200&q=80"
+              alt="Power meter and energy monitoring for load analysis"
+              fill
+              className="object-cover opacity-15"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background"></div>
+          </div>
+
+          <div className="relative z-10 px-4 py-12 md:px-8">
+            {/* Back Button */}
+            <Link
+              href="/solar-calculators"
+              className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+            >
+              ← Back to Solar Calculators
+            </Link>
+
+            <h1 className="mb-4 text-3xl font-bold tracking-tight lg:text-5xl">
+              Free Load Analysis Calculator - Solar Power Needs
+            </h1>
+            <p className="max-w-3xl text-lg text-muted-foreground">
+              <strong>Calculate your exact power consumption</strong> for accurate off-grid solar
+              system sizing. The foundation of solar design - analyze appliances, seasonal usage,
+              and get personalized <strong>solar equipment recommendations</strong> with instant
+              shopping baskets.
+            </p>
+          </div>
+        </div>
+
+        {/* Controls Bar */}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border bg-card p-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <CurrencySelector />
+            <UnitsSelector />
+          </div>
+        </div>
+
+        {/* Auto-Fill Household Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 flex items-center gap-2 text-xl font-semibold">
+            <BuildingIcon size="sm" /> Auto-Fill for Your Household
+          </h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Quick start with pre-configured appliances for different household sizes
           </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(householdPresets).map(([key, preset]) => (
+              <button
+                key={key}
+                onClick={() => autoFillPreset(key)}
+                className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+              >
+                <div className="font-semibold text-primary">{preset.name}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{preset.description}</div>
+                <div className="mt-2 text-xs text-muted-foreground">
+                  {preset.appliances.length} appliances
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
@@ -389,57 +503,203 @@ export default function LoadAnalysisCalculator() {
             )}
 
             {showShoppingBasket && shoppingBasket.length > 0 && (
-              <div className="rounded-lg border bg-card p-6">
-                <h2 className="mb-4 text-xl font-semibold">🛒 Recommended Shopping Basket</h2>
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Curated products based on your load analysis. Click affiliate links to purchase
-                  and support our site.
-                </p>
-                <div className="space-y-3">
-                  {shoppingBasket.map((item, index) => (
-                    <div key={index} className="rounded border bg-background p-3">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="font-medium">{item.item}</div>
-                          <div className="text-sm text-muted-foreground">{item.category}</div>
+              <>
+                {/* Pricing Controls */}
+                <div className="rounded-lg border bg-card p-6">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold">Custom Pricing</h3>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={productOverrides.useCustomPricing}
+                        onChange={(e) =>
+                          setProductOverrides({
+                            ...productOverrides,
+                            useCustomPricing: e.target.checked,
+                          })
+                        }
+                        className="h-4 w-4 rounded border-gray-300"
+                      />
+                      <span className="font-medium">Use Custom Pricing</span>
+                    </label>
+
+                    {productOverrides.useCustomPricing && (
+                      <div className="grid gap-3 border-t pt-4 sm:grid-cols-2">
+                        <div>
+                          <label className="mb-1 block text-sm text-muted-foreground">
+                            Solar Panel Price (per panel)
+                          </label>
+                          <input
+                            type="number"
+                            value={productOverrides.solarPanelPrice}
+                            onChange={(e) =>
+                              setProductOverrides({
+                                ...productOverrides,
+                                solarPanelPrice: e.target.value,
+                              })
+                            }
+                            className="w-full rounded border px-3 py-2 text-sm"
+                            placeholder="200"
+                          />
                         </div>
-                        <div className="text-right">
-                          <div className="font-semibold">${item.price.toFixed(0)}</div>
-                          <a
-                            href={item.affiliate}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:underline"
-                          >
-                            View Product →
-                          </a>
+                        <div>
+                          <label className="mb-1 block text-sm text-muted-foreground">
+                            Battery Price (per 100Ah)
+                          </label>
+                          <input
+                            type="number"
+                            value={productOverrides.batteryPrice}
+                            onChange={(e) =>
+                              setProductOverrides({
+                                ...productOverrides,
+                                batteryPrice: e.target.value,
+                              })
+                            }
+                            className="w-full rounded border px-3 py-2 text-sm"
+                            placeholder="400"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-sm text-muted-foreground">
+                            Inverter Price (per watt)
+                          </label>
+                          <input
+                            type="number"
+                            step="0.01"
+                            value={productOverrides.inverterPricePerWatt}
+                            onChange={(e) =>
+                              setProductOverrides({
+                                ...productOverrides,
+                                inverterPricePerWatt: e.target.value,
+                              })
+                            }
+                            className="w-full rounded border px-3 py-2 text-sm"
+                            placeholder="0.8"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-sm text-muted-foreground">
+                            Controller Price (per amp)
+                          </label>
+                          <input
+                            type="number"
+                            value={productOverrides.controllerPricePerAmp}
+                            onChange={(e) =>
+                              setProductOverrides({
+                                ...productOverrides,
+                                controllerPricePerAmp: e.target.value,
+                              })
+                            }
+                            className="w-full rounded border px-3 py-2 text-sm"
+                            placeholder="8"
+                          />
+                        </div>
+                        <div>
+                          <label className="mb-1 block text-sm text-muted-foreground">
+                            Monitor Price
+                          </label>
+                          <input
+                            type="number"
+                            value={productOverrides.monitorPrice}
+                            onChange={(e) =>
+                              setProductOverrides({
+                                ...productOverrides,
+                                monitorPrice: e.target.value,
+                              })
+                            }
+                            className="w-full rounded border px-3 py-2 text-sm"
+                            placeholder="150"
+                          />
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 border-t pt-4">
-                  <div className="flex justify-between text-lg font-semibold">
-                    <span>Estimated Total Cost:</span>
-                    <span className="text-primary">${totalCost.toFixed(0)}</span>
+                    )}
                   </div>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    *Prices are estimates. Click affiliate links for current pricing and
-                    availability.
-                  </p>
                 </div>
-              </div>
+
+                {/* Shopping Basket */}
+                <div className="rounded-lg border bg-card p-6">
+                  <h2 className="mb-4 text-xl font-semibold">🛒 Recommended Shopping Basket</h2>
+                  <p className="mb-4 text-sm text-muted-foreground">
+                    Curated products based on your load analysis. Multiple affiliate sources
+                    available - prices may vary by retailer.
+                  </p>
+                  <div className="space-y-4">
+                    {shoppingBasket.map((item, index) => (
+                      <div key={index} className="rounded border bg-background p-4">
+                        <div className="mb-3 flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="font-medium">{item.item}</div>
+                            <div className="text-sm text-muted-foreground">{item.category}</div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-lg font-semibold">{formatPrice(item.price)}</div>
+                            {productOverrides.useCustomPricing && (
+                              <div className="text-xs text-muted-foreground">Custom pricing</div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="border-t pt-3">
+                          <div className="mb-2 text-sm font-medium text-muted-foreground">
+                            Buy from:
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {item.affiliates.map((affiliate, idx) => (
+                              <a
+                                key={idx}
+                                href={affiliate.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="rounded border border-primary/20 bg-primary/5 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:border-primary/40 hover:bg-primary/10"
+                              >
+                                {affiliate.source} →
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 border-t pt-4">
+                    <div className="flex justify-between text-lg font-semibold">
+                      <span>Estimated Total Cost:</span>
+                      <span className="text-primary">{formatPrice(totalCost)}</span>
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      *Prices are estimates. Click affiliate links for current pricing and
+                      availability. Prices shown in selected currency.
+                    </p>
+                  </div>
+                </div>
+              </>
             )}
 
             {showShoppingBasket && (
               <div className="rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">
                 <h3 className="mb-2 text-lg font-semibold">Next Steps</h3>
                 <div className="space-y-2 text-sm">
-                  <div>✅ Complete your load analysis</div>
-                  <div>🔄 Use Panel Sizing Calculator for location-specific solar production</div>
-                  <div>🔋 Refine battery requirements with Battery Calculator</div>
-                  <div>⚡ Verify electrical components with Wire & Safety Calculator</div>
-                  <div>🎯 Create complete system design with System Designer</div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-green-600">✓</span>
+                    <span>Complete your load analysis</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-600">→</span>
+                    <span>Use Panel Sizing Calculator for location-specific solar production</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-purple-600">→</span>
+                    <span>Refine battery requirements with Battery Calculator</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-orange-600">→</span>
+                    <span>Verify electrical components with Wire & Safety Calculator</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-600">→</span>
+                    <span>Create complete system design with System Designer</span>
+                  </div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <Link
@@ -448,6 +708,42 @@ export default function LoadAnalysisCalculator() {
                   >
                     Continue to Panel Sizing Calculator →
                   </Link>
+                </div>
+              </div>
+            )}
+
+            {/* Sources & References */}
+            {showShoppingBasket && (
+              <div className="rounded-lg border bg-card p-6">
+                <h3 className="mb-3 text-lg font-semibold">Data Sources & References</h3>
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p>
+                    <strong className="text-foreground">Equipment Specifications:</strong> Based on
+                    industry-standard solar components from manufacturers including Renogy, Victron
+                    Energy, Battle Born Batteries, and Aims Power.
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Pricing Data:</strong> Average retail
+                    pricing from Amazon, eBay, specialist solar retailers (Signature Solar, SOK
+                    Battery, Current Connected), and manufacturer MSRPs as of{' '}
+                    {new Date().getFullYear()}.
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Calculation Methods:</strong> Load analysis
+                    formulas follow NREL (National Renewable Energy Laboratory) guidelines and IEEE
+                    standards for off-grid system design.
+                  </p>
+                  <p>
+                    <strong className="text-foreground">Efficiency Factors:</strong> System losses
+                    (20%), depth of discharge (DOD), and safety margins based on Solar Energy
+                    International (SEI) best practices.
+                  </p>
+                  <p className="pt-2 text-xs">
+                    *Prices and specifications are estimates for planning purposes. Always verify
+                    current specifications and compatibility with manufacturers before purchase.
+                    This calculator is for educational purposes and should not replace professional
+                    solar system design consultation.
+                  </p>
                 </div>
               </div>
             )}

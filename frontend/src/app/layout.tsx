@@ -3,7 +3,10 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { QueryProvider } from '@/components/query-provider';
+import { CurrencyProvider } from '@/contexts/CurrencyContext';
+import { UnitsProvider } from '@/contexts/UnitsContext';
 import ErrorBoundary from '@/components/error-boundary';
+import { Navigation } from '@/components/Navigation';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -102,6 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Organization Schema for better search understanding */}
         <script
           type="application/ld+json"
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
@@ -124,14 +128,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ErrorBoundary>
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
             storageKey="offgrid-theme"
+            forcedTheme="dark"
           >
-            <QueryProvider>
-              <div className="relative min-h-screen">{children}</div>
-            </QueryProvider>
+            <CurrencyProvider>
+              <UnitsProvider>
+                <QueryProvider>
+                  <Navigation />
+                  <div className="relative min-h-screen">{children}</div>
+                </QueryProvider>
+              </UnitsProvider>
+            </CurrencyProvider>
           </ThemeProvider>
         </ErrorBoundary>
       </body>

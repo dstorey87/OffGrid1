@@ -30,7 +30,7 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
     description,
     keywords: keywords.join(', '),
     robots: noindex ? 'noindex, nofollow' : 'index, follow',
-    canonical: canonicalUrl,
+    metadataBase: new URL(canonicalUrl || 'https://offgrid1.com'),
     openGraph: {
       title: fullTitle,
       description,

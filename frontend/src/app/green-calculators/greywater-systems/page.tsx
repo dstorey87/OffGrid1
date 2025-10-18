@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { waterPresets } from '@/lib/waterPresets';
 
 interface GreywaterResults {
   dailyGreywaterVolume: number;
@@ -198,6 +199,31 @@ export default function GreywaterSystemsCalculator() {
   return (
     <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16">
+        {/* Auto-Fill Water Usage Presets */}
+        <div className="mb-6 rounded-lg border bg-gradient-to-r from-primary/10 to-accent/10 p-6">
+          <h2 className="mb-4 text-xl font-semibold">💧 Quick Start: Household Size</h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Estimate greywater generation based on household size (60-70% of total water use)
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(waterPresets).map(([key, preset]) => {
+              return (
+                <button
+                  key={key}
+                  onClick={() => setHouseholdSize(preset.people.toString())}
+                  className="rounded-lg border-2 border-primary/20 bg-background p-4 text-left transition-all hover:border-primary hover:bg-accent"
+                >
+                  <div className="font-semibold text-primary">{preset.name}</div>
+                  <div className="mt-1 text-xs text-muted-foreground">{preset.people} people</div>
+                  <div className="mt-2 text-sm font-medium text-foreground">
+                    ~{(preset.totalDaily * 0.65 * 0.264172).toFixed(0)} gal/day greywater
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold tracking-tight lg:text-6xl">
@@ -327,9 +353,11 @@ export default function GreywaterSystemsCalculator() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Production & Capacity */}
-                <div className="rounded bg-blue-50 p-4">
-                  <h3 className="mb-3 font-semibold text-blue-900">💧 System Capacity</h3>
-                  <div className="grid gap-2 text-sm">
+                <div className="rounded bg-blue-50 p-4 dark:bg-blue-950">
+                  <h3 className="mb-3 font-semibold text-blue-900 dark:text-blue-100">
+                    💧 System Capacity
+                  </h3>
+                  <div className="grid gap-2 text-sm text-blue-900 dark:text-blue-100">
                     <div className="flex justify-between">
                       <span>Daily Greywater Production:</span>
                       <span className="font-medium">
@@ -352,9 +380,11 @@ export default function GreywaterSystemsCalculator() {
                 </div>
 
                 {/* Distribution System */}
-                <div className="rounded bg-green-50 p-4">
-                  <h3 className="mb-3 font-semibold text-green-900">🚰 Distribution System</h3>
-                  <div className="grid gap-2 text-sm">
+                <div className="rounded bg-green-50 p-4 dark:bg-green-950">
+                  <h3 className="mb-3 font-semibold text-green-900 dark:text-green-100">
+                    🚰 Distribution System
+                  </h3>
+                  <div className="grid gap-2 text-sm text-green-900 dark:text-green-100">
                     <div className="flex justify-between">
                       <span>Main Pipe Size:</span>
                       <span className="font-medium">{results.distributionSystem.pipeSize}</span>
@@ -376,9 +406,11 @@ export default function GreywaterSystemsCalculator() {
 
                 {/* Pump Requirements */}
                 {results.pumpRequirements.power > 0 && (
-                  <div className="rounded bg-orange-50 p-4">
-                    <h3 className="mb-3 font-semibold text-orange-900">⚡ Pump Requirements</h3>
-                    <div className="grid gap-2 text-sm">
+                  <div className="rounded bg-orange-50 p-4 dark:bg-orange-950">
+                    <h3 className="mb-3 font-semibold text-orange-900 dark:text-orange-100">
+                      ⚡ Pump Requirements
+                    </h3>
+                    <div className="grid gap-2 text-sm text-orange-900 dark:text-orange-100">
                       <div className="flex justify-between">
                         <span>Flow Rate:</span>
                         <span className="font-medium">{results.pumpRequirements.gpm} GPM</span>
@@ -396,9 +428,11 @@ export default function GreywaterSystemsCalculator() {
                 )}
 
                 {/* Environmental Benefits */}
-                <div className="rounded bg-green-100 p-4">
-                  <h3 className="mb-3 font-semibold text-green-800">🌱 Environmental Benefits</h3>
-                  <div className="grid gap-2 text-sm">
+                <div className="rounded bg-green-100 p-4 dark:bg-green-900">
+                  <h3 className="mb-3 font-semibold text-green-800 dark:text-green-100">
+                    🌱 Environmental Benefits
+                  </h3>
+                  <div className="grid gap-2 text-sm text-green-800 dark:text-green-100">
                     <div className="flex justify-between">
                       <span>Annual Water Savings:</span>
                       <span className="font-medium">
@@ -407,20 +441,20 @@ export default function GreywaterSystemsCalculator() {
                     </div>
                     <div className="flex justify-between">
                       <span>Annual Cost Savings:</span>
-                      <span className="font-medium text-green-800">
-                        ${results.benefits.costSavingsPerYear}
-                      </span>
+                      <span className="font-medium">${results.benefits.costSavingsPerYear}</span>
                     </div>
                   </div>
-                  <p className="mt-2 text-xs text-green-700">
+                  <p className="mt-2 text-xs text-green-700 dark:text-green-200">
                     {results.benefits.environmentalImpact}
                   </p>
                 </div>
 
                 {/* Cost Breakdown */}
-                <div className="rounded bg-purple-50 p-4">
-                  <h3 className="mb-3 font-semibold text-purple-900">💰 Cost Estimate</h3>
-                  <div className="grid gap-2 text-sm">
+                <div className="rounded bg-purple-50 p-4 dark:bg-purple-950">
+                  <h3 className="mb-3 font-semibold text-purple-900 dark:text-purple-100">
+                    💰 Cost Estimate
+                  </h3>
+                  <div className="grid gap-2 text-sm text-purple-900 dark:text-purple-100">
                     <div className="flex justify-between">
                       <span>Treatment System:</span>
                       <span className="font-medium">${results.costEstimate.treatment}</span>
@@ -441,7 +475,9 @@ export default function GreywaterSystemsCalculator() {
                     </div>
                     <div className="flex justify-between border-t pt-2 font-bold">
                       <span>Total System Cost:</span>
-                      <span className="text-purple-900">${results.costEstimate.total}</span>
+                      <span className="text-purple-900 dark:text-purple-100">
+                        ${results.costEstimate.total}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -520,7 +556,7 @@ export default function GreywaterSystemsCalculator() {
           <p>
             <strong>Greywater systems</strong> reuse water from bathroom sinks, showers, and laundry
             for landscape irrigation. Our calculator designs complete systems including treatment,
-            distribution, and pumping requirements based on your household's specific needs.
+            distribution, and pumping requirements based on your household&apos;s specific needs.
           </p>
 
           <h3>System Types</h3>

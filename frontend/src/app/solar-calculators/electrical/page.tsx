@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { EnergyIcon, TargetIcon } from '@/components/icons';
 
 interface ElectricalResults {
   dcWiring: {
@@ -624,7 +625,7 @@ export default function ElectricalCalculator() {
 
             {showRecommendations && electricalRecommendations.length > 0 && (
               <div className="rounded-lg border bg-card p-6">
-                <h2 className="mb-4 text-xl font-semibold">⚡ Electrical Components</h2>
+                <h2 className="mb-4 text-xl font-semibold flex items-center gap-2"><EnergyIcon size="sm" /> Electrical Components</h2>
                 <p className="mb-4 text-sm text-muted-foreground">
                   Code-compliant electrical components for safe installation:
                 </p>
@@ -669,13 +670,13 @@ export default function ElectricalCalculator() {
 
             {showRecommendations && (
               <div className="rounded-lg border bg-gradient-to-br from-green-100 to-primary/10 p-6">
-                <h3 className="mb-2 text-lg font-semibold">🎯 System Complete!</h3>
+                <h3 className="mb-2 text-lg font-semibold flex items-center gap-2"><TargetIcon size="sm" /> System Complete!</h3>
                 <div className="space-y-2 text-sm">
-                  <div>✅ Load analysis and power requirements</div>
-                  <div>✅ Solar panel sizing and configuration</div>
-                  <div>✅ Battery storage and backup duration</div>
-                  <div>✅ Inverter sizing for AC conversion</div>
-                  <div>✅ Electrical safety and code compliance</div>
+                  <div className="flex items-center gap-2">✅ Load analysis and power requirements</div>
+                  <div className="flex items-center gap-2">✅ Solar panel sizing and configuration</div>
+                  <div className="flex items-center gap-2">✅ Battery storage and backup duration</div>
+                  <div className="flex items-center gap-2">✅ Inverter sizing for AC conversion</div>
+                  <div className="flex items-center gap-2">✅ Electrical safety and code compliance</div>
                 </div>
                 <div className="mt-4 space-y-2">
                   <Link
