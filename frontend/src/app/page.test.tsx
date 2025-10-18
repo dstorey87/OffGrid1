@@ -2,11 +2,6 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import Home from './page';
 
-// Mock the theme-toggle component
-jest.mock('@/components/theme-toggle', () => ({
-  ThemeToggle: () => <div data-testid="theme-toggle">Theme Toggle</div>,
-}));
-
 describe('Home Page', () => {
   it('renders the main heading', () => {
     render(<Home />);
@@ -14,9 +9,9 @@ describe('Home Page', () => {
     expect(heading).toBeInTheDocument();
   });
 
-  it('renders theme toggle', () => {
+  it('renders calculator links', () => {
     render(<Home />);
-    const themeToggle = screen.getByTestId('theme-toggle');
-    expect(themeToggle).toBeInTheDocument();
+    const rainwaterLink = screen.getByText(/Rainwater Calculator/i);
+    expect(rainwaterLink).toBeInTheDocument();
   });
 });
