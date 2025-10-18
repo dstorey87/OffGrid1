@@ -9,9 +9,9 @@
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
-    "maxFailures": 5,
+    "maxFailures": 0,
     "metadata": {
-      "actualWorkers": 8
+      "actualWorkers": 3
     },
     "preserveOutput": "always",
     "reporter": [
@@ -41,7 +41,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 3
         },
         "id": "chromium",
         "name": "chromium",
@@ -57,7 +57,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 3
         },
         "id": "firefox",
         "name": "firefox",
@@ -73,7 +73,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 3
         },
         "id": "webkit",
         "name": "webkit",
@@ -89,7 +89,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 3
         },
         "id": "Mobile Chrome",
         "name": "Mobile Chrome",
@@ -105,7 +105,7 @@
         "repeatEach": 1,
         "retries": 0,
         "metadata": {
-          "actualWorkers": 8
+          "actualWorkers": 3
         },
         "id": "Mobile Safari",
         "name": "Mobile Safari",
@@ -159,12 +159,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2612,
+                      "duration": 3467,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.934Z",
+                      "startTime": "2025-10-18T23:48:10.621Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -178,7 +178,7 @@
               "column": 7
             },
             {
-              "title": "Solar Load Analysis - Auto-fill Small Family preset works",
+              "title": "Admin page is accessible",
               "ok": false,
               "tags": [],
               "tests": [
@@ -193,517 +193,31 @@
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "failed",
-                      "duration": 17533,
+                      "duration": 3062,
                       "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h1:has-text(\"Free Load Analysis Calculator\")') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h1:has-text(\"Free Load Analysis Calculator\")') to be visible\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:26:16",
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('text=/Admin Access|Enter password/')\nExpected: visible\nError: strict mode violation: locator('text=/Admin Access|Enter password/') resolved to 2 elements:\n    1) <h3 class=\"text-2xl font-semibold leading-none tracking-tight\">Admin Access</h3> aka getByRole('heading', { name: 'Admin Access' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter password to access admin panel</p> aka getByText('Enter password to access')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/Admin Access|Enter password/')\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('text=/Admin Access|Enter password/')\nExpected: visible\nError: strict mode violation: locator('text=/Admin Access|Enter password/') resolved to 2 elements:\n    1) <h3 class=\"text-2xl font-semibold leading-none tracking-tight\">Admin Access</h3> aka getByRole('heading', { name: 'Admin Access' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter password to access admin panel</p> aka getByText('Enter password to access')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/Admin Access|Enter password/')\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:222:70",
                         "location": {
                           "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                          "column": 16,
-                          "line": 26
+                          "column": 70,
+                          "line": 222
                         },
-                        "snippet": "\u001b[0m \u001b[90m 24 |\u001b[39m     \n \u001b[90m 25 |\u001b[39m     \u001b[90m// Wait for page to load\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'h1:has-text(\"Free Load Analysis Calculator\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m     \n \u001b[90m 28 |\u001b[39m     \u001b[90m// Click Small Family preset button\u001b[39m\n \u001b[90m 29 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Small Family\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
+                        "snippet": "\u001b[0m \u001b[90m 220 |\u001b[39m\n \u001b[90m 221 |\u001b[39m     \u001b[90m// Should show login form\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 222 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=/Admin Access|Enter password/'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 223 |\u001b[39m\n \u001b[90m 224 |\u001b[39m     \u001b[90m// Try to login\u001b[39m\n \u001b[90m 225 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"password\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'offgrid2024'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
                       },
                       "errors": [
                         {
                           "location": {
                             "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                            "column": 16,
-                            "line": 26
+                            "column": 70,
+                            "line": 222
                           },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('h1:has-text(\"Free Load Analysis Calculator\")') to be visible\u001b[22m\n\n\n\u001b[0m \u001b[90m 24 |\u001b[39m     \n \u001b[90m 25 |\u001b[39m     \u001b[90m// Wait for page to load\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 26 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'h1:has-text(\"Free Load Analysis Calculator\")'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 27 |\u001b[39m     \n \u001b[90m 28 |\u001b[39m     \u001b[90m// Click Small Family preset button\u001b[39m\n \u001b[90m 29 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Small Family\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:26:16\u001b[22m"
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('text=/Admin Access|Enter password/')\nExpected: visible\nError: strict mode violation: locator('text=/Admin Access|Enter password/') resolved to 2 elements:\n    1) <h3 class=\"text-2xl font-semibold leading-none tracking-tight\">Admin Access</h3> aka getByRole('heading', { name: 'Admin Access' })\n    2) <p class=\"text-sm text-muted-foreground\">Enter password to access admin panel</p> aka getByText('Enter password to access')\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for locator('text=/Admin Access|Enter password/')\u001b[22m\n\n\n\u001b[0m \u001b[90m 220 |\u001b[39m\n \u001b[90m 221 |\u001b[39m     \u001b[90m// Should show login form\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 222 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'text=/Admin Access|Enter password/'\u001b[39m))\u001b[33m.\u001b[39mtoBeVisible()\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 223 |\u001b[39m\n \u001b[90m 224 |\u001b[39m     \u001b[90m// Try to login\u001b[39m\n \u001b[90m 225 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'input[type=\"password\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'offgrid2024'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:222:70\u001b[22m"
                         }
                       ],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.896Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--d480f-l-Small-Family-preset-works-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--d480f-l-Small-Family-preset-works-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--d480f-l-Small-Family-preset-works-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                        "column": 16,
-                        "line": 26
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-69969af42c4ce1cea198",
-              "file": "e2e-full.spec.ts",
-              "line": 22,
-              "column": 7
-            },
-            {
-              "title": "Rainwater Calculator - Auto-fill Small Family preset works",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 2,
-                      "parallelIndex": 2,
-                      "status": "failed",
-                      "duration": 18002,
-                      "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Rainwater/') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Rainwater/') to be visible\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:63:16",
-                        "location": {
-                          "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                          "column": 16,
-                          "line": 63
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/green-calculators/rainwater-harvesting'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 62 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 63 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Rainwater/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 64 |\u001b[39m     \n \u001b[90m 65 |\u001b[39m     \u001b[90m// Click Small Family preset\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Small Family\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                            "column": 16,
-                            "line": 63
-                          },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Rainwater/') to be visible\u001b[22m\n\n\n\u001b[0m \u001b[90m 61 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/green-calculators/rainwater-harvesting'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 62 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 63 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Rainwater/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 64 |\u001b[39m     \n \u001b[90m 65 |\u001b[39m     \u001b[90m// Click Small Family preset\u001b[39m\n \u001b[90m 66 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'button:has-text(\"Small Family\")'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:63:16\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.914Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--e6f68-l-Small-Family-preset-works-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--e6f68-l-Small-Family-preset-works-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--e6f68-l-Small-Family-preset-works-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                        "column": 16,
-                        "line": 63
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-f9658b1acaa58c2363ed",
-              "file": "e2e-full.spec.ts",
-              "line": 60,
-              "column": 7
-            },
-            {
-              "title": "Battery Sizing Calculator - Auto-fill preset works",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 3,
-                      "parallelIndex": 3,
-                      "status": "failed",
-                      "duration": 18203,
-                      "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Battery/') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Battery/') to be visible\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:98:16",
-                        "location": {
-                          "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                          "column": 16,
-                          "line": 98
-                        },
-                        "snippet": "\u001b[0m \u001b[90m  96 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/solar-calculators/battery-sizing'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m  97 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  98 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Battery/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  99 |\u001b[39m     \n \u001b[90m 100 |\u001b[39m     \u001b[90m// Click first preset button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m presetButtons \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[35m/Family|Person|Off-Grid/\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                            "column": 16,
-                            "line": 98
-                          },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Battery/') to be visible\u001b[22m\n\n\n\u001b[0m \u001b[90m  96 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/solar-calculators/battery-sizing'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m  97 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m  98 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Battery/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m  99 |\u001b[39m     \n \u001b[90m 100 |\u001b[39m     \u001b[90m// Click first preset button\u001b[39m\n \u001b[90m 101 |\u001b[39m     \u001b[36mconst\u001b[39m presetButtons \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[35m/Family|Person|Off-Grid/\u001b[39m })\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:98:16\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.934Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--2d8f8-or---Auto-fill-preset-works-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--2d8f8-or---Auto-fill-preset-works-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--2d8f8-or---Auto-fill-preset-works-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                        "column": 16,
-                        "line": 98
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-9ac74fec1c05f99ae0bb",
-              "file": "e2e-full.spec.ts",
-              "line": 95,
-              "column": 7
-            },
-            {
-              "title": "Wind Power Calculator - Preset and calculation",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 4,
-                      "parallelIndex": 4,
-                      "status": "failed",
-                      "duration": 18273,
-                      "error": {
-                        "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Wind/') to be visible\u001b[22m\n",
-                        "stack": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Wind/') to be visible\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:121:16",
-                        "location": {
-                          "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                          "column": 16,
-                          "line": 121
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/green-calculators/wind-power'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Wind/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m     \n \u001b[90m 123 |\u001b[39m     \u001b[90m// Click first preset if available\u001b[39m\n \u001b[90m 124 |\u001b[39m     \u001b[36mconst\u001b[39m presetBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[35m/Family|Home|Off-Grid/\u001b[39m })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                            "column": 16,
-                            "line": 121
-                          },
-                          "message": "TimeoutError: page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=/Wind/') to be visible\u001b[22m\n\n\n\u001b[0m \u001b[90m 119 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mgoto(\u001b[32m'http://localhost:3000/green-calculators/wind-power'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m 120 |\u001b[39m     \n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 121 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mwaitForSelector(\u001b[32m'text=/Wind/'\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 122 |\u001b[39m     \n \u001b[90m 123 |\u001b[39m     \u001b[90m// Click first preset if available\u001b[39m\n \u001b[90m 124 |\u001b[39m     \u001b[36mconst\u001b[39m presetBtn \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'button'\u001b[39m)\u001b[33m.\u001b[39mfilter({ hasText\u001b[33m:\u001b[39m \u001b[35m/Family|Home|Off-Grid/\u001b[39m })\u001b[33m.\u001b[39mfirst()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:121:16\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.921Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--94a96-or---Preset-and-calculation-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--94a96-or---Preset-and-calculation-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--94a96-or---Preset-and-calculation-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                        "column": 16,
-                        "line": 121
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-dc4460d03cf694e83d07",
-              "file": "e2e-full.spec.ts",
-              "line": 118,
-              "column": 7
-            },
-            {
-              "title": "Greywater Calculator - Preset functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 5,
-                      "parallelIndex": 5,
-                      "status": "interrupted",
-                      "duration": 18178,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:21.019Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--d7b67-ator---Preset-functionality-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--d7b67-ator---Preset-functionality-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "skipped"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-8b28ee9da0c890af2547",
-              "file": "e2e-full.spec.ts",
-              "line": 144,
-              "column": 7
-            },
-            {
-              "title": "Hydroponics Calculator - Preset functionality",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 6,
-                      "parallelIndex": 6,
-                      "status": "interrupted",
-                      "duration": 18133,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:21.010Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--7928c-ator---Preset-functionality-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--7928c-ator---Preset-functionality-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "skipped"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-3c748bed45e5ad628a0d",
-              "file": "e2e-full.spec.ts",
-              "line": 157,
-              "column": 7
-            },
-            {
-              "title": "Navigation - All menu links work",
-              "ok": false,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 7,
-                      "parallelIndex": 7,
-                      "status": "failed",
-                      "duration": 10879,
-                      "error": {
-                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/services/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    5 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3000/\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    2 × unexpected value \"http://localhost:3000/\"\u001b[22m\n",
-                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/services/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    5 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3000/\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    2 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:185:24",
-                        "location": {
-                          "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                          "column": 24,
-                          "line": 185
-                        },
-                        "snippet": "\u001b[0m \u001b[90m 183 |\u001b[39m     \u001b[90m// Test Services link\u001b[39m\n \u001b[90m 184 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'a:has-text(\"Services\")'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 185 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/services/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 186 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 187 |\u001b[39m\n \u001b[90m 188 |\u001b[39m   test(\u001b[32m'Currency selector changes currency display'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
-                      },
-                      "errors": [
-                        {
-                          "location": {
-                            "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                            "column": 24,
-                            "line": 185
-                          },
-                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/services/\u001b[39m\nReceived string:  \u001b[31m\"http://localhost:3000/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    5 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    - waiting for\" http://localhost:3000/\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://localhost:3000/\"\u001b[22m\n\u001b[2m    2 × unexpected value \"http://localhost:3000/\"\u001b[22m\n\n\n\u001b[0m \u001b[90m 183 |\u001b[39m     \u001b[90m// Test Services link\u001b[39m\n \u001b[90m 184 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'a:has-text(\"Services\")'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 185 |\u001b[39m     \u001b[36mawait\u001b[39m expect(page)\u001b[33m.\u001b[39mtoHaveURL(\u001b[35m/services/\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m     |\u001b[39m                        \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 186 |\u001b[39m   })\u001b[33m;\u001b[39m\n \u001b[90m 187 |\u001b[39m\n \u001b[90m 188 |\u001b[39m   test(\u001b[32m'Currency selector changes currency display'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[2m    at C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts:185:24\u001b[22m"
-                        }
-                      ],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:20.932Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--527bb-ation---All-menu-links-work-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "video",
-                          "contentType": "video/webm",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--527bb-ation---All-menu-links-work-chromium\\video.webm"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--527bb-ation---All-menu-links-work-chromium\\error-context.md"
-                        }
-                      ],
-                      "errorLocation": {
-                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
-                        "column": 24,
-                        "line": 185
-                      }
-                    }
-                  ],
-                  "status": "unexpected"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-b71cf629cde4124f7d81",
-              "file": "e2e-full.spec.ts",
-              "line": 170,
-              "column": 7
-            },
-            {
-              "title": "Currency selector changes currency display",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "interrupted",
-                      "duration": 15686,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:23.871Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "screenshot",
-                          "contentType": "image/png",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--2e4dd-or-changes-currency-display-chromium\\test-failed-1.png"
-                        },
-                        {
-                          "name": "error-context",
-                          "contentType": "text/markdown",
-                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website--2e4dd-or-changes-currency-display-chromium\\error-context.md"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "skipped"
-                }
-              ],
-              "id": "2cf6a74f87944600ae9a-3d2557afcb15c4dfaa55",
-              "file": "e2e-full.spec.ts",
-              "line": 188,
-              "column": 7
-            },
-            {
-              "title": "Admin page is accessible",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 60000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 8,
-                      "parallelIndex": 7,
-                      "status": "interrupted",
-                      "duration": 6910,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2025-10-18T23:41:33.983Z",
+                      "startTime": "2025-10-18T23:48:10.622Z",
                       "annotations": [],
                       "attachments": [
                         {
@@ -715,34 +229,82 @@
                           "name": "video",
                           "contentType": "video/webm",
                           "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website-Testing-Admin-page-is-accessible-chromium\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\OffGrid1\\OffGrid1\\frontend\\test-results\\e2e-full-OffGrid1-Website-Testing-Admin-page-is-accessible-chromium\\error-context.md"
                         }
-                      ]
+                      ],
+                      "errorLocation": {
+                        "file": "C:\\OffGrid1\\OffGrid1\\frontend\\tests\\e2e\\e2e-full.spec.ts",
+                        "column": 70,
+                        "line": 222
+                      }
                     }
                   ],
-                  "status": "skipped"
+                  "status": "unexpected"
                 }
               ],
               "id": "2cf6a74f87944600ae9a-298870594741801e8d4a",
               "file": "e2e-full.spec.ts",
-              "line": 208,
+              "line": 218,
               "column": 7
             }
           ]
         }
       ]
-    }
-  ],
-  "errors": [
+    },
     {
-      "message": "\u001b[31mTesting stopped early after 5 maximum allowed failures.\u001b[39m"
+      "title": "smoke.spec.ts",
+      "file": "smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "homepage loads and shows header",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3175,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-10-18T23:48:10.619Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4219922fea2e2bd3c691-ce523f650712862263a7",
+          "file": "smoke.spec.ts",
+          "line": 3,
+          "column": 5
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2025-10-18T23:41:18.469Z",
-    "duration": 22678.587,
-    "expected": 1,
-    "skipped": 4,
-    "unexpected": 5,
+    "startTime": "2025-10-18T23:47:59.956Z",
+    "duration": 14880.253,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

@@ -76,7 +76,7 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 // Load settings from localStorage with fallback to defaults
 export function loadAdminSettings(): AdminSettings {
   if (typeof window === 'undefined') return DEFAULT_ADMIN_SETTINGS;
-  
+
   try {
     const stored = localStorage.getItem('admin_settings');
     if (stored) {
@@ -92,7 +92,7 @@ export function loadAdminSettings(): AdminSettings {
 // Save settings to localStorage
 export function saveAdminSettings(settings: AdminSettings): void {
   if (typeof window === 'undefined') return;
-  
+
   try {
     localStorage.setItem('admin_settings', JSON.stringify(settings));
     // Trigger a custom event to notify other components
@@ -103,9 +103,7 @@ export function saveAdminSettings(settings: AdminSettings): void {
 }
 
 // Get a specific setting value
-export function getAdminSetting<K extends keyof AdminSettings>(
-  category: K
-): AdminSettings[K] {
+export function getAdminSetting<K extends keyof AdminSettings>(category: K): AdminSettings[K] {
   const settings = loadAdminSettings();
   return settings[category];
 }

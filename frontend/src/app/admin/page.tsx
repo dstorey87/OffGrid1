@@ -57,7 +57,7 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <main className="min-h-screen bg-background flex items-center justify-center p-4">
+      <main className="flex min-h-screen items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Admin Access</CardTitle>
