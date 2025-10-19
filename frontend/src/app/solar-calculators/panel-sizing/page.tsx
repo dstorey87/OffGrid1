@@ -120,7 +120,9 @@ export default function PanelSizingCalculator() {
     const tilt = parseInt(systemInputs.roofTilt);
     const futureExpansion = parseFloat(systemInputs.futureExpansion) / 100;
 
-    if (!location.selectedLocation || !dailyNeed) return;
+    if (!location.selectedLocation || !dailyNeed) {
+      return;
+    }
 
     const solarRegion = solarData[location.selectedLocation];
 
@@ -157,8 +159,7 @@ export default function PanelSizingCalculator() {
     const annualProduction = monthlyProduction.reduce((sum, month) => sum + month, 0);
 
     // Panel configuration for string sizing
-    const systemVoltage = parseInt(systemInputs.systemVoltage);
-    const _panelVoltage = systemVoltage === 12 ? 12 : systemVoltage === 24 ? 24 : 48;
+    // System voltage: parseInt(systemInputs.systemVoltage) - determined but not used in current calculations
     const maxPanelsPerString = Math.floor(600 / 40); // Max 600V system, ~40V per panel
     const strings = Math.ceil(panelsNeeded / maxPanelsPerString);
     const panelsPerString = Math.ceil(panelsNeeded / strings);
@@ -185,7 +186,9 @@ export default function PanelSizingCalculator() {
   };
 
   const generatePanelRecommendations = () => {
-    if (!results) return [];
+    if (!results) {
+      return [];
+    }
 
     const recommendations = [];
     const panelWatts = parseInt(systemInputs.panelWattage);

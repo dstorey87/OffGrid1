@@ -120,7 +120,9 @@ export default function ElectricalCalculator() {
     const inverterWatts = parseFloat(inputs.inverterWatts);
     const voltageDropLimit = parseFloat(inputs.voltageDropLimit);
 
-    if (!solarWatts || !inverterWatts) return;
+    if (!solarWatts || !inverterWatts) {
+      return;
+    }
 
     // Calculate currents
     const solarCurrent = solarWatts / systemVoltage;
@@ -242,7 +244,9 @@ export default function ElectricalCalculator() {
   };
 
   const generateElectricalRecommendations = () => {
-    if (!results) return [];
+    if (!results) {
+      return [];
+    }
 
     const recommendations = [];
 

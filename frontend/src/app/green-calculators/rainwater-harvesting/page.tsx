@@ -95,10 +95,14 @@ export default function RainwaterHarvestingCalculator() {
 
     // Filter recommendations
     const filters = [];
-    if (roofAreaM2 > 93) filters.push('Leaf eater diverter'); // > 1000 sq ft
+    if (roofAreaM2 > 93) {
+      filters.push('Leaf eater diverter'); // > 1000 sq ft
+    }
     filters.push('First flush diverter');
     filters.push('Pre-tank screen filter');
-    if (usageLiters > 189) filters.push('UV sterilization system'); // > 50 gallons
+    if (usageLiters > 189) {
+      filters.push('UV sterilization system'); // > 50 gallons
+    }
 
     // Cost estimates (convert to gallons for pricing: $1.20 per gallon capacity)
     const tankGallons = recommendedTank * 0.264172;

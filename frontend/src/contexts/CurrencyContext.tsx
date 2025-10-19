@@ -40,7 +40,7 @@ export function CurrencyProvider({ children }: { children: React.ReactNode }) {
       try {
         const adminSettings = localStorage.getItem('admin_settings');
         if (adminSettings) {
-          const settings = JSON.parse(adminSettings);
+          const settings = JSON.parse(adminSettings) as { currency?: { default?: Currency } };
           if (settings.currency?.default) {
             setCurrency(settings.currency.default);
           }

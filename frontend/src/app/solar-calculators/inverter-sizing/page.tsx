@@ -82,7 +82,9 @@ export default function InverterSizingCalculator() {
   };
 
   const calculateInverterNeeds = () => {
-    if (appliances.length === 0) return;
+    if (appliances.length === 0) {
+      return;
+    }
 
     const systemVoltage = parseInt(inputs.systemVoltage);
     const safetyMargin = parseFloat(inputs.safetyMargin) / 100;
@@ -100,7 +102,7 @@ export default function InverterSizingCalculator() {
     }));
 
     const largestSurge = Math.max(...surgeLoads.map((load) => load.surge));
-    const otherContinuous = surgeLoads.reduce((total, load, _index) => {
+    const otherContinuous = surgeLoads.reduce((total, load) => {
       const isLargestSurge = load.surge === largestSurge;
       return total + (isLargestSurge ? 0 : load.continuous);
     }, 0);
@@ -137,10 +139,18 @@ export default function InverterSizingCalculator() {
     };
 
     const getWireRecommendation = (amps: number) => {
-      if (amps <= 50) return wireGauges['0-50A'];
-      if (amps <= 100) return wireGauges['50-100A'];
-      if (amps <= 150) return wireGauges['100-150A'];
-      if (amps <= 200) return wireGauges['150-200A'];
+      if (amps <= 50) {
+        return wireGauges['0-50A'];
+      }
+      if (amps <= 100) {
+        return wireGauges['50-100A'];
+      }
+      if (amps <= 150) {
+        return wireGauges['100-150A'];
+      }
+      if (amps <= 200) {
+        return wireGauges['150-200A'];
+      }
       return wireGauges['200A+'];
     };
 
@@ -165,7 +175,9 @@ export default function InverterSizingCalculator() {
   };
 
   const generateInverterRecommendations = () => {
-    if (!results) return [];
+    if (!results) {
+      return [];
+    }
 
     const recommendations = [];
     const requiredWatts = results.recommendedInverterSize;

@@ -245,6 +245,13 @@ offgrid/
 
 ## 🔧 Development
 
+### Prerequisites
+
+- **Node.js** 20.x or higher
+- **Python** 3.12 or higher
+- **Docker** & **Docker Compose**
+- **Git**
+
 ### Frontend Development
 
 ```powershell
@@ -256,17 +263,31 @@ npm install
 # Run development server
 npm run dev
 
-# Type check
-npm run type-check
+# Run all validations (lint + typecheck + build)
+npm run validate
 
-# Lint
-npm run lint
+# Linting
+npm run lint          # Check for linting errors
+npm run lint:fix      # Auto-fix linting errors
+
+# Type checking
+npm run typecheck     # Run TypeScript compiler
+
+# Testing
+npm run test          # Run unit tests
+npm run test:watch    # Run tests in watch mode
+npm run test:ci       # Run tests in CI mode with coverage
+npm run e2e           # Run E2E tests
+npm run e2e:ci        # Run E2E tests in CI mode
+
+# Visual regression
+npm run visual:update # Update visual snapshots
+
+# Link checking
+npm run linkcheck     # Check for broken links (requires running server)
 
 # Format code
-npm run format
-
-# Run tests
-npm test
+npm run format        # Format with Prettier
 ```
 
 ### AI Service Development
@@ -282,16 +303,31 @@ python -m venv venv
 pip install -r requirements.txt
 
 # Run development server
-uvicorn main:app --reload
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
-# Run tests
-pytest
+# Linting
+ruff check .          # Check for linting errors
+ruff check . --fix    # Auto-fix linting errors
 
 # Format code
-black .
+black .               # Format with Black
+black . --check       # Check formatting without changing files
 
-# Type check
-mypy .
+# Type checking
+mypy app/             # Run MyPy type checker
+
+# Testing
+pytest                # Run all tests
+pytest -v             # Verbose output
+pytest -m unit        # Run only unit tests
+pytest -m integration # Run only integration tests
+pytest --cov=app      # Run tests with coverage
+pytest --cov=app --cov-report=html  # Generate HTML coverage report
+pytest --cov=app --cov-fail-under=90  # Fail if coverage < 90%
+
+# View coverage report
+start htmlcov/index.html  # Windows
+# or open htmlcov/index.html in browser
 ```
 
 ### WordPress Plugin Development
@@ -476,7 +512,64 @@ kubectl logs -n offgrid -l app=frontend --tail=100 -f
 - [ ] Affiliate program
 - [ ] Advanced reporting & BI
 
-## 🔒 Security
+## � Continuous Integration
+
+The project uses a comprehensive CI pipeline (`.github/workflows/validate.yml`) that runs on every push and pull request.
+
+### CI Pipeline Stages
+
+1. **Frontend Lint** — ESLint + Prettier checks
+2. **Frontend Type Check** — TypeScript compilation with strict mode
+3. **Frontend Build** — Production build verification
+4. **Frontend Unit Tests** — Jest with ≥90% coverage requirement
+5. **Frontend E2E Tests** — Playwright with console/network error detection
+6. **Frontend Visual Regression** — Screenshot comparison tests
+7. **Frontend Link Check** — Broken link detection
+8. **Backend Lint** — Ruff + Black checks
+9. **Backend Type Check** — MyPy type checking
+10. **Backend Tests** — Pytest with ≥90% coverage requirement
+
+### Running CI Checks Locally
+
+Before pushing, run all CI checks locally to catch issues early:
+
+```powershell
+# Frontend checks (from /frontend)
+cd frontend
+npm run lint
+npm run typecheck
+npm run build
+npm run test:ci
+npm run e2e:ci
+npm run linkcheck  # Requires dev server running
+
+# Backend checks (from /ai-service)
+cd ai-service
+ruff check .
+black . --check
+mypy app/
+pytest --cov=app --cov-fail-under=90
+```
+
+### CI Failure Handling
+
+If CI fails:
+1. Review the GitHub Actions logs
+2. Reproduce the failure locally using the commands above
+3. Fix the issue
+4. Re-run checks locally to verify the fix
+5. Push the fix — CI will automatically re-run
+
+**Merging is blocked until all checks pass.** No exceptions.
+
+### Coverage Requirements
+
+- **Frontend**: ≥90% lines, branches, functions, statements
+- **Backend**: ≥90% overall coverage
+
+Coverage reports are uploaded as artifacts in GitHub Actions.
+
+## �🔒 Security
 
 - Change all default passwords in `.env`
 - Use secrets management in production (Vault, AWS Secrets Manager, etc.)

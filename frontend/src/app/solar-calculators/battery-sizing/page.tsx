@@ -96,7 +96,9 @@ export default function BatterySizingCalculator() {
     const systemVoltage = parseInt(inputs.systemVoltage);
     const safetyMargin = parseFloat(inputs.safetyMargin) / 100;
 
-    if (!dailyLoad) return;
+    if (!dailyLoad) {
+      return;
+    }
 
     const batterySpec = batterySpecs[inputs.batteryChemistry];
     const tempFactor =
@@ -162,7 +164,9 @@ export default function BatterySizingCalculator() {
   };
 
   const generateBatteryRecommendations = () => {
-    if (!results) return [];
+    if (!results) {
+      return [];
+    }
 
     const recommendations = [];
     const capacity = results.batteryCapacityAh;

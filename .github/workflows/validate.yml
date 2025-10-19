@@ -1,0 +1,362 @@
+name: Comprehensive Validation Pipeline
+
+on:
+    push:
+        branches: [main, develop, feature/*]
+    pull_request:
+        branches: [main, develop]
+
+env:
+    NODE_VERSION: "20"
+    PYTHON_VERSION: "3.12"
+
+jobs:
+    #
+    # FRONTEND VALIDATION
+    #
+    frontend-lint:
+        name: Frontend - Lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Run ESLint
+              working-directory: ./frontend
+              run: npm run lint
+
+            - name: Check formatting
+              working-directory: ./frontend
+              run: npm run format -- --check
+
+    frontend-typecheck:
+        name: Frontend - Type Check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Run TypeScript type check
+              working-directory: ./frontend
+              run: npm run typecheck
+
+    frontend-build:
+        name: Frontend - Build
+        runs-on: ubuntu-latest
+        needs: [frontend-lint, frontend-typecheck]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Build application
+              working-directory: ./frontend
+              run: npm run build
+
+            - name: Upload build artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: frontend-build
+                  path: frontend/.next
+                  retention-days: 7
+
+    frontend-unit-tests:
+        name: Frontend - Unit Tests
+        runs-on: ubuntu-latest
+        needs: [frontend-lint, frontend-typecheck]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Run unit tests with coverage
+              working-directory: ./frontend
+              run: npm run test:ci
+
+            - name: Check coverage threshold
+              working-directory: ./frontend
+              run: |
+                  COVERAGE=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+                  echo "Coverage: $COVERAGE%"
+                  if (( $(echo "$COVERAGE < 90" | bc -l) )); then
+                    echo "❌ Coverage $COVERAGE% is below 90% threshold"
+                    exit 1
+                  fi
+                  echo "✅ Coverage $COVERAGE% meets 90% threshold"
+
+            - name: Upload coverage reports
+              uses: actions/upload-artifact@v4
+              with:
+                  name: frontend-coverage
+                  path: frontend/coverage
+                  retention-days: 30
+
+    frontend-e2e:
+        name: Frontend - E2E Tests
+        runs-on: ubuntu-latest
+        needs: [frontend-build, frontend-unit-tests]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Install Playwright browsers
+              working-directory: ./frontend
+              run: npx playwright install --with-deps chromium
+
+            - name: Run E2E tests
+              working-directory: ./frontend
+              run: npm run e2e:ci
+              env:
+                  CI: true
+
+            - name: Upload Playwright report
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-report
+                  path: frontend/playwright-report
+                  retention-days: 30
+
+            - name: Upload test results
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: playwright-results
+                  path: frontend/test-results
+                  retention-days: 7
+
+    frontend-visual-regression:
+        name: Frontend - Visual Regression
+        runs-on: ubuntu-latest
+        needs: [frontend-build]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Install Playwright browsers
+              working-directory: ./frontend
+              run: npx playwright install --with-deps chromium
+
+            - name: Run visual regression tests
+              working-directory: ./frontend
+              run: npx playwright test tests/visual/
+              env:
+                  CI: true
+
+            - name: Upload visual diffs
+              if: failure()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: visual-diffs
+                  path: frontend/test-results
+                  retention-days: 7
+
+    frontend-linkcheck:
+        name: Frontend - Link Check
+        runs-on: ubuntu-latest
+        needs: [frontend-build]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install dependencies
+              working-directory: ./frontend
+              run: npm ci
+
+            - name: Build and start server
+              working-directory: ./frontend
+              run: |
+                  npm run build
+                  npm run start &
+                  sleep 10
+
+            - name: Run link checker
+              working-directory: ./frontend
+              run: npm run linkcheck
+              env:
+                  SITE_URL: http://localhost:3000
+
+    #
+    # BACKEND VALIDATION
+    #
+    backend-lint:
+        name: Backend - Lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
+                  cache: "pip"
+                  cache-dependency-path: ai-service/requirements.txt
+
+            - name: Install dependencies
+              working-directory: ./ai-service
+              run: |
+                  pip install -r requirements.txt
+
+            - name: Run ruff
+              working-directory: ./ai-service
+              run: ruff check .
+
+            - name: Check black formatting
+              working-directory: ./ai-service
+              run: black . --check
+
+    backend-typecheck:
+        name: Backend - Type Check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
+                  cache: "pip"
+                  cache-dependency-path: ai-service/requirements.txt
+
+            - name: Install dependencies
+              working-directory: ./ai-service
+              run: |
+                  pip install -r requirements.txt
+
+            - name: Run mypy
+              working-directory: ./ai-service
+              run: mypy app/
+
+    backend-tests:
+        name: Backend - Tests
+        runs-on: ubuntu-latest
+        needs: [backend-lint, backend-typecheck]
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: ${{ env.PYTHON_VERSION }}
+                  cache: "pip"
+                  cache-dependency-path: ai-service/requirements.txt
+
+            - name: Install dependencies
+              working-directory: ./ai-service
+              run: |
+                  pip install -r requirements.txt
+
+            - name: Run tests with coverage
+              working-directory: ./ai-service
+              run: pytest --cov=app --cov-report=xml --cov-report=html --cov-report=term --cov-fail-under=90
+
+            - name: Upload coverage reports
+              uses: actions/upload-artifact@v4
+              with:
+                  name: backend-coverage
+                  path: ai-service/htmlcov
+                  retention-days: 30
+
+    #
+    # FINAL VALIDATION
+    #
+    all-checks-passed:
+        name: All Checks Passed
+        runs-on: ubuntu-latest
+        needs:
+            - frontend-lint
+            - frontend-typecheck
+            - frontend-build
+            - frontend-unit-tests
+            - frontend-e2e
+            - frontend-visual-regression
+            - frontend-linkcheck
+            - backend-lint
+            - backend-typecheck
+            - backend-tests
+        steps:
+            - name: All validations passed
+              run: |
+                  echo "✅ All validation checks passed successfully!"
+                  echo "✅ Frontend: Lint, Type Check, Build, Unit Tests, E2E, Visual Regression, Link Check"
+                  echo "✅ Backend: Lint, Type Check, Tests (≥90% coverage)"
+                  echo "🎉 Ready to merge!"
+
+    #
+    # NOTIFICATION (optional)
+    #
+    notify-failure:
+        name: Notify on Failure
+        runs-on: ubuntu-latest
+        needs: [all-checks-passed]
+        if: failure()
+        steps:
+            - name: Report failure
+              run: |
+                  echo "❌ One or more validation checks failed!"
+                  echo "Please review the logs and fix the issues before merging."
+                  exit 1

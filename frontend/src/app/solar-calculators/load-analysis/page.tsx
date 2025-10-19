@@ -171,7 +171,9 @@ export default function LoadAnalysisCalculator() {
   };
 
   const generateShoppingBasket = () => {
-    if (!results) return [];
+    if (!results) {
+      return [];
+    }
 
     const basket = [];
 

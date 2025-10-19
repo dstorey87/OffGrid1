@@ -59,6 +59,7 @@ function DefaultErrorFallback({ error, reset }: { error: Error; reset: () => voi
       const timer = setTimeout(reset, 100);
       return () => clearTimeout(timer);
     }
+    return undefined;
   }, [isDOMError, reset]);
 
   // Don't show error UI for DOM manipulation errors - just retry

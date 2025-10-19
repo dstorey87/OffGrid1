@@ -75,12 +75,14 @@ export const DEFAULT_ADMIN_SETTINGS: AdminSettings = {
 
 // Load settings from localStorage with fallback to defaults
 export function loadAdminSettings(): AdminSettings {
-  if (typeof window === 'undefined') return DEFAULT_ADMIN_SETTINGS;
+  if (typeof window === 'undefined') {
+    return DEFAULT_ADMIN_SETTINGS;
+  }
 
   try {
     const stored = localStorage.getItem('admin_settings');
     if (stored) {
-      const parsed = JSON.parse(stored);
+      const parsed = JSON.parse(stored) as Partial<AdminSettings>;
       return { ...DEFAULT_ADMIN_SETTINGS, ...parsed };
     }
   } catch (error) {
@@ -91,7 +93,9 @@ export function loadAdminSettings(): AdminSettings {
 
 // Save settings to localStorage
 export function saveAdminSettings(settings: AdminSettings): void {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined') {
+    return;
+  }
 
   try {
     localStorage.setItem('admin_settings', JSON.stringify(settings));

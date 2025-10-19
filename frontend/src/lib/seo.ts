@@ -308,9 +308,10 @@ export const INTERNAL_LINKS = {
 };
 
 // Content optimization helpers
-export const optimizeContentForSEO = (content: string, _targetKeywords: string[]) => {
-  // Add semantic variations and related terms
-  const _semanticTerms = {
+export const optimizeContentForSEO = (content: string) => {
+  // Add semantic variations and related terms (not implemented yet)
+  /*
+  const semanticTerms = {
     solar: ['photovoltaic', 'PV', 'renewable energy', 'clean energy'],
     calculator: ['tool', 'sizing guide', 'estimation tool', 'planning tool'],
     'off-grid': ['off-the-grid', 'standalone', 'independent', 'self-sufficient'],
@@ -319,6 +320,7 @@ export const optimizeContentForSEO = (content: string, _targetKeywords: string[]
     green: ['eco-friendly', 'sustainable', 'environmentally friendly', 'clean'],
     renewable: ['sustainable', 'green', 'clean', 'eco-friendly'],
   };
+  */
 
   // This would implement content optimization logic
   return content;

@@ -57,7 +57,8 @@ export default function WindPowerCalculator() {
     const windSpeed = parseFloat(averageWindSpeed);
     const height = parseFloat(towerHeight);
     const energyNeed = parseFloat(dailyEnergyNeed);
-    const _obstacles = parseFloat(obstacleDistance);
+    // Obstacle distance validation (not used in calculations currently)
+    parseFloat(obstacleDistance);
     const rate = parseFloat(electricityRate);
 
     if (!windSpeed || !height || !energyNeed) {

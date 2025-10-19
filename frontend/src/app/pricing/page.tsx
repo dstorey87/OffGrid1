@@ -159,7 +159,9 @@ export default function PricingPage() {
 
   const calculateMaterialCost = () => {
     const selectedMaterial = materials.find((m) => m.id === calculator.material);
-    if (!selectedMaterial || !calculator.quantity) return;
+    if (!selectedMaterial || !calculator.quantity) {
+      return;
+    }
 
     const quantity = parseFloat(calculator.quantity);
     const ukTotal = selectedMaterial.ukPrice * quantity;
@@ -178,7 +180,9 @@ export default function PricingPage() {
   };
 
   const calculateAreaQuantity = () => {
-    if (!calculator.length || !calculator.width) return;
+    if (!calculator.length || !calculator.width) {
+      return;
+    }
 
     const length = parseFloat(calculator.length);
     const width = parseFloat(calculator.width);
@@ -189,8 +193,12 @@ export default function PricingPage() {
 
   const getSavingsColor = (ukPrice: number, portugalPrice: number) => {
     const savingsPercentage = ((ukPrice - portugalPrice) / ukPrice) * 100;
-    if (savingsPercentage > 50) return 'text-green-600';
-    if (savingsPercentage > 30) return 'text-yellow-600';
+    if (savingsPercentage > 50) {
+      return 'text-green-600';
+    }
+    if (savingsPercentage > 30) {
+      return 'text-yellow-600';
+    }
     return 'text-red-600';
   };
 

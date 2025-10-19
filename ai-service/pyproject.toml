@@ -1,33 +1,90 @@
+[project]
+name = "offgrid-ai-service"
+version = "0.1.0"
+description = "AI service for OffGrid platform"
+requires-python = ">=3.12"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 asyncio_mode = "auto"
+addopts = "--strict-markers --tb=short -v"
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests"
+]
+
+[tool.coverage.run]
+source = ["app"]
+omit = ["tests/*", "**/__pycache__/*"]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+fail_under = 90
 
 [tool.black]
 line-length = 100
 target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
 
 [tool.ruff]
 line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "I"]
-ignore = [
-    "E501",  # Line too long
-    "G004",  # Logging statement uses f-string
-    "TRY003", # Long exception message
-    "EM101", # Exception must not use string literal
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
 ]
+ignore = [
+    "E501",   # Line too long (handled by black)
+    "B008",   # Do not perform function calls in argument defaults
+    "C901",   # Too complex
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Unused imports in __init__.py are okay
+
+[tool.ruff.lint.isort]
+known-third-party = ["fastapi", "pydantic", "uvicorn"]
 
 [tool.mypy]
 python_version = "3.12"
-warn_return_any = false
+warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = false
-check_untyped_defs = true
+disallow_untyped_defs = true
+disallow_any_unimported = false
 no_implicit_optional = true
 warn_redundant_casts = true
-warn_unused_ignores = false
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false

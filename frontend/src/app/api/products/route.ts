@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { Product, ProductSearchParams } from '@/lib/products/types';
+import type { ProductSearchParams } from '@/lib/products/types';
 import { PRODUCT_DATABASE } from '@/lib/products/database';
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
   const filters: ProductSearchParams = {
-    category: searchParams.get('category') as any,
+    category: (searchParams.get('category') as ProductSearchParams['category']) ?? undefined,
     minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
     maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
-    currency: (searchParams.get('currency') as any) || 'EUR',
+    currency: (searchParams.get('currency') as ProductSearchParams['currency']) || 'EUR',
     inStockOnly: searchParams.get('inStockOnly') === 'true',
     shipsToPortugal: searchParams.get('shipsToPortugal') === 'true',
     minRating: searchParams.get('minRating') ? Number(searchParams.get('minRating')) : undefined,
@@ -43,12 +43,18 @@ export async function GET(request: NextRequest) {
         .filter((link) => link.price.currency === filters.currency)
         .map((link) => link.price.amount);
 
-      if (prices.length === 0) return false;
+      if (prices.length === 0) {
+        return false;
+      }
 
       const minPrice = Math.min(...prices);
 
-      if (filters.minPrice && minPrice < filters.minPrice) return false;
-      if (filters.maxPrice && minPrice > filters.maxPrice) return false;
+      if (filters.minPrice && minPrice < filters.minPrice) {
+        return false;
+      }
+      if (filters.maxPrice && minPrice > filters.maxPrice) {
+        return false;
+      }
 
       return true;
     });

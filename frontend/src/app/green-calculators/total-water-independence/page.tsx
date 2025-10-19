@@ -205,8 +205,12 @@ export default function TotalWaterIndependenceCalculator() {
 
     // Total investment based on preference
     let selectedStorageCost = ibcToteSystemCost;
-    if (storagePreference === 'underground') selectedStorageCost = undergroundCisternCost;
-    if (storagePreference === 'hybrid') selectedStorageCost = hybridSystemCost;
+    if (storagePreference === 'underground') {
+      selectedStorageCost = undergroundCisternCost;
+    }
+    if (storagePreference === 'hybrid') {
+      selectedStorageCost = hybridSystemCost;
+    }
 
     const totalInvestment = selectedStorageCost + plumbingCost + filtrationCost + pumpCost;
 

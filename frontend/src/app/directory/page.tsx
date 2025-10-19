@@ -60,8 +60,8 @@ export default function DirectoryPage() {
   const [expandedPosts, setExpandedPosts] = useState<Set<number>>(new Set());
 
   useEffect(() => {
-    fetchCategories();
-    fetchPosts();
+    void fetchCategories();
+    void fetchPosts();
   }, []);
 
   const fetchPosts = async () => {
@@ -76,7 +76,7 @@ export default function DirectoryPage() {
         throw new Error(`Failed to fetch posts: ${response.status}`);
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as WordPressPost[];
       setPosts(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load posts');
@@ -88,8 +88,10 @@ export default function DirectoryPage() {
   const fetchCategories = async () => {
     try {
       const response = await fetch('http://localhost:8080/wp-json/wp/v2/categories');
-      if (!response.ok) return;
-      const data = await response.json();
+      if (!response.ok) {
+        return;
+      }
+      const data = (await response.json()) as Category[];
       setCategories(data);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
@@ -114,7 +116,7 @@ export default function DirectoryPage() {
   };
 
   // Portugal-themed placeholder images
-  const getPortugalImage = (postId: number, title: string) => {
+  const getPortugalImage = (_postId: number, title: string) => {
     const lowerTitle = title.toLowerCase();
 
     if (lowerTitle.includes('solar') || lowerTitle.includes('energia solar')) {
@@ -180,7 +182,7 @@ export default function DirectoryPage() {
         <div className="rounded-lg border border-destructive bg-destructive/10 p-6 text-center">
           <h2 className="mb-2 text-2xl font-bold text-destructive">Error Loading Content</h2>
           <p className="mb-4 text-muted-foreground">{error}</p>
-          <Button onClick={fetchPosts} variant="outline">
+          <Button onClick={() => void fetchPosts()} variant="outline">
             Try Again
           </Button>
         </div>

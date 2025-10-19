@@ -38,8 +38,8 @@ test.describe('Directory Page', () => {
     await page.goto('http://localhost:3001/directory');
     await page.waitForSelector('[data-testid="posts-grid"]', { timeout: 30000 });
 
-    // Get initial post count
-    const _initialPosts = await page.locator('[data-testid^=\"post-card-\"]').count();
+    // Get initial post count (for future comparison if needed)
+    // const initialPosts = await page.locator('[data-testid^=\"post-card-\"]').count();
 
     // Search for "Hello"
     await page.fill('[data-testid="search-input"]', 'Hello');
