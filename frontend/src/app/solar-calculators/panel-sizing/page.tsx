@@ -47,47 +47,41 @@ export default function PanelSizingCalculator() {
   const [results, setResults] = useState<PanelResults | null>(null);
   const [showRecommendations, setShowRecommendations] = useState(false);
 
-  // Solar irradiance data by region (simplified - in real app would use API)
+  // Solar irradiance data by Portugal region (based on PVGIS data)
   const solarData: Record<string, SolarData> = {
-    southwest: {
-      irradiance: [3.2, 4.1, 5.3, 6.4, 7.2, 7.8, 7.5, 6.9, 5.8, 4.6, 3.5, 2.9],
-      peakSunHours: 5.5,
-      climateFactor: 0.95,
+    'north-portugal': {
+      irradiance: [2.2, 3.1, 4.3, 5.2, 6.1, 6.8, 7.2, 6.5, 5.1, 3.8, 2.6, 1.9],
+      peakSunHours: 4.1,
+      climateFactor: 0.90, // More rainfall, coastal humidity
     },
-    southeast: {
-      irradiance: [2.8, 3.6, 4.8, 5.8, 6.3, 6.8, 6.5, 6.0, 5.1, 4.2, 3.1, 2.6],
-      peakSunHours: 4.8,
-      climateFactor: 0.9,
+    'central-portugal': {
+      irradiance: [2.5, 3.5, 4.8, 5.8, 6.8, 7.5, 7.8, 7.2, 5.8, 4.2, 2.9, 2.2],
+      peakSunHours: 4.4,
+      climateFactor: 0.92, // Balanced climate, Lisbon area
     },
-    northeast: {
-      irradiance: [1.8, 2.6, 3.8, 4.6, 5.4, 5.8, 5.6, 5.0, 4.0, 2.9, 2.0, 1.5],
-      peakSunHours: 3.8,
-      climateFactor: 0.85,
-    },
-    northwest: {
-      irradiance: [1.2, 2.0, 3.2, 4.4, 5.6, 6.2, 6.8, 5.9, 4.3, 2.8, 1.6, 1.0],
-      peakSunHours: 3.5,
-      climateFactor: 0.88,
-    },
-    midwest: {
-      irradiance: [2.0, 2.8, 3.9, 4.8, 5.6, 6.1, 5.9, 5.3, 4.2, 3.2, 2.2, 1.7],
-      peakSunHours: 4.2,
-      climateFactor: 0.87,
-    },
-    mountain: {
-      irradiance: [2.8, 3.8, 5.0, 6.2, 7.0, 7.6, 7.3, 6.7, 5.5, 4.3, 3.2, 2.5],
+    algarve: {
+      irradiance: [3.2, 4.2, 5.5, 6.5, 7.5, 8.2, 8.5, 7.8, 6.2, 4.8, 3.5, 2.8],
       peakSunHours: 5.2,
-      climateFactor: 0.92,
+      climateFactor: 0.95, // Excellent solar, Mediterranean climate
+    },
+    azores: {
+      irradiance: [1.8, 2.5, 3.5, 4.5, 5.2, 5.8, 6.2, 5.5, 4.2, 3.2, 2.2, 1.6],
+      peakSunHours: 3.8,
+      climateFactor: 0.88, // Atlantic climate, more cloud cover
+    },
+    madeira: {
+      irradiance: [2.8, 3.8, 5.0, 6.0, 6.8, 7.5, 7.8, 7.2, 5.8, 4.5, 3.2, 2.5],
+      peakSunHours: 5.0,
+      climateFactor: 0.93, // Subtropical, excellent solar year-round
     },
   };
 
   const locationOptions = [
-    { value: 'southwest', label: 'Southwest US (AZ, NV, CA, NM)' },
-    { value: 'southeast', label: 'Southeast US (FL, GA, SC, NC)' },
-    { value: 'northeast', label: 'Northeast US (NY, NJ, CT, MA)' },
-    { value: 'northwest', label: 'Northwest US (WA, OR, ID)' },
-    { value: 'midwest', label: 'Midwest US (IL, IN, OH, MI)' },
-    { value: 'mountain', label: 'Mountain West (CO, UT, WY, MT)' },
+    { value: 'north-portugal', label: 'North Portugal (Porto, Braga, Viana do Castelo)' },
+    { value: 'central-portugal', label: 'Central Portugal (Lisbon, Coimbra, Leiria)' },
+    { value: 'algarve', label: 'Algarve (Faro, Lagos, Albufeira)' },
+    { value: 'azores', label: 'Azores Islands' },
+    { value: 'madeira', label: 'Madeira Island' },
   ];
 
   const shadingFactors = {
@@ -310,8 +304,9 @@ export default function PanelSizingCalculator() {
 
                 <div className="text-sm text-muted-foreground">
                   <p>
-                    💡 <strong>Tip:</strong> More precise location data gives better accuracy. We
-                    use regional solar irradiance data and climate factors for calculations.
+                    💡 <strong>Tip:</strong> Solar data based on PVGIS (EU Joint Research Centre).
+                    Portugal has excellent solar potential with 2,200-3,000 hours of sunshine
+                    annually. Algarve has the highest solar irradiance in Portugal.
                   </p>
                 </div>
               </div>
