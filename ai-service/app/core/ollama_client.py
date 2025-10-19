@@ -48,7 +48,7 @@ class OllamaClient:
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-        logger.info(f"Initializing Ollama client for model: {model}")
+        logger.info("Initializing Ollama client for model: %s", model)
 
         # Verify connection
         try:
@@ -58,14 +58,14 @@ class OllamaClient:
                 model_names = [m["name"] for m in models]
 
                 if any(model in name for name in model_names):
-                    logger.info(f"✓ Model '{model}' is available")
+                    logger.info("✓ Model '%s' is available", model)
                 else:
-                    logger.warning(f"✗ Model '{model}' not found. Available: {model_names}")
-                    logger.warning(f"Run: ollama pull {model}")
+                    logger.warning("✗ Model '%s' not found. Available: %s", model, model_names)
+                    logger.warning("Run: ollama pull %s", model)
             else:
-                logger.error(f"Ollama server returned status {response.status_code}")
+                logger.error("Ollama server returned status %d", response.status_code)
         except requests.exceptions.RequestException as e:
-            logger.error(f"Cannot connect to Ollama server at {base_url}: {e}")
+            logger.error("Cannot connect to Ollama server at %s: %s", base_url, e)
             logger.error("Is Ollama running? Start with: ollama serve")
 
     def generate(
@@ -122,7 +122,7 @@ class OllamaClient:
             )
 
         except requests.exceptions.RequestException as e:
-            logger.error(f"Ollama request failed: {e}")
+            logger.error("Ollama request failed: %s", e)
             raise
 
     def enrich_product(
@@ -196,12 +196,12 @@ Example output:
             # Parse JSON
             enriched_data = json.loads(response.content)
 
-            logger.info(f"Enriched product '{name}' in {response.total_duration_ms:.0f}ms")
+            logger.info("Enriched product '%s' in %.0fms", name, response.total_duration_ms)
 
             return enriched_data
 
         except (json.JSONDecodeError, KeyError) as e:
-            logger.error(f"Failed to parse enrichment response: {e}")
+            logger.error("Failed to parse enrichment response: %s", e)
             # Return minimal fallback
             return {
                 "tags": [name.lower()],
@@ -268,14 +268,14 @@ Output:
                 prompt=user_prompt, system=system_prompt, temperature=0.2, json_mode=True
             )
 
-            requirements = json.loads(response.content)
+            extracted_reqs = json.loads(response.content)
 
-            logger.info(f"Extracted requirements in {response.total_duration_ms:.0f}ms")
+            logger.info("Extracted requirements in %.0fms", response.total_duration_ms)
 
-            return requirements
+            return extracted_reqs
 
         except (json.JSONDecodeError, KeyError) as e:
-            logger.error(f"Failed to parse requirements: {e}")
+            logger.error("Failed to parse requirements: %s", e)
             # Return minimal fallback
             return {
                 "categories": [],
@@ -304,11 +304,11 @@ Output:
         """
         # Prepare product descriptions
         product_list = []
-        for i, p in enumerate(products[:20]):  # Limit to top 20 candidates
+        for idx, prod in enumerate(products[:20]):  # Limit to top 20 candidates
             product_list.append(
-                f"{i+1}. {p.get('name', 'Unknown')} - €{p.get('price', 0):.2f}\n"
-                f"   Category: {p.get('category', 'N/A')}\n"
-                f"   Description: {p.get('summary_en', p.get('description', 'N/A')[:100])}"
+                f"{idx+1}. {prod.get('name', 'Unknown')} - €{prod.get('price', 0):.2f}\n"
+                f"   Category: {prod.get('category', 'N/A')}\n"
+                f"   Description: {prod.get('summary_en', prod.get('description', 'N/A')[:100])}"
             )
 
         products_text = "\n\n".join(product_list)
@@ -359,13 +359,13 @@ Only include the top {top_k} most relevant products."""
                     ranked_products.append(product)
 
             logger.info(
-                f"Ranked {len(ranked_products)} products in {response.total_duration_ms:.0f}ms"
+                "Ranked %d products in %.0fms", len(ranked_products), response.total_duration_ms
             )
 
             return ranked_products
 
         except (json.JSONDecodeError, KeyError, IndexError) as e:
-            logger.error(f"Failed to rank products: {e}")
+            logger.error("Failed to rank products: %s", e)
             # Return original order
             return products[:top_k]
 
@@ -376,7 +376,7 @@ _ollama_client: OllamaClient = None
 
 def get_ollama_client() -> OllamaClient:
     """Get or create global Ollama client"""
-    global _ollama_client
+    global _ollama_client  # pylint: disable=global-statement
 
     if _ollama_client is None:
         _ollama_client = OllamaClient()

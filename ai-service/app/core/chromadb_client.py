@@ -30,7 +30,7 @@ class ChromaDBClient:
         self.persist_directory = Path(persist_directory)
         self.persist_directory.mkdir(parents=True, exist_ok=True)
 
-        logger.info(f"Initializing ChromaDB at {persist_directory}")
+        logger.info("Initializing ChromaDB at %s", persist_directory)
 
         # Create client with persistent storage (new API)
         self.client = chromadb.PersistentClient(path=str(self.persist_directory))
@@ -45,7 +45,9 @@ class ChromaDBClient:
             },
         )
 
-        logger.info(f"Collection '{collection_name}' ready with {self.collection.count()} products")
+        logger.info(
+            "Collection '%s' ready with %d products", collection_name, self.collection.count()
+        )
 
     def add_products(
         self,
@@ -63,13 +65,13 @@ class ChromaDBClient:
             metadatas: Product metadata (category, price, etc.)
             documents: Product descriptions (for retrieval context)
         """
-        logger.info(f"Adding {len(ids)} products to ChromaDB")
+        logger.info("Adding %d products to ChromaDB", len(ids))
 
         self.collection.add(
             ids=ids, embeddings=embeddings, metadatas=metadatas, documents=documents
         )
 
-        logger.info(f"Successfully added {len(ids)} products")
+        logger.info("Successfully added %d products", len(ids))
 
     def search(
         self,
@@ -95,7 +97,7 @@ class ChromaDBClient:
                 - documents: Product descriptions
                 - embeddings: Product embeddings (optional)
         """
-        results = self.collection.query(
+        query_results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=n_results,
             where=where,
@@ -103,7 +105,7 @@ class ChromaDBClient:
             include=["metadatas", "documents", "distances"],
         )
 
-        return results
+        return query_results
 
     def search_with_filters(
         self,
@@ -161,81 +163,81 @@ class ChromaDBClient:
         # Tags filter requires different approach (ChromaDB limitation)
         # We'll filter in post-processing if needed
 
-        results = self.search(
+        search_results = self.search(
             query_embedding=query_embedding,
             n_results=n_results * 2 if tags else n_results,  # Get more for tag filtering
             where=where_filter if where_filter else None,
         )
 
         # Post-filter by tags if needed
-        if tags and results["ids"]:
+        if tags and search_results["ids"]:
             filtered_ids = []
             filtered_metadatas = []
             filtered_documents = []
             filtered_distances = []
 
-            for i, metadata in enumerate(results["metadatas"][0]):
+            for idx, meta in enumerate(search_results["metadatas"][0]):
                 # Tags are stored as comma-separated string
-                product_tags_str = metadata.get("tags", "")
+                product_tags_str = meta.get("tags", "")
                 product_tags = [t.strip() for t in product_tags_str.split(",") if t.strip()]
                 if any(tag in product_tags for tag in tags):
-                    filtered_ids.append(results["ids"][0][i])
-                    filtered_metadatas.append(metadata)
-                    filtered_documents.append(results["documents"][0][i])
-                    filtered_distances.append(results["distances"][0][i])
+                    filtered_ids.append(search_results["ids"][0][idx])
+                    filtered_metadatas.append(meta)
+                    filtered_documents.append(search_results["documents"][0][idx])
+                    filtered_distances.append(search_results["distances"][0][idx])
 
                     if len(filtered_ids) >= n_results:
                         break
 
-            results = {
+            search_results = {
                 "ids": [filtered_ids],
                 "metadatas": [filtered_metadatas],
                 "documents": [filtered_documents],
                 "distances": [filtered_distances],
             }
 
-        return results
+        return search_results
 
     def update_product(
         self,
-        product_id: str,
+        prod_id: str,
         embedding: list[float] | None = None,
-        metadata: dict[str, Any] | None = None,
+        meta: dict[str, Any] | None = None,
         document: str | None = None,
     ) -> None:
         """
         Update a product in the collection
 
         Args:
-            product_id: Product ID to update
+            prod_id: Product ID to update
             embedding: New embedding (optional)
-            metadata: New metadata (optional)
+            meta: New metadata (optional)
             document: New document text (optional)
         """
         self.collection.update(
-            ids=[product_id],
+            ids=[prod_id],
             embeddings=[embedding] if embedding else None,
-            metadatas=[metadata] if metadata else None,
+            metadatas=[meta] if meta else None,
             documents=[document] if document else None,
         )
 
     def delete_products(self, ids: list[str]) -> None:
         """Delete products from collection"""
         self.collection.delete(ids=ids)
-        logger.info(f"Deleted {len(ids)} products")
+        logger.info("Deleted %d products", len(ids))
 
-    def get_product(self, product_id: str) -> dict[str, Any] | None:
+    def get_product(self, prod_id: str) -> dict[str, Any] | None:
         """Get a single product by ID"""
-        results = self.collection.get(
-            ids=[product_id], include=["metadatas", "documents", "embeddings"]
+        get_results = self.collection.get(
+            ids=[prod_id], include=["metadatas", "documents", "embeddings"]
         )
 
-        if results["ids"]:
+        if get_results["ids"]:
             return {
-                "id": results["ids"][0],
-                "metadata": results["metadatas"][0],
-                "document": results["documents"][0],
-                "embedding": results["embeddings"][0] if results["embeddings"] else None,
+                "id": get_results["ids"][0],
+                "metadata": get_results["metadatas"][0],
+                "document": get_results["documents"][0],
+                "embedding": get_results["embeddings"][0] if get_results["embeddings"] else None,
             }
 
         return None
@@ -259,7 +261,7 @@ _chromadb_client: ChromaDBClient = None
 
 def get_chromadb_client() -> ChromaDBClient:
     """Get or create global ChromaDB client"""
-    global _chromadb_client
+    global _chromadb_client  # pylint: disable=global-statement
 
     if _chromadb_client is None:
         _chromadb_client = ChromaDBClient()
@@ -311,7 +313,5 @@ if __name__ == "__main__":
 
     print(f"Found {len(results['ids'][0])} products")
     for i, product_id in enumerate(results["ids"][0]):
-        metadata = results['metadatas'][0][i]
-        print(
-            f"  {product_id}: {metadata['name']} - €{metadata['price']}"
-        )
+        metadata = results["metadatas"][0][i]
+        print(f"  {product_id}: {metadata['name']} - €{metadata['price']}")

@@ -67,7 +67,7 @@ class AIProviderService:
         )
 
         return {
-            "message": response.text,
+            "message": response.content,
             "provider": "ollama",
             "model": model,
             "usage": {},

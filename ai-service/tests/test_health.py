@@ -2,6 +2,7 @@
 Health check tests for the AI service
 Tests basic functionality and error handling
 """
+
 # pylint: disable=redefined-outer-name  # pytest fixtures are intentionally reused
 
 import pytest

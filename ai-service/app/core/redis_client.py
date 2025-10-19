@@ -11,7 +11,7 @@ _redis_client: redis.Redis | None = None
 
 async def get_redis_client() -> redis.Redis:
     """Get or create Redis client"""
-    global _redis_client
+    global _redis_client  # pylint: disable=global-statement
     if _redis_client is None:
         _redis_client = redis.from_url(settings.REDIS_URL, encoding="utf-8", decode_responses=True)
     return _redis_client
@@ -19,7 +19,7 @@ async def get_redis_client() -> redis.Redis:
 
 async def close_redis_client() -> None:
     """Close Redis connection"""
-    global _redis_client
+    global _redis_client  # pylint: disable=global-statement
     if _redis_client:
         await _redis_client.close()
         _redis_client = None
