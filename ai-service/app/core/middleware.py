@@ -33,11 +33,13 @@ async def log_requests_middleware(request: Request, call_next: Callable) -> Resp
 
     # Log incoming request
     logger.info(
-        f"Incoming request: {request.method} {request.url.path}",
+        "Incoming request: %s %s",
+        request.method,
+        request.url.path,
         extra={
             "method": request.method,
             "path": request.url.path,
-            "client": request.client.host if request.client else "unknown",
+            "client": request.client.host if request.client else None,
         },
     )
 
@@ -47,8 +49,11 @@ async def log_requests_middleware(request: Request, call_next: Callable) -> Resp
     # Log response with timing
     duration = time.time() - start_time
     logger.info(
-        f"Request completed: {request.method} {request.url.path} - "
-        f"Status: {response.status_code} - Duration: {duration:.3f}s",
+        "Request completed: %s %s - Status: %s - Duration: %.3fs",
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration,
         extra={
             "method": request.method,
             "path": request.url.path,
@@ -70,7 +75,9 @@ def setup_exception_handlers(app: FastAPI) -> None:
     async def http_exception_handler(request: Request, exc: StarletteHTTPException) -> JSONResponse:
         """Handle HTTP exceptions"""
         logger.warning(
-            f"HTTP exception: {exc.status_code} - {exc.detail}",
+            "HTTP exception: %s - %s",
+            exc.status_code,
+            exc.detail,
             extra={
                 "status_code": exc.status_code,
                 "detail": exc.detail,
@@ -88,7 +95,8 @@ def setup_exception_handlers(app: FastAPI) -> None:
     ) -> JSONResponse:
         """Handle validation errors"""
         logger.warning(
-            f"Validation error: {exc.errors()}",
+            "Validation error: %s",
+            exc.errors(),
             extra={
                 "errors": exc.errors(),
                 "path": request.url.path,
@@ -106,7 +114,9 @@ def setup_exception_handlers(app: FastAPI) -> None:
         Logs the error and returns 500
         """
         logger.error(
-            f"Unhandled exception: {type(exc).__name__} - {str(exc)}",
+            "Unhandled exception: %s - %s",
+            type(exc).__name__,
+            str(exc),
             extra={
                 "exception_type": type(exc).__name__,
                 "exception_message": str(exc),

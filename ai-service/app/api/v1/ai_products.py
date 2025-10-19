@@ -123,7 +123,7 @@ async def enrich_product(request: ProductEnrichRequest):
         return ProductEnrichResponse(**enriched)
 
     except Exception as e:
-        logger.error(f"Product enrichment failed: {e}")
+        logger.error("Product enrichment failed: %s", e)
         raise HTTPException(status_code=500, detail=f"Enrichment failed: {str(e)}") from e
 
 
@@ -151,7 +151,7 @@ async def generate_embedding(
         }
 
     except Exception as e:
-        logger.error(f"Embedding generation failed: {e}")
+        logger.error("Embedding generation failed: %s", e)
         raise HTTPException(status_code=500, detail=f"Embedding failed: {str(e)}") from e
 
 
@@ -179,7 +179,7 @@ async def search_products(request: ProductSearchRequest):
         ollama = get_ollama_client()
 
         # 1. Extract requirements
-        logger.info(f"Extracting requirements from: {request.query}")
+        logger.info("Extracting requirements from: %s", request.query)
         requirements = ollama.extract_requirements(request.query)
 
         # Use requirements to enhance filters
@@ -261,7 +261,7 @@ async def search_products(request: ProductSearchRequest):
         )
 
     except Exception as e:
-        logger.error(f"Product search failed: {e}")
+        logger.error("Product search failed: %s", e)
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}") from e
 
 
@@ -326,7 +326,7 @@ async def recommend_products(request: RecommendationRequest):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Product recommendation failed: {e}")
+        logger.error("Product recommendation failed: %s", e)
         raise HTTPException(status_code=500, detail=f"Recommendation failed: {str(e)}") from e
 
 
@@ -367,7 +367,7 @@ async def health_check():
         }
 
     except Exception as e:
-        logger.error(f"Health check failed: {e}")
+        logger.error("Health check failed: %s", e)
         return {"status": "unhealthy", "error": str(e)}
 
 

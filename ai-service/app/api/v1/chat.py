@@ -45,7 +45,7 @@ class ChatResponse(BaseModel):
 
 @router.post("/", response_model=ChatResponse)
 async def chat(
-    request: ChatRequest, redis_client: redis.Redis = Depends(get_redis_client)
+    request: ChatRequest, _redis_client: redis.Redis = Depends(get_redis_client)
 ) -> ChatResponse:
     """
     Chat endpoint - Local Ollama only
@@ -69,7 +69,9 @@ async def chat(
         )
 
         logger.info(
-            f"Chat request processed: provider={request.provider}, model={response.get('model')}"
+            "Chat request processed: provider=%s, model=%s",
+            request.provider,
+            response.get("model"),
         )
 
         return ChatResponse(
@@ -80,10 +82,10 @@ async def chat(
         )
 
     except ValueError as e:
-        logger.error(f"Invalid request: {str(e)}")
+        logger.error("Invalid request: %s", str(e))
         raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
-        logger.error(f"Chat error: {str(e)}")
+        logger.error("Chat error: %s", str(e))
         raise HTTPException(status_code=500, detail="Internal server error") from e
 
 

@@ -74,18 +74,18 @@ async def startup_event():
 
         # Initialize embedding service
         embedding_service = get_embedding_service()
-        logger.info(f"✓ Embedding model loaded: {embedding_service.model_name}")
-        logger.info(f"  - Dimension: {embedding_service.embedding_dim}")
-        logger.info(f"  - Device: {embedding_service.device}")
+        logger.info("✓ Embedding model loaded: %s", embedding_service.model_name)
+        logger.info("  - Dimension: %s", embedding_service.embedding_dim)
+        logger.info("  - Device: %s", embedding_service.device)
 
         # Initialize ChromaDB
         chromadb = get_chromadb_client()
         product_count = chromadb.count()
-        logger.info(f"✓ ChromaDB connected: {product_count} products indexed")
+        logger.info("✓ ChromaDB connected: %s products indexed", product_count)
 
         # Initialize Ollama client
         ollama = get_ollama_client()
-        logger.info(f"✓ Ollama LLM ready: {ollama.model}")
+        logger.info("✓ Ollama LLM ready: %s", ollama.model)
 
         logger.info("=" * 70)
         logger.info("✓ AI Service Ready!")
@@ -94,7 +94,7 @@ async def startup_event():
         logger.info("=" * 70)
 
     except Exception as e:
-        logger.error(f"✗ Failed to initialize AI services: {e}")
+        logger.error("✗ Failed to initialize AI services: %s", e)
         logger.error("Please check:")
         logger.error("  1. Ollama is running: ollama serve")
         logger.error("  2. Models are downloaded: ollama pull qwen2.5:7b-instruct-q4_K_M")
