@@ -53,12 +53,16 @@ export function useSubscription(): AccessControl {
       tier,
       isActive,
       canAccess: (requiredTier: SubscriptionTier) => {
-        if (!isActive && tier !== 'free') return false
+        if (!isActive && tier !== 'free') {
+          return false
+        }
         return tierHierarchy[tier] >= tierHierarchy[requiredTier]
       },
       canAccessFeature: (feature: string) => {
         const requiredTier = featureAccess[feature] || 'expert'
-        if (!isActive && tier !== 'free') return false
+        if (!isActive && tier !== 'free') {
+          return false
+        }
         return tierHierarchy[tier] >= tierHierarchy[requiredTier]
       },
     }

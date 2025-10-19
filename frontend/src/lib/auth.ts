@@ -71,15 +71,15 @@ export const authOptions: NextAuthOptions = {
         token.subscriptionStatus = session.subscriptionStatus
       }
 
-      return token
+      return Promise.resolve(token)
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
-        session.user.subscriptionTier = token.subscriptionTier as string
-        session.user.subscriptionStatus = token.subscriptionStatus as string
+        session.user.id = token.id
+        session.user.subscriptionTier = token.subscriptionTier
+        session.user.subscriptionStatus = token.subscriptionStatus
       }
-      return session
+      return Promise.resolve(session)
     },
   },
 }

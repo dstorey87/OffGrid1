@@ -26,7 +26,7 @@ export interface AITestEvent {
   details?: string;
   analysis?: string;
   fix?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export function useAIStream() {

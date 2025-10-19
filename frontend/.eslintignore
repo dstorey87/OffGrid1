@@ -1,0 +1,29 @@
+# Generated files
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Prisma generated files (contains auto-generated code with unavoidable lint issues)
+src/generated/
+
+# Test results
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+
+# Environment files
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
