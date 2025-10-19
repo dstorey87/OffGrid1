@@ -626,6 +626,158 @@ export default function DIYBatteryBuildingGuide() {
         </section>
         </ContentGate>
 
+        {/* Section 5: Complete Parts List - PRO */}
+        <ContentGate
+          feature="diy-battery-parts-list"
+          requiredTier="pro"
+          title="📝 Complete Parts List"
+          description="Get the full itemized parts list with verified supplier links, cost breakdowns, and bulk ordering strategies to save 30-40%."
+        >
+        <section id="parts-list" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">5. Complete Parts List</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Comprehensive parts list with supplier links, cost analysis, and bulk ordering tips coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 6: Step-by-Step Assembly - PRO */}
+        <ContentGate
+          feature="diy-battery-assembly"
+          requiredTier="pro"
+          title="🔧 Step-by-Step Assembly Guide"
+          description="Follow detailed assembly instructions with photos, wiring diagrams, and pro tips to build your battery pack safely and correctly."
+        >
+        <section id="assembly" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">6. Step-by-Step Assembly</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Detailed assembly instructions with photos and diagrams coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 7: BMS Selection Guide - PRO */}
+        <ContentGate
+          feature="diy-battery-bms"
+          requiredTier="pro"
+          title="⚡ BMS Selection & Wiring"
+          description="Master BMS selection, wiring diagrams, and configuration for optimal battery protection and performance."
+        >
+        <section id="bms" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">7. BMS Selection & Wiring</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                BMS comparison, wiring diagrams, and configuration guide coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 8: Testing & Validation - EXPERT */}
+        <ContentGate
+          feature="diy-battery-testing"
+          requiredTier="expert"
+          title="🔬 Testing & Validation Protocol"
+          description="Access professional testing procedures, capacity verification methods, and safety validation checklists."
+        >
+        <section id="testing" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">8. Testing & Validation</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Professional testing procedures and validation protocols coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 9: Troubleshooting - EXPERT */}
+        <ContentGate
+          feature="diy-battery-troubleshooting"
+          requiredTier="expert"
+          title="🛠️ Advanced Troubleshooting"
+          description="Learn how to diagnose and fix common battery issues, cell imbalances, and BMS errors with expert guidance."
+        >
+        <section id="troubleshooting" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">9. Troubleshooting Guide</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Common issues, diagnostics, and solutions coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 10: Solar Integration - EXPERT */}
+        <ContentGate
+          feature="diy-battery-solar-integration"
+          requiredTier="expert"
+          title="☀️ Solar System Integration"
+          description="Design complete off-grid systems with proper charge controllers, inverters, and solar panel configurations."
+        >
+        <section id="solar-integration" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">10. Solar System Integration</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Complete system integration with solar panels and inverters coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 11: Maintenance - EXPERT */}
+        <ContentGate
+          feature="diy-battery-maintenance"
+          requiredTier="expert"
+          title="🔄 Long-Term Maintenance"
+          description="Ensure 10+ year battery life with proper maintenance schedules, cell balancing, and capacity monitoring."
+        >
+        <section id="maintenance" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">11. Long-Term Maintenance</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Maintenance schedules and longevity optimization coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
+        {/* Section 12: Cost Analysis - EXPERT */}
+        <ContentGate
+          feature="diy-battery-cost-analysis"
+          requiredTier="expert"
+          title="💰 ROI & Cost Analysis"
+          description="Understand true costs, payback periods, and compare DIY vs commercial batteries with real-world data."
+        >
+        <section id="cost-analysis" className="mb-12">
+          <div className="rounded-lg border bg-card p-6">
+            <h2 className="mb-4 text-2xl font-bold">12. Cost Analysis & ROI</h2>
+            <div className="rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
+              <p className="text-muted-foreground">
+                Detailed cost breakdowns and ROI calculations coming soon.
+              </p>
+            </div>
+          </div>
+        </section>
+        </ContentGate>
+
         {/* Continue to next article link */}
         <div className="mt-12 rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">
           <p className="mb-4 text-center text-muted-foreground">
@@ -646,18 +798,6 @@ export default function DIYBatteryBuildingGuide() {
               Complete System Designer
             </Link>
           </div>
-        </div>
-
-        {/* Coming Soon Notice */}
-        <div className="mt-8 rounded-lg border-2 border-primary bg-primary/5 p-6 text-center">
-          <h3 className="mb-2 text-xl font-semibold">📚 Full Guide Coming Soon</h3>
-          <p className="text-muted-foreground">
-            The complete step-by-step assembly instructions, BMS wiring diagrams, and video
-            tutorials are being added. Check back soon or sign up for updates.
-          </p>
-          <button className="mt-4 rounded bg-primary px-6 py-2 text-primary-foreground hover:bg-primary/90">
-            Notify Me When Complete
-          </button>
         </div>
       </div>
     </main>
