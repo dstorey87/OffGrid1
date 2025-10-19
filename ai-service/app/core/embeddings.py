@@ -26,14 +26,14 @@ class EmbeddingService:
         """
         self.model_name = model_name
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        logger.info(f"Initializing embedding model on {self.device}")
+        logger.info("Initializing embedding model on %s", self.device)
 
         # Load model (downloads on first run)
         self.model = SentenceTransformer(model_name, device=self.device)
 
         # Get embedding dimension
         self.embedding_dim = self.model.get_sentence_embedding_dimension()
-        logger.info(f"Embedding dimension: {self.embedding_dim}")
+        logger.info("Embedding dimension: %s", self.embedding_dim)
 
     def encode(
         self, texts: str | list[str], normalize: bool = True, batch_size: int = 32

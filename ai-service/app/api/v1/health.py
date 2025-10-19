@@ -70,7 +70,7 @@ async def readiness_check(
         await redis_client.ping()
         return {"status": "ready"}
     except Exception:
-        return {"status": "not ready"}
+        return {"status": "not_ready"}
 
 
 @router.get("/live")

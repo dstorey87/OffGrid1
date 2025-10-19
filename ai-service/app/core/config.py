@@ -53,7 +53,7 @@ class Settings(BaseSettings):
             # Verify Vault connectivity (no cloud AI credentials needed)
             vault_client.get_ai_credentials()
 
-        except Exception as e:
+        except (ConnectionError, ValueError, RuntimeError) as e:
             if self.ENVIRONMENT == "production":
                 raise RuntimeError(f"Failed to load secrets from Vault: {e}") from e
             else:
