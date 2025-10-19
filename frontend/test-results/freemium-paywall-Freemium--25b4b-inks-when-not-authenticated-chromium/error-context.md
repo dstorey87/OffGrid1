@@ -1,0 +1,193 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Solar Calculators" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Solar Calculators
+          - img [ref=e33]
+        - button "Green Calculators" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - text: Green Calculators
+          - img [ref=e40]
+        - button "DIY Guides" [ref=e43] [cursor=pointer]:
+          - img [ref=e44]
+          - text: DIY Guides
+          - img [ref=e46]
+        - link "Portugal Guide" [ref=e48] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e49]
+          - text: Portugal Guide
+        - link "Shop" [ref=e52] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e53]
+          - text: Shop
+        - link "System Designer" [ref=e57] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e58]
+          - text: System Designer
+        - button "Toggle theme" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+  - main [ref=e70]:
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - img "Off-grid sustainable living with solar panels and green technology" [ref=e74]
+        - generic [ref=e76]:
+          - heading "Complete Green Technology Calculator Suite" [level=1] [ref=e77]:
+            - generic [ref=e78]: Complete Green Technology
+            - generic [ref=e79]: Calculator Suite
+          - paragraph [ref=e80]:
+            - strong [ref=e81]: Calculate everything
+            - text: "for sustainable living: solar systems, rainwater harvesting, greywater recycling, wind power, hydroponics & more. Plus complete"
+            - strong [ref=e82]: Portugal digital nomad
+            - text: guides.
+            - emphasis [ref=e83]: 100% FREE
+            - text: "- no signup required."
+          - generic [ref=e84]:
+            - link "Rainwater Calculator" [ref=e85] [cursor=pointer]:
+              - /url: /green-calculators/rainwater-harvesting
+              - img [ref=e87]
+              - text: Rainwater Calculator
+            - link "Solar Calculator" [ref=e90] [cursor=pointer]:
+              - /url: /solar-calculators/load-analysis
+              - img [ref=e92]
+              - text: Solar Calculator
+            - link "All Green Calculators" [ref=e94] [cursor=pointer]:
+              - /url: /green-calculators
+              - img [ref=e96]
+              - text: All Green Calculators
+      - generic [ref=e100]:
+        - heading "Complete Sustainable Living Calculator Suite" [level=2] [ref=e101]
+        - generic [ref=e102]:
+          - heading "Solar Panel Calculator & System Design Tools" [level=3] [ref=e103]:
+            - img [ref=e105]
+            - text: Solar Panel Calculator & System Design Tools
+          - generic [ref=e109]:
+            - link "Solar panel system FREE Solar Panel Calculator Calculate solar panels, battery sizing, inverter requirements. Get instant shopping lists with best prices for your off-grid solar system. Most Popular" [ref=e110] [cursor=pointer]:
+              - /url: /solar-calculators
+              - img "Solar panel system" [ref=e112]
+              - img [ref=e115]
+              - heading "FREE Solar Panel Calculator" [level=4] [ref=e118]
+              - paragraph [ref=e119]:
+                - strong [ref=e120]: Calculate solar panels, battery sizing, inverter requirements
+                - text: . Get instant shopping lists with best prices for your off-grid solar system.
+              - generic [ref=e121]: Most Popular
+            - link "Solar equipment and technology Solar Equipment Shop Curated panels, batteries, inverters with expert reviews & affiliate pricing Best Deals" [ref=e122] [cursor=pointer]:
+              - /url: /solar-shop
+              - img "Solar equipment and technology" [ref=e124]
+              - img [ref=e127]
+              - heading "Solar Equipment Shop" [level=4] [ref=e132]
+              - paragraph [ref=e133]: Curated panels, batteries, inverters with expert reviews & affiliate pricing
+              - generic [ref=e134]: Best Deals
+        - generic [ref=e135]:
+          - heading "Portugal Digital Nomad Visa & Living Guide" [level=3] [ref=e136]:
+            - img [ref=e138]
+            - text: Portugal Digital Nomad Visa & Living Guide
+          - generic [ref=e142]:
+            - link "Portugal legal documentation Portugal Digital Nomad Visa Guide Portugal visa requirements, D8 digital nomad visa application, residency permits, and legal compliance guide." [ref=e143] [cursor=pointer]:
+              - /url: /legal
+              - img "Portugal legal documentation" [ref=e145]
+              - generic [ref=e146]:
+                - img [ref=e149]
+                - heading "Portugal Digital Nomad Visa Guide" [level=4] [ref=e152]
+                - paragraph [ref=e153]:
+                  - strong [ref=e154]: Portugal visa requirements
+                  - text: ", D8 digital nomad visa application, residency permits, and legal compliance guide."
+            - link "Construction and building services Local Services Trusted builders, electricians, contractors" [ref=e155] [cursor=pointer]:
+              - /url: /services
+              - img "Construction and building services" [ref=e157]
+              - generic [ref=e158]:
+                - img [ref=e161]
+                - heading "Local Services" [level=4] [ref=e164]
+                - paragraph [ref=e165]: Trusted builders, electricians, contractors
+            - link "Cost comparison and pricing Cost Comparison UK vs Portugal building materials & tools" [ref=e166] [cursor=pointer]:
+              - /url: /pricing
+              - img "Cost comparison and pricing" [ref=e168]
+              - generic [ref=e169]:
+                - img [ref=e172]
+                - heading "Cost Comparison" [level=4] [ref=e176]
+                - paragraph [ref=e177]: UK vs Portugal building materials & tools
+        - generic [ref=e178]:
+          - heading "Complete Resource Suite" [level=3] [ref=e179]:
+            - img [ref=e181]
+            - text: Complete Resource Suite
+          - generic [ref=e184]:
+            - link "Green technology and water systems Green Calculators Water, wind, growing systems" [ref=e185] [cursor=pointer]:
+              - /url: /green-calculators
+              - img "Green technology and water systems" [ref=e187]
+              - generic [ref=e188]:
+                - img [ref=e191]
+                - heading "Green Calculators" [level=4] [ref=e195]
+                - paragraph [ref=e196]: Water, wind, growing systems
+            - link "Solar energy panels Solar Calculators Complete solar system design" [ref=e197] [cursor=pointer]:
+              - /url: /solar-calculators
+              - img "Solar energy panels" [ref=e199]
+              - generic [ref=e200]:
+                - img [ref=e203]
+                - heading "Solar Calculators" [level=4] [ref=e206]
+                - paragraph [ref=e207]: Complete solar system design
+            - link "Sustainable living guides Sustainable Living Blog Green tech guides & tutorials" [ref=e208] [cursor=pointer]:
+              - /url: /blog
+              - img "Sustainable living guides" [ref=e210]
+              - generic [ref=e211]:
+                - img [ref=e214]
+                - heading "Sustainable Living Blog" [level=4] [ref=e219]
+                - paragraph [ref=e220]: Green tech guides & tutorials
+            - link "Property and resources directory Resource Directory Properties, guides, tools" [ref=e221] [cursor=pointer]:
+              - /url: /directory
+              - img "Property and resources directory" [ref=e223]
+              - generic [ref=e224]:
+                - img [ref=e227]
+                - heading "Resource Directory" [level=4] [ref=e230]
+                - paragraph [ref=e231]: Properties, guides, tools
+        - generic [ref=e232]:
+          - heading "Premium Services" [level=3] [ref=e233]:
+            - img [ref=e235]
+            - text: Premium Services
+          - generic [ref=e239]:
+            - generic [ref=e240]:
+              - img [ref=e243]
+              - heading "1-on-1 Consultations" [level=4] [ref=e248]
+              - paragraph [ref=e249]: Personal off-grid planning sessions
+            - generic [ref=e250]:
+              - img [ref=e253]
+              - heading "Masterclass Courses" [level=4] [ref=e257]
+              - paragraph [ref=e258]: Complete off-grid setup guides
+            - generic [ref=e259]:
+              - img [ref=e262]
+              - heading "AI Assistant Pro" [level=4] [ref=e269]
+              - paragraph [ref=e270]: Advanced personalized guidance
+        - generic [ref=e271]:
+          - heading "Why Choose Our Offgrid Journey?" [level=3] [ref=e272]
+          - generic [ref=e273]:
+            - generic [ref=e274]:
+              - generic [ref=e275]:
+                - img [ref=e277]
+                - generic [ref=e282]: Expert-curated products & reviews
+              - generic [ref=e283]:
+                - img [ref=e285]
+                - generic [ref=e289]: Best prices through affiliate partnerships
+              - generic [ref=e290]:
+                - img [ref=e292]
+                - generic [ref=e296]: Real Portugal relocation experience
+            - generic [ref=e297]:
+              - generic [ref=e298]:
+                - img [ref=e300]
+                - generic [ref=e303]: Professional calculators & tools
+              - generic [ref=e304]:
+                - img [ref=e306]
+                - generic [ref=e313]: Active community support
+              - generic [ref=e314]:
+                - img [ref=e316]
+                - generic [ref=e321]: Comprehensive guides & resources
+```

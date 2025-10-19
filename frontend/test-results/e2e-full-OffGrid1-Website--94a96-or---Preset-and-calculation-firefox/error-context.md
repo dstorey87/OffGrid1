@@ -1,0 +1,160 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e12]
+  - navigation [ref=e13]:
+    - generic [ref=e15]:
+      - link "OffGrid1" [ref=e16] [cursor=pointer]:
+        - /url: /
+        - img [ref=e18]
+        - generic [ref=e28]: OffGrid1
+      - generic [ref=e29]:
+        - button "Solar Calculators" [ref=e31] [cursor=pointer]:
+          - img [ref=e32]
+          - text: Solar Calculators
+          - img [ref=e42]
+        - button "Green Calculators" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: Green Calculators
+          - img [ref=e49]
+        - button "DIY Guides" [ref=e52] [cursor=pointer]:
+          - img [ref=e53]
+          - text: DIY Guides
+          - img [ref=e55]
+        - link "Portugal Guide" [ref=e57] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e58]
+          - text: Portugal Guide
+        - link "Shop" [ref=e62] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e63]
+          - text: Shop
+        - link "System Designer" [ref=e67] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e68]
+          - text: System Designer
+        - button "Toggle theme" [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+  - main [ref=e84]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - 'heading "⚡ Quick Start: Energy Needs" [level=2] [ref=e87]'
+        - paragraph [ref=e88]: Estimate daily energy requirements based on household size
+        - generic [ref=e89]:
+          - button "Single Person 1 person, minimal appliances ~4.4 kWh/day" [ref=e90] [cursor=pointer]:
+            - generic [ref=e91]: Single Person
+            - generic [ref=e92]: 1 person, minimal appliances
+            - generic [ref=e93]: ~4.4 kWh/day
+          - button "Couple (2 People) 2 adults, standard appliances ~10.8 kWh/day" [ref=e94] [cursor=pointer]:
+            - generic [ref=e95]: Couple (2 People)
+            - generic [ref=e96]: 2 adults, standard appliances
+            - generic [ref=e97]: ~10.8 kWh/day
+          - button "Small Family (2 Adults + 2 Kids) 2 adults, 2 children, typical family home ~20.7 kWh/day" [ref=e98] [cursor=pointer]:
+            - generic [ref=e99]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e100]: 2 adults, 2 children, typical family home
+            - generic [ref=e101]: ~20.7 kWh/day
+          - button "Large Family (2 Adults + 3+ Kids) 2 adults, 3+ children, larger home ~46.0 kWh/day" [ref=e102] [cursor=pointer]:
+            - generic [ref=e103]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e104]: 2 adults, 3+ children, larger home
+            - generic [ref=e105]: ~46.0 kWh/day
+          - button "Off-Grid Minimal Essential appliances only, energy-conscious ~4.6 kWh/day" [ref=e106] [cursor=pointer]:
+            - generic [ref=e107]: Off-Grid Minimal
+            - generic [ref=e108]: Essential appliances only, energy-conscious
+            - generic [ref=e109]: ~4.6 kWh/day
+          - button "Off-Grid Comfort Balanced off-grid lifestyle with modern conveniences ~12.2 kWh/day" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]: Off-Grid Comfort
+            - generic [ref=e112]: Balanced off-grid lifestyle with modern conveniences
+            - generic [ref=e113]: ~12.2 kWh/day
+      - generic [ref=e114]:
+        - heading "Wind Power Calculator" [level=1] [ref=e115]:
+          - text: Wind Power
+          - generic [ref=e116]: Calculator
+        - paragraph [ref=e117]:
+          - text: Calculate
+          - strong [ref=e118]: wind turbine sizing
+          - text: ", energy production, and system requirements for"
+          - emphasis [ref=e119]: residential wind power
+          - text: . Compare with solar options and get complete system specifications.
+        - generic [ref=e120]:
+          - generic [ref=e121]: 🌪️ Wind Assessment
+          - generic [ref=e122]: ⚡ Energy Production
+          - generic [ref=e123]: 📊 Economic Analysis
+      - generic [ref=e125]:
+        - generic [ref=e126]:
+          - heading "Wind Resource Assessment" [level=3] [ref=e127]
+          - paragraph [ref=e128]: Enter your location's wind data and energy requirements for optimal turbine sizing
+        - generic [ref=e129]:
+          - generic [ref=e130]:
+            - generic [ref=e131]: Average Wind Speed (mph) *
+            - spinbutton [ref=e132]: "6"
+            - paragraph [ref=e133]: "* Check NREL Wind Resource Maps or local weather data. Minimum 7 mph recommended."
+          - generic [ref=e134]:
+            - generic [ref=e135]: Tower Height (feet)
+            - spinbutton [ref=e136]: "20"
+            - paragraph [ref=e137]: Higher towers access stronger, steadier winds. 80-120 feet typical.
+          - generic [ref=e138]:
+            - generic [ref=e139]: Daily Energy Need (kWh)
+            - spinbutton [ref=e140]
+            - paragraph [ref=e141]:
+              - text: Check your electric bill or use our
+              - link "load analysis calculator" [ref=e142] [cursor=pointer]:
+                - /url: /solar-calculators/load-analysis
+          - generic [ref=e143]:
+            - generic [ref=e144]: Wind Resource Quality
+            - combobox [ref=e145]:
+              - option "Excellent (coastal, ridge tops)"
+              - option "Good (open plains, hills)" [selected]
+              - option "Moderate (suburban, light trees)"
+              - option "Poor (urban, heavy forests)"
+          - generic [ref=e146]:
+            - generic [ref=e147]:
+              - generic [ref=e148]: Distance from Obstacles (feet)
+              - spinbutton [ref=e149]
+            - generic [ref=e150]:
+              - generic [ref=e151]: Electricity Rate ($/kWh)
+              - spinbutton [ref=e152]: "0.12"
+          - generic [ref=e153]:
+            - generic [ref=e154]: Zoning/Location
+            - combobox [ref=e155]:
+              - option "Rural (minimal restrictions)" [selected]
+              - option "Suburban (height/noise limits)"
+              - option "Urban (strict regulations)"
+          - button "🌪️ Calculate Wind Power System" [active] [ref=e156] [cursor=pointer]
+      - generic [ref=e157]:
+        - heading "🔧 Complete Your Renewable Energy System" [level=2] [ref=e158]
+        - paragraph [ref=e159]: Combine wind power with solar and other green technologies for maximum energy independence
+        - generic [ref=e160]:
+          - link "Solar Calculators" [ref=e161] [cursor=pointer]:
+            - /url: /solar-calculators/load-analysis
+          - link "Micro Hydro Power" [ref=e162] [cursor=pointer]:
+            - /url: /green-calculators/micro-hydro
+          - link "Energy Efficiency" [ref=e163] [cursor=pointer]:
+            - /url: /green-calculators/energy-efficiency
+      - generic [ref=e164]:
+        - heading "Residential Wind Power Guide" [level=2] [ref=e165]
+        - paragraph [ref=e166]:
+          - strong [ref=e167]: Small wind turbines
+          - text: can be an excellent complement to solar power systems, especially in areas with consistent wind resources. Our calculator evaluates your site's wind potential and recommends optimal turbine sizing for maximum energy production.
+        - heading "Wind Power Basics" [level=3] [ref=e168]
+        - list [ref=e169]:
+          - listitem [ref=e170]:
+            - strong [ref=e171]: "Wind Speed:"
+            - text: Power increases with the cube of wind speed
+          - listitem [ref=e172]:
+            - strong [ref=e173]: "Tower Height:"
+            - text: Higher towers access stronger, steadier winds
+          - listitem [ref=e174]:
+            - strong [ref=e175]: "Turbine Sizing:"
+            - text: Match turbine to local wind resource and energy needs
+          - listitem [ref=e176]:
+            - strong [ref=e177]: "Zoning:"
+            - text: Check local regulations for height and noise restrictions
+        - paragraph [ref=e178]:
+          - text: Wind and solar are complementary technologies - wind often produces power when solar doesn't (at night, during storms). A hybrid system using our
+          - link "solar calculators" [ref=e179] [cursor=pointer]:
+            - /url: /solar-calculators
+          - text: and wind power calculator can provide more consistent renewable energy production than either technology alone.
+```

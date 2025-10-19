@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { SessionProvider } from '@/components/session-provider';
 import { QueryProvider } from '@/components/query-provider';
 import { CurrencyProvider } from '@/contexts/CurrencyContext';
 import { UnitsProvider } from '@/contexts/UnitsContext';
@@ -134,14 +135,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             storageKey="offgrid-theme"
             forcedTheme="dark"
           >
-            <CurrencyProvider>
-              <UnitsProvider>
-                <QueryProvider>
-                  <Navigation />
-                  <div className="relative min-h-screen">{children}</div>
-                </QueryProvider>
-              </UnitsProvider>
-            </CurrencyProvider>
+            <SessionProvider>
+              <CurrencyProvider>
+                <UnitsProvider>
+                  <QueryProvider>
+                    <Navigation />
+                    <div className="relative min-h-screen">{children}</div>
+                  </QueryProvider>
+                </UnitsProvider>
+              </CurrencyProvider>
+            </SessionProvider>
           </ThemeProvider>
         </ErrorBoundary>
       </body>

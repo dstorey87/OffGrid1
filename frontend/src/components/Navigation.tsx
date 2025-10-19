@@ -2,9 +2,33 @@
 
 import Link from 'next/link';
 import { useState, useCallback, memo } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Sun, Droplets, Globe, ShoppingCart, Wrench, Target } from 'lucide-react';
 import { ThemeToggle } from './theme-toggle';
-import { SolarIcon, WaterIcon, GlobeIcon, CartIcon, ToolsIcon } from './icons';
+
+// Icon wrapper components for consistency
+const SolarIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <Sun className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
+
+const WaterIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <Droplets className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
+
+const GlobeIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <Globe className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
+
+const CartIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <ShoppingCart className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
+
+const ToolsIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <Wrench className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
+
+const TargetIcon = ({ size = 'md', className = '' }: { size?: 'sm' | 'md'; className?: string }) => (
+  <Target className={`${size === 'sm' ? 'h-4 w-4' : 'h-5 w-5'} ${className}`} />
+);
 
 export const Navigation = memo(function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

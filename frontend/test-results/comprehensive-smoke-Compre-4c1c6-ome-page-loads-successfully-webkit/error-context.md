@@ -1,0 +1,78 @@
+# Page snapshot
+
+```yaml
+- generic:
+  - generic [active]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - navigation [ref=e6]:
+            - button "previous" [disabled] [ref=e7]:
+              - img "previous" [ref=e8]
+            - generic [ref=e10]:
+              - generic [ref=e11]: 1/
+              - text: "1"
+            - button "next" [disabled] [ref=e12]:
+              - img "next" [ref=e13]
+          - img
+        - generic [ref=e15]:
+          - link "Next.js 15.5.5 (stale) Webpack" [ref=e16]:
+            - /url: https://nextjs.org/docs/messages/version-staleness
+            - img [ref=e17]
+            - generic "There is a newer version (15.5.6) available, upgrade recommended!" [ref=e19]: Next.js 15.5.5 (stale)
+            - generic [ref=e20]: Webpack
+          - img
+      - generic [ref=e21]:
+        - dialog "Runtime Error" [ref=e22]:
+          - generic [ref=e25]:
+            - generic [ref=e26]:
+              - generic [ref=e27]:
+                - generic [ref=e29]: Runtime Error
+                - generic [ref=e30]:
+                  - button "Copy Error Info" [ref=e31] [cursor=pointer]:
+                    - img [ref=e32]
+                  - link "Go to related documentation" [ref=e34]:
+                    - /url: https://nextjs.org/docs/messages/module-not-found
+                    - img [ref=e35]
+                  - link "Learn more about enabling Node.js inspector for server code with Chrome DevTools" [ref=e37]:
+                    - /url: https://nextjs.org/docs/app/building-your-application/configuring/debugging#server-side-code
+                    - img [ref=e38]
+              - generic [ref=e49]:
+                - paragraph [ref=e50]:
+                  - text: "Module not found: Can't resolve '@/generated/prisma' > 1 | import { PrismaClient } from '@/generated/prisma' | ^ 2 | 3 | const globalForPrisma = globalThis as unknown as { 4 | prisma: PrismaClient | undefined"
+                  - link "https://nextjs.org/docs/messages/module-not-found" [ref=e51]:
+                    - /url: https://nextjs.org/docs/messages/module-not-found
+                  - text: "Import trace for requested module: ./src/lib/auth.ts ./src/app/api/auth/[...nextauth]/route.ts"
+                - button "Show More" [ref=e53] [cursor=pointer]
+            - generic [ref=e56]:
+              - paragraph [ref=e57]:
+                - text: Call Stack
+                - generic [ref=e58]: "6"
+              - button "Show 6 ignore-listed frame(s)" [ref=e59] [cursor=pointer]:
+                - text: Show 6 ignore-listed frame(s)
+                - img [ref=e60]
+          - generic [ref=e62]:
+            - generic [ref=e63]: "1"
+            - generic [ref=e64]: "2"
+        - contentinfo [ref=e65]:
+          - region "Error feedback" [ref=e66]:
+            - paragraph [ref=e67]:
+              - link "Was this helpful?" [ref=e68]:
+                - /url: https://nextjs.org/telemetry#error-feedback
+            - button "Mark as helpful" [ref=e69] [cursor=pointer]:
+              - img [ref=e70]
+            - button "Mark as not helpful" [ref=e73] [cursor=pointer]:
+              - img [ref=e74]
+    - generic [ref=e80] [cursor=pointer]:
+      - button "Open Next.js Dev Tools" [ref=e81]:
+        - img [ref=e82]
+      - generic [ref=e87]:
+        - button "Open issues overlay" [ref=e88]:
+          - generic [ref=e89]:
+            - generic [ref=e90]: "0"
+            - generic [ref=e91]: "1"
+          - generic [ref=e92]: Issue
+        - button "Collapse issues badge" [ref=e93]:
+          - img [ref=e94]
+  - alert [ref=e96]
+```

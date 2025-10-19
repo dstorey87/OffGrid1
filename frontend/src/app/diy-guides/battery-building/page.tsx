@@ -3,12 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { BatteryIcon, TargetIcon, EnergyIcon } from '@/components/icons';
-
-export const metadata = {
-  title: 'Complete DIY Solar Battery Guide 2025: Build 18650/21700 Packs',
-  description:
-    'Step-by-step guide to building solar battery banks using 18650/21700 cells. Save 60% vs commercial batteries. Safety, BMS selection, assembly.',
-};
+import { ContentGate } from '@/components/ContentGate';
 
 export default function DIYBatteryBuildingGuide() {
   const [configCalculator, setConfigCalculator] = useState({
@@ -105,31 +100,39 @@ export default function DIYBatteryBuildingGuide() {
             <a href="#cell-comparison" className="text-primary hover:underline">
               3. 18650 vs 21700 vs LiFePO4
             </a>
-            <a href="#configuration" className="text-primary hover:underline">
+            <a href="#configuration" className="text-primary hover:underline flex items-center gap-2">
               4. Configuration Calculator
+              <span className="text-xs bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full font-semibold">PRO</span>
             </a>
-            <a href="#parts-list" className="text-primary hover:underline">
+            <a href="#parts-list" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               5. Complete Parts List
+              <span className="text-xs bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full font-semibold">PRO</span>
             </a>
-            <a href="#assembly" className="text-primary hover:underline">
+            <a href="#assembly" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               6. Step-by-Step Assembly
+              <span className="text-xs bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full font-semibold">PRO</span>
             </a>
-            <a href="#bms-guide" className="text-primary hover:underline">
+            <a href="#bms-guide" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               7. BMS Selection Guide
+              <span className="text-xs bg-gradient-to-r from-orange-500 to-amber-500 text-white px-2 py-0.5 rounded-full font-semibold">PRO</span>
             </a>
-            <a href="#testing" className="text-primary hover:underline">
+            <a href="#testing" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               8. Testing & Validation
+              <span className="text-xs bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-0.5 rounded-full font-semibold">EXPERT</span>
             </a>
-            <a href="#troubleshooting" className="text-primary hover:underline">
+            <a href="#troubleshooting" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               9. Troubleshooting
+              <span className="text-xs bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-0.5 rounded-full font-semibold">EXPERT</span>
             </a>
-            <a href="#solar-integration" className="text-primary hover:underline">
+            <a href="#solar-integration" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               10. Solar Integration
+              <span className="text-xs bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-0.5 rounded-full font-semibold">EXPERT</span>
             </a>
-            <a href="#maintenance" className="text-primary hover:underline">
+            <a href="#maintenance" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               11. Maintenance
+              <span className="text-xs bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-0.5 rounded-full font-semibold">EXPERT</span>
             </a>
-            <a href="#cost-analysis" className="text-primary hover:underline">
+            <a href="#cost-analysis" className="text-muted-foreground hover:text-primary flex items-center gap-2">
               12. Cost Analysis
             </a>
           </nav>
@@ -492,9 +495,15 @@ export default function DIYBatteryBuildingGuide() {
           </div>
         </section>
 
-        {/* Configuration Calculator */}
-        <section id="configuration" className="mb-12">
-          <h2 className="mb-6 text-3xl font-bold">🧮 Battery Configuration Calculator</h2>
+        {/* Configuration Calculator - PREMIUM CONTENT */}
+        <ContentGate
+          feature="diy-battery-calculator"
+          requiredTier="pro"
+          title="🧮 Battery Configuration Calculator"
+          description="Access the interactive calculator to determine exact cell counts, series/parallel configuration, and cost estimates for your custom battery pack. Pro members get instant calculations plus downloadable BOM templates."
+        >
+          <section id="configuration" className="mb-12">
+            <h2 className="mb-6 text-3xl font-bold">🧮 Battery Configuration Calculator</h2>
           
           <div className="rounded-lg border bg-gradient-to-br from-primary/10 to-accent/10 p-6">
             <p className="mb-6 text-muted-foreground">
@@ -615,6 +624,7 @@ export default function DIYBatteryBuildingGuide() {
             </div>
           </div>
         </section>
+        </ContentGate>
 
         {/* Continue to next article link */}
         <div className="mt-12 rounded-lg border bg-gradient-to-br from-accent/10 to-primary/10 p-6">

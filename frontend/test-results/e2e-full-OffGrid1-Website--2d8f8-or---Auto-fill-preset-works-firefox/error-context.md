@@ -1,0 +1,141 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e12]
+  - navigation [ref=e13]:
+    - generic [ref=e15]:
+      - link "OffGrid1" [ref=e16] [cursor=pointer]:
+        - /url: /
+        - img [ref=e18]
+        - generic [ref=e28]: OffGrid1
+      - generic [ref=e29]:
+        - button "Solar Calculators" [ref=e31] [cursor=pointer]:
+          - img [ref=e32]
+          - text: Solar Calculators
+          - img [ref=e42]
+        - button "Green Calculators" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: Green Calculators
+          - img [ref=e49]
+        - button "DIY Guides" [ref=e52] [cursor=pointer]:
+          - img [ref=e53]
+          - text: DIY Guides
+          - img [ref=e55]
+        - link "Portugal Guide" [ref=e57] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e58]
+          - text: Portugal Guide
+        - link "Shop" [ref=e62] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e63]
+          - text: Shop
+        - link "System Designer" [ref=e67] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e68]
+          - text: System Designer
+        - button "Toggle theme" [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+  - main [ref=e84]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - 'heading "Quick Start: Critical Load Presets" [level=2] [ref=e87]':
+          - img [ref=e89]
+          - text: "Quick Start: Critical Load Presets"
+        - paragraph [ref=e94]: Estimate critical backup power needs (essential appliances only)
+        - generic [ref=e95]:
+          - button "Single Person 1 person, minimal appliances ~3.0 kWh/day critical" [active] [ref=e96] [cursor=pointer]:
+            - generic [ref=e97]: Single Person
+            - generic [ref=e98]: 1 person, minimal appliances
+            - generic [ref=e99]: ~3.0 kWh/day critical
+          - button "Couple (2 People) 2 adults, standard appliances ~7.6 kWh/day critical" [ref=e100] [cursor=pointer]:
+            - generic [ref=e101]: Couple (2 People)
+            - generic [ref=e102]: 2 adults, standard appliances
+            - generic [ref=e103]: ~7.6 kWh/day critical
+          - button "Small Family (2 Adults + 2 Kids) 2 adults, 2 children, typical family home ~9.6 kWh/day critical" [ref=e104] [cursor=pointer]:
+            - generic [ref=e105]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e106]: 2 adults, 2 children, typical family home
+            - generic [ref=e107]: ~9.6 kWh/day critical
+          - button "Large Family (2 Adults + 3+ Kids) 2 adults, 3+ children, larger home ~11.7 kWh/day critical" [ref=e108] [cursor=pointer]:
+            - generic [ref=e109]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e110]: 2 adults, 3+ children, larger home
+            - generic [ref=e111]: ~11.7 kWh/day critical
+          - button "Off-Grid Minimal Essential appliances only, energy-conscious ~4.1 kWh/day critical" [ref=e112] [cursor=pointer]:
+            - generic [ref=e113]: Off-Grid Minimal
+            - generic [ref=e114]: Essential appliances only, energy-conscious
+            - generic [ref=e115]: ~4.1 kWh/day critical
+          - button "Off-Grid Comfort Balanced off-grid lifestyle with modern conveniences ~7.3 kWh/day critical" [ref=e116] [cursor=pointer]:
+            - generic [ref=e117]: Off-Grid Comfort
+            - generic [ref=e118]: Balanced off-grid lifestyle with modern conveniences
+            - generic [ref=e119]: ~7.3 kWh/day critical
+      - generic [ref=e120]:
+        - link "← Back to Solar Calculators" [ref=e121] [cursor=pointer]:
+          - /url: /solar-calculators
+        - heading "Battery Storage Calculator" [level=1] [ref=e122]
+        - paragraph [ref=e123]: Size your battery bank for reliable backup power. Calculate capacity, configuration, and get recommendations for the best battery deals.
+      - generic [ref=e125]:
+        - generic [ref=e126]:
+          - heading "Backup Power Requirements" [level=2] [ref=e127]
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - generic [ref=e130]: Daily Critical Load (kWh)- essential appliances only
+              - spinbutton [ref=e131]: "3.0"
+              - generic [ref=e132]: "💡 From Load Analysis: lights, refrigerator, communication, water pump"
+            - generic [ref=e133]:
+              - generic [ref=e134]: Backup Duration Needed
+              - combobox [ref=e135]:
+                - option "1 day (basic backup)"
+                - option "2 days (standard backup)"
+                - option "3 days (recommended)" [selected]
+                - option "5 days (extended backup)"
+                - option "1 week (off-grid living)"
+            - generic [ref=e136]:
+              - generic [ref=e137]: Cycling Frequency
+              - combobox [ref=e138]:
+                - option "Daily cycling (off-grid)" [selected]
+                - option "Weekly cycling (backup system)"
+                - option "Monthly cycling (emergency backup)"
+        - generic [ref=e139]:
+          - heading "Battery Technology" [level=2] [ref=e140]
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - generic [ref=e143]: Battery Chemistry
+              - combobox [ref=e144]:
+                - option "LiFePO4 - Lithium (Recommended)" [selected]
+                - option "AGM - Lead Acid (Budget)"
+                - option "Gel - Lead Acid (Mid-range)"
+                - option "Flooded - Lead Acid (Maintenance)"
+            - generic [ref=e145]:
+              - generic [ref=e146]: LiFePO4 (Lithium Iron Phosphate)
+              - generic [ref=e147]:
+                - generic [ref=e148]: "• Depth of Discharge: 90%"
+                - generic [ref=e149]: "• Cycle Life: ~6,000 cycles"
+                - generic [ref=e150]: "• Efficiency: 95%"
+                - generic [ref=e151]: "• Cost: ~$4/Ah"
+        - generic [ref=e152]:
+          - heading "System Configuration" [level=2] [ref=e153]
+          - generic [ref=e154]:
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - generic [ref=e157]: System Voltage
+                - combobox [ref=e158]:
+                  - option "12V (Small systems)"
+                  - option "24V (Medium systems)" [selected]
+                  - option "48V (Large systems)"
+              - generic [ref=e159]:
+                - generic [ref=e160]: Temperature Range
+                - combobox [ref=e161]:
+                  - option "Cold (-10°C to 10°C)"
+                  - option "Moderate (10°C to 30°C)" [selected]
+                  - option "Hot (30°C to 50°C)"
+            - generic [ref=e162]:
+              - generic [ref=e163]: Safety Margin
+              - combobox [ref=e164]:
+                - option "10% (Minimal)"
+                - option "20% (Recommended)" [selected]
+                - option "30% (Conservative)"
+                - option "50% (Maximum safety)"
+          - button "Calculate Battery Requirements" [ref=e165] [cursor=pointer]
+```

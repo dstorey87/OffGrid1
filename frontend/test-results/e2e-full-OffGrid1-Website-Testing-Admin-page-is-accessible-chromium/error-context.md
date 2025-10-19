@@ -2,44 +2,46 @@
 
 ```yaml
 - generic [active] [ref=e1]:
-  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
-    - img [ref=e8]
-  - alert [ref=e11]
-  - navigation [ref=e12]:
-    - generic [ref=e14]:
-      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+  - alert [ref=e2]
+  - navigation [ref=e3]:
+    - generic [ref=e5]:
+      - link "OffGrid1" [ref=e6] [cursor=pointer]:
         - /url: /
-        - img [ref=e18]
-        - generic [ref=e21]: OffGrid1
-      - generic [ref=e22]:
-        - button "Solar Calculators" [ref=e24] [cursor=pointer]:
-          - img [ref=e26]
+        - img [ref=e8]
+        - generic [ref=e14]: OffGrid1
+      - generic [ref=e15]:
+        - button "Solar Calculators" [ref=e17] [cursor=pointer]:
+          - img [ref=e18]
           - text: Solar Calculators
-          - img [ref=e29]
-        - button "Green Calculators" [ref=e32] [cursor=pointer]:
-          - img [ref=e34]
+          - img [ref=e24]
+        - button "Green Calculators" [ref=e27] [cursor=pointer]:
+          - img [ref=e28]
           - text: Green Calculators
+          - img [ref=e31]
+        - button "DIY Guides" [ref=e34] [cursor=pointer]:
+          - img [ref=e35]
+          - text: DIY Guides
           - img [ref=e37]
         - link "Portugal Guide" [ref=e39] [cursor=pointer]:
           - /url: /legal
-          - img [ref=e41]
+          - img [ref=e40]
           - text: Portugal Guide
-        - link "Shop" [ref=e45] [cursor=pointer]:
+        - link "Shop" [ref=e43] [cursor=pointer]:
           - /url: /solar-shop
-          - img [ref=e47]
+          - img [ref=e44]
           - text: Shop
-        - link "Services" [ref=e52] [cursor=pointer]:
-          - /url: /services
+        - link "System Designer" [ref=e48] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e49]
+          - text: System Designer
+        - button "Toggle theme" [ref=e53] [cursor=pointer]:
           - img [ref=e54]
-          - text: Services
-        - button "Toggle theme" [ref=e57] [cursor=pointer]:
-          - img [ref=e58]
-  - main [ref=e65]:
-    - generic [ref=e66]:
+  - main [ref=e61]:
+    - generic [ref=e62]:
+      - generic [ref=e63]:
+        - heading "Admin Access" [level=3] [ref=e64]
+        - paragraph [ref=e65]: Enter password to access admin panel
       - generic [ref=e67]:
-        - heading "Admin Access" [level=3] [ref=e68]
-        - paragraph [ref=e69]: Enter password to access admin panel
-      - generic [ref=e71]:
-        - textbox "Admin password" [ref=e72]
-        - button "Login" [ref=e73] [cursor=pointer]
+        - textbox "Admin password" [ref=e68]
+        - button "Login" [ref=e69] [cursor=pointer]
 ```

@@ -1,0 +1,142 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Solar Calculators" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Solar Calculators
+          - img [ref=e33]
+        - button "Green Calculators" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - text: Green Calculators
+          - img [ref=e40]
+        - button "DIY Guides" [ref=e43] [cursor=pointer]:
+          - img [ref=e44]
+          - text: DIY Guides
+          - img [ref=e46]
+        - link "Portugal Guide" [ref=e48] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e49]
+          - text: Portugal Guide
+        - link "Shop" [ref=e52] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e53]
+          - text: Shop
+        - link "System Designer" [ref=e57] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e58]
+          - text: System Designer
+        - button "Toggle theme" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+  - main [ref=e70]:
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - img "Power meter and energy monitoring for load analysis" [ref=e74]
+        - generic [ref=e76]:
+          - link "← Back to Solar Calculators" [ref=e77] [cursor=pointer]:
+            - /url: /solar-calculators
+          - heading "Free Load Analysis Calculator - Solar Power Needs" [level=1] [ref=e78]
+          - paragraph [ref=e79]:
+            - strong [ref=e80]: Calculate your exact power consumption
+            - text: for accurate off-grid solar system sizing. The foundation of solar design - analyze appliances, seasonal usage, and get personalized
+            - strong [ref=e81]: solar equipment recommendations
+            - text: with instant shopping baskets.
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]: "Currency:"
+          - combobox "Currency:" [ref=e86]:
+            - option "USD ($)"
+            - option "GBP (£)" [selected]
+            - option "EUR (€)"
+        - generic [ref=e87]:
+          - generic [ref=e88]: "Units:"
+          - combobox "Units:" [ref=e89]:
+            - option "Metric (L, m², kg)" [selected]
+            - option "Imperial (gal, ft², lbs)"
+      - generic [ref=e90]:
+        - heading "Auto-Fill for Your Household" [level=2] [ref=e91]:
+          - img [ref=e93]
+          - text: Auto-Fill for Your Household
+        - paragraph [ref=e101]: Quick start with pre-configured appliances for different household sizes
+        - generic [ref=e102]:
+          - button "Single Person 1 person, minimal appliances 9 appliances" [ref=e103] [cursor=pointer]:
+            - generic [ref=e104]: Single Person
+            - generic [ref=e105]: 1 person, minimal appliances
+            - generic [ref=e106]: 9 appliances
+          - button "Couple (2 People) 2 adults, standard appliances 11 appliances" [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]: Couple (2 People)
+            - generic [ref=e109]: 2 adults, standard appliances
+            - generic [ref=e110]: 11 appliances
+          - button "Small Family (2 Adults + 2 Kids) 2 adults, 2 children, typical family home 15 appliances" [ref=e111] [cursor=pointer]:
+            - generic [ref=e112]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e113]: 2 adults, 2 children, typical family home
+            - generic [ref=e114]: 15 appliances
+          - button "Large Family (2 Adults + 3+ Kids) 2 adults, 3+ children, larger home 17 appliances" [ref=e115] [cursor=pointer]:
+            - generic [ref=e116]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e117]: 2 adults, 3+ children, larger home
+            - generic [ref=e118]: 17 appliances
+          - button "Off-Grid Minimal Essential appliances only, energy-conscious 7 appliances" [ref=e119] [cursor=pointer]:
+            - generic [ref=e120]: Off-Grid Minimal
+            - generic [ref=e121]: Essential appliances only, energy-conscious
+            - generic [ref=e122]: 7 appliances
+          - button "Off-Grid Comfort Balanced off-grid lifestyle with modern conveniences 11 appliances" [ref=e123] [cursor=pointer]:
+            - generic [ref=e124]: Off-Grid Comfort
+            - generic [ref=e125]: Balanced off-grid lifestyle with modern conveniences
+            - generic [ref=e126]: 11 appliances
+      - generic [ref=e128]:
+        - generic [ref=e129]:
+          - heading "Quick Add Common Appliances" [level=2] [ref=e130]
+          - generic [ref=e131]:
+            - button "LED Light Bulb (9W) 9W" [ref=e132] [cursor=pointer]:
+              - generic [ref=e133]: LED Light Bulb (9W)
+              - generic [ref=e134]: 9W
+            - button "LED Light Bulb (15W) 15W" [ref=e135] [cursor=pointer]:
+              - generic [ref=e136]: LED Light Bulb (15W)
+              - generic [ref=e137]: 15W
+            - button "Refrigerator (Energy Star) 150W" [ref=e138] [cursor=pointer]:
+              - generic [ref=e139]: Refrigerator (Energy Star)
+              - generic [ref=e140]: 150W
+            - button "Chest Freezer 100W" [ref=e141] [cursor=pointer]:
+              - generic [ref=e142]: Chest Freezer
+              - generic [ref=e143]: 100W
+            - button "Laptop 65W" [ref=e144] [cursor=pointer]:
+              - generic [ref=e145]: Laptop
+              - generic [ref=e146]: 65W
+            - button "Desktop Computer 200W" [ref=e147] [cursor=pointer]:
+              - generic [ref=e148]: Desktop Computer
+              - generic [ref=e149]: 200W
+            - button "TV (32\" LED) 30W" [ref=e150] [cursor=pointer]:
+              - generic [ref=e151]: TV (32" LED)
+              - generic [ref=e152]: 30W
+            - button "TV (55\" LED) 60W" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]: TV (55" LED)
+              - generic [ref=e155]: 60W
+        - generic [ref=e156]:
+          - heading "Add Custom Appliance" [level=2] [ref=e157]
+          - generic [ref=e158]:
+            - textbox "Appliance name" [ref=e159]
+            - generic [ref=e160]:
+              - spinbutton [ref=e161]
+              - spinbutton [ref=e162]
+              - combobox [ref=e163]:
+                - option "Lighting" [selected]
+                - option "Appliances"
+                - option "Electronics"
+                - option "Heating"
+                - option "Cooling"
+                - option "Water"
+            - generic [ref=e164]:
+              - checkbox "Critical load (essential during power outage)" [ref=e165]
+              - text: Critical load (essential during power outage)
+            - button "Add Appliance" [ref=e166] [cursor=pointer]
+```

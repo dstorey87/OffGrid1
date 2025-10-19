@@ -1,0 +1,144 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Toggle theme" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - button "Toggle mobile menu" [ref=e32] [cursor=pointer]:
+          - img [ref=e33]
+  - main [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - 'heading "💧 Quick Start: Household Size" [level=2] [ref=e38]'
+        - paragraph [ref=e39]: Estimate greywater generation based on household size (60-70% of total water use)
+        - generic [ref=e40]:
+          - button "Single Person 1 people ~22 gal/day greywater" [ref=e41] [cursor=pointer]:
+            - generic [ref=e42]: Single Person
+            - generic [ref=e43]: 1 people
+            - generic [ref=e44]: ~22 gal/day greywater
+          - button "Couple (2 Adults) 2 people ~45 gal/day greywater" [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]: Couple (2 Adults)
+            - generic [ref=e47]: 2 people
+            - generic [ref=e48]: ~45 gal/day greywater
+          - button "Small Family (2 Adults + 2 Kids) 4 people ~86 gal/day greywater" [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e51]: 4 people
+            - generic [ref=e52]: ~86 gal/day greywater
+          - button "Large Family (2 Adults + 3+ Kids) 6 people ~129 gal/day greywater" [ref=e53] [cursor=pointer]:
+            - generic [ref=e54]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e55]: 6 people
+            - generic [ref=e56]: ~129 gal/day greywater
+          - button "Off-Grid Minimal 2 people ~21 gal/day greywater" [ref=e57] [cursor=pointer]:
+            - generic [ref=e58]: Off-Grid Minimal
+            - generic [ref=e59]: 2 people
+            - generic [ref=e60]: ~21 gal/day greywater
+          - button "Off-Grid Comfort 3 people ~58 gal/day greywater" [ref=e61] [cursor=pointer]:
+            - generic [ref=e62]: Off-Grid Comfort
+            - generic [ref=e63]: 3 people
+            - generic [ref=e64]: ~58 gal/day greywater
+      - generic [ref=e65]:
+        - heading "Greywater System Design Calculator" [level=1] [ref=e66]:
+          - text: Greywater System
+          - generic [ref=e67]: Design Calculator
+        - paragraph [ref=e68]:
+          - text: Design efficient
+          - strong [ref=e69]: greywater recycling systems
+          - text: to reuse water from sinks, showers, and laundry for
+          - emphasis [ref=e70]: landscape irrigation
+          - text: . Calculate treatment, distribution, and cost requirements.
+        - generic [ref=e71]:
+          - generic [ref=e72]: 🌊 Water Reuse
+          - generic [ref=e73]: 🌱 Eco-Friendly
+          - generic [ref=e74]: 💰 Cost Savings
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - heading "System Requirements" [level=3] [ref=e78]
+          - paragraph [ref=e79]: Enter your household details and irrigation needs for custom greywater system design
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]: Household Size
+              - spinbutton [ref=e84]
+            - generic [ref=e85]:
+              - generic [ref=e86]: Showers per Day
+              - spinbutton [ref=e87]
+          - generic [ref=e88]:
+            - generic [ref=e89]: Laundry Loads per Week
+            - spinbutton [ref=e90]
+          - generic [ref=e91]:
+            - generic [ref=e92]: Sink Usage Level
+            - combobox [ref=e93]:
+              - option "Light (minimal cooking/cleaning)"
+              - option "Moderate (normal household)" [selected]
+              - option "Heavy (frequent cooking/cleaning)"
+          - generic [ref=e94]:
+            - generic [ref=e95]: Irrigation Area (sq ft)
+            - spinbutton [ref=e96]
+            - paragraph [ref=e97]: Area of landscape to be irrigated with greywater
+          - generic [ref=e98]:
+            - generic [ref=e99]: Soil Type
+            - combobox [ref=e100]:
+              - option "Sandy (fast draining)"
+              - option "Sandy Loam (ideal)" [selected]
+              - option "Clay Loam (moderate drainage)"
+              - option "Clay (slow draining)"
+          - generic [ref=e101]:
+            - generic [ref=e102]: System Type
+            - combobox [ref=e103]:
+              - option "Branched Drain (gravity flow)" [selected]
+              - option "Laundry-to-Landscape"
+              - option "Simple Sand Filter"
+              - option "Constructed Wetland"
+              - option "Advanced Treatment"
+          - button "🌊 Design Greywater System" [ref=e104] [cursor=pointer]
+      - generic [ref=e105]:
+        - heading "🔧 Complete Your Water Independence" [level=2] [ref=e106]
+        - paragraph [ref=e107]: Combine greywater recycling with rainwater harvesting for complete water sustainability
+        - generic [ref=e108]:
+          - link "Rainwater Harvesting" [ref=e109] [cursor=pointer]:
+            - /url: /green-calculators/rainwater-harvesting
+          - link "Composting Toilets" [ref=e110] [cursor=pointer]:
+            - /url: /green-calculators/composting-toilet
+          - link "Solar for Pumps" [ref=e111] [cursor=pointer]:
+            - /url: /solar-calculators/load-analysis
+      - generic [ref=e112]:
+        - heading "Greywater System Design Guide" [level=2] [ref=e113]
+        - paragraph [ref=e114]:
+          - strong [ref=e115]: Greywater systems
+          - text: reuse water from bathroom sinks, showers, and laundry for landscape irrigation. Our calculator designs complete systems including treatment, distribution, and pumping requirements based on your household's specific needs.
+        - heading "System Types" [level=3] [ref=e116]
+        - list [ref=e117]:
+          - listitem [ref=e118]:
+            - strong [ref=e119]: "Branched Drain:"
+            - text: Simple gravity-fed distribution system
+          - listitem [ref=e120]:
+            - strong [ref=e121]: "Laundry-to-Landscape:"
+            - text: Direct connection from washing machine
+          - listitem [ref=e122]:
+            - strong [ref=e123]: "Sand Filter:"
+            - text: Basic filtration for cleaner water
+          - listitem [ref=e124]:
+            - strong [ref=e125]: "Constructed Wetland:"
+            - text: Biological treatment using plants
+          - listitem [ref=e126]:
+            - strong [ref=e127]: "Advanced Treatment:"
+            - text: Full treatment with disinfection
+        - paragraph [ref=e128]:
+          - text: Greywater systems can reduce household water consumption by 30-50% while providing free irrigation for your landscape. Combined with
+          - link "rainwater harvesting" [ref=e129] [cursor=pointer]:
+            - /url: /green-calculators/rainwater-harvesting
+          - text: and
+          - link "solar power systems" [ref=e130] [cursor=pointer]:
+            - /url: /solar-calculators
+          - text: ", you can achieve complete water and energy independence."
+```

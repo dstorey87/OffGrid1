@@ -1,0 +1,171 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Toggle theme" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - button "Toggle mobile menu" [ref=e32] [cursor=pointer]:
+          - img [ref=e33]
+  - main [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - img "Off-grid sustainable living with solar panels and green technology" [ref=e39]
+        - generic [ref=e41]:
+          - heading "Complete Green Technology Calculator Suite" [level=1] [ref=e42]:
+            - generic [ref=e43]: Complete Green Technology
+            - generic [ref=e44]: Calculator Suite
+          - paragraph [ref=e45]:
+            - strong [ref=e46]: Calculate everything
+            - text: "for sustainable living: solar systems, rainwater harvesting, greywater recycling, wind power, hydroponics & more. Plus complete"
+            - strong [ref=e47]: Portugal digital nomad
+            - text: guides.
+            - emphasis [ref=e48]: 100% FREE
+            - text: "- no signup required."
+          - generic [ref=e49]:
+            - link "Rainwater Calculator" [ref=e50] [cursor=pointer]:
+              - /url: /green-calculators/rainwater-harvesting
+              - img [ref=e52]
+              - text: Rainwater Calculator
+            - link "Solar Calculator" [ref=e55] [cursor=pointer]:
+              - /url: /solar-calculators/load-analysis
+              - img [ref=e57]
+              - text: Solar Calculator
+            - link "All Green Calculators" [ref=e59] [cursor=pointer]:
+              - /url: /green-calculators
+              - img [ref=e61]
+              - text: All Green Calculators
+      - generic [ref=e65]:
+        - heading "Complete Sustainable Living Calculator Suite" [level=2] [ref=e66]
+        - generic [ref=e67]:
+          - heading "Solar Panel Calculator & System Design Tools" [level=3] [ref=e68]:
+            - img [ref=e70]
+            - text: Solar Panel Calculator & System Design Tools
+          - generic [ref=e74]:
+            - link "Solar panel system FREE Solar Panel Calculator Calculate solar panels, battery sizing, inverter requirements. Get instant shopping lists with best prices for your off-grid solar system. Most Popular" [ref=e75] [cursor=pointer]:
+              - /url: /solar-calculators
+              - img "Solar panel system" [ref=e77]
+              - img [ref=e80]
+              - heading "FREE Solar Panel Calculator" [level=4] [ref=e83]
+              - paragraph [ref=e84]:
+                - strong [ref=e85]: Calculate solar panels, battery sizing, inverter requirements
+                - text: . Get instant shopping lists with best prices for your off-grid solar system.
+              - generic [ref=e86]: Most Popular
+            - link "Solar equipment and technology Solar Equipment Shop Curated panels, batteries, inverters with expert reviews & affiliate pricing Best Deals" [ref=e87] [cursor=pointer]:
+              - /url: /solar-shop
+              - img "Solar equipment and technology" [ref=e89]
+              - img [ref=e92]
+              - heading "Solar Equipment Shop" [level=4] [ref=e97]
+              - paragraph [ref=e98]: Curated panels, batteries, inverters with expert reviews & affiliate pricing
+              - generic [ref=e99]: Best Deals
+        - generic [ref=e100]:
+          - heading "Portugal Digital Nomad Visa & Living Guide" [level=3] [ref=e101]:
+            - img [ref=e103]
+            - text: Portugal Digital Nomad Visa & Living Guide
+          - generic [ref=e107]:
+            - link "Portugal legal documentation Portugal Digital Nomad Visa Guide Portugal visa requirements, D8 digital nomad visa application, residency permits, and legal compliance guide." [ref=e108] [cursor=pointer]:
+              - /url: /legal
+              - img "Portugal legal documentation" [ref=e110]
+              - generic [ref=e111]:
+                - img [ref=e114]
+                - heading "Portugal Digital Nomad Visa Guide" [level=4] [ref=e117]
+                - paragraph [ref=e118]:
+                  - strong [ref=e119]: Portugal visa requirements
+                  - text: ", D8 digital nomad visa application, residency permits, and legal compliance guide."
+            - link "Construction and building services Local Services Trusted builders, electricians, contractors" [ref=e120] [cursor=pointer]:
+              - /url: /services
+              - img "Construction and building services" [ref=e122]
+              - generic [ref=e123]:
+                - img [ref=e126]
+                - heading "Local Services" [level=4] [ref=e129]
+                - paragraph [ref=e130]: Trusted builders, electricians, contractors
+            - link "Cost comparison and pricing Cost Comparison UK vs Portugal building materials & tools" [ref=e131] [cursor=pointer]:
+              - /url: /pricing
+              - img "Cost comparison and pricing" [ref=e133]
+              - generic [ref=e134]:
+                - img [ref=e137]
+                - heading "Cost Comparison" [level=4] [ref=e141]
+                - paragraph [ref=e142]: UK vs Portugal building materials & tools
+        - generic [ref=e143]:
+          - heading "Complete Resource Suite" [level=3] [ref=e144]:
+            - img [ref=e146]
+            - text: Complete Resource Suite
+          - generic [ref=e149]:
+            - link "Green technology and water systems Green Calculators Water, wind, growing systems" [ref=e150] [cursor=pointer]:
+              - /url: /green-calculators
+              - img "Green technology and water systems" [ref=e152]
+              - generic [ref=e153]:
+                - img [ref=e156]
+                - heading "Green Calculators" [level=4] [ref=e160]
+                - paragraph [ref=e161]: Water, wind, growing systems
+            - link "Solar energy panels Solar Calculators Complete solar system design" [ref=e162] [cursor=pointer]:
+              - /url: /solar-calculators
+              - img "Solar energy panels" [ref=e164]
+              - generic [ref=e165]:
+                - img [ref=e168]
+                - heading "Solar Calculators" [level=4] [ref=e171]
+                - paragraph [ref=e172]: Complete solar system design
+            - link "Sustainable living guides Sustainable Living Blog Green tech guides & tutorials" [ref=e173] [cursor=pointer]:
+              - /url: /blog
+              - img "Sustainable living guides" [ref=e175]
+              - generic [ref=e176]:
+                - img [ref=e179]
+                - heading "Sustainable Living Blog" [level=4] [ref=e184]
+                - paragraph [ref=e185]: Green tech guides & tutorials
+            - link "Property and resources directory Resource Directory Properties, guides, tools" [ref=e186] [cursor=pointer]:
+              - /url: /directory
+              - img "Property and resources directory" [ref=e188]
+              - generic [ref=e189]:
+                - img [ref=e192]
+                - heading "Resource Directory" [level=4] [ref=e195]
+                - paragraph [ref=e196]: Properties, guides, tools
+        - generic [ref=e197]:
+          - heading "Premium Services" [level=3] [ref=e198]:
+            - img [ref=e200]
+            - text: Premium Services
+          - generic [ref=e204]:
+            - generic [ref=e205]:
+              - img [ref=e208]
+              - heading "1-on-1 Consultations" [level=4] [ref=e213]
+              - paragraph [ref=e214]: Personal off-grid planning sessions
+            - generic [ref=e215]:
+              - img [ref=e218]
+              - heading "Masterclass Courses" [level=4] [ref=e222]
+              - paragraph [ref=e223]: Complete off-grid setup guides
+            - generic [ref=e224]:
+              - img [ref=e227]
+              - heading "AI Assistant Pro" [level=4] [ref=e234]
+              - paragraph [ref=e235]: Advanced personalized guidance
+        - generic [ref=e236]:
+          - heading "Why Choose Our Offgrid Journey?" [level=3] [ref=e237]
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - generic [ref=e240]:
+                - img [ref=e242]
+                - generic [ref=e247]: Expert-curated products & reviews
+              - generic [ref=e248]:
+                - img [ref=e250]
+                - generic [ref=e254]: Best prices through affiliate partnerships
+              - generic [ref=e255]:
+                - img [ref=e257]
+                - generic [ref=e261]: Real Portugal relocation experience
+            - generic [ref=e262]:
+              - generic [ref=e263]:
+                - img [ref=e265]
+                - generic [ref=e268]: Professional calculators & tools
+              - generic [ref=e269]:
+                - img [ref=e271]
+                - generic [ref=e278]: Active community support
+              - generic [ref=e279]:
+                - img [ref=e281]
+                - generic [ref=e286]: Comprehensive guides & resources
+```

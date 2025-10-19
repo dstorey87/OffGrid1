@@ -1,0 +1,199 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Toggle theme" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+        - button "Toggle mobile menu" [ref=e32] [cursor=pointer]:
+          - img [ref=e33]
+  - main [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - img "Power meter and energy monitoring for load analysis" [ref=e39]
+        - generic [ref=e41]:
+          - link "← Back to Solar Calculators" [ref=e42] [cursor=pointer]:
+            - /url: /solar-calculators
+          - heading "Free Load Analysis Calculator - Solar Power Needs" [level=1] [ref=e43]
+          - paragraph [ref=e44]:
+            - strong [ref=e45]: Calculate your exact power consumption
+            - text: for accurate off-grid solar system sizing. The foundation of solar design - analyze appliances, seasonal usage, and get personalized
+            - strong [ref=e46]: solar equipment recommendations
+            - text: with instant shopping baskets.
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]: "Currency:"
+          - combobox "Currency:" [ref=e51]:
+            - option "USD ($)"
+            - option "GBP (£)" [selected]
+            - option "EUR (€)"
+        - generic [ref=e52]:
+          - generic [ref=e53]: "Units:"
+          - combobox "Units:" [ref=e54]:
+            - option "Metric (L, m², kg)" [selected]
+            - option "Imperial (gal, ft², lbs)"
+      - generic [ref=e55]:
+        - heading "Auto-Fill for Your Household" [level=2] [ref=e56]:
+          - img [ref=e58]
+          - text: Auto-Fill for Your Household
+        - paragraph [ref=e66]: Quick start with pre-configured appliances for different household sizes
+        - generic [ref=e67]:
+          - button "Single Person 1 person, minimal appliances 9 appliances" [ref=e68] [cursor=pointer]:
+            - generic [ref=e69]: Single Person
+            - generic [ref=e70]: 1 person, minimal appliances
+            - generic [ref=e71]: 9 appliances
+          - button "Couple (2 People) 2 adults, standard appliances 11 appliances" [ref=e72] [cursor=pointer]:
+            - generic [ref=e73]: Couple (2 People)
+            - generic [ref=e74]: 2 adults, standard appliances
+            - generic [ref=e75]: 11 appliances
+          - button "Small Family (2 Adults + 2 Kids) 2 adults, 2 children, typical family home 15 appliances" [active] [ref=e76] [cursor=pointer]:
+            - generic [ref=e77]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e78]: 2 adults, 2 children, typical family home
+            - generic [ref=e79]: 15 appliances
+          - button "Large Family (2 Adults + 3+ Kids) 2 adults, 3+ children, larger home 17 appliances" [ref=e80] [cursor=pointer]:
+            - generic [ref=e81]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e82]: 2 adults, 3+ children, larger home
+            - generic [ref=e83]: 17 appliances
+          - button "Off-Grid Minimal Essential appliances only, energy-conscious 7 appliances" [ref=e84] [cursor=pointer]:
+            - generic [ref=e85]: Off-Grid Minimal
+            - generic [ref=e86]: Essential appliances only, energy-conscious
+            - generic [ref=e87]: 7 appliances
+          - button "Off-Grid Comfort Balanced off-grid lifestyle with modern conveniences 11 appliances" [ref=e88] [cursor=pointer]:
+            - generic [ref=e89]: Off-Grid Comfort
+            - generic [ref=e90]: Balanced off-grid lifestyle with modern conveniences
+            - generic [ref=e91]: 11 appliances
+      - generic [ref=e93]:
+        - generic [ref=e94]:
+          - heading "Quick Add Common Appliances" [level=2] [ref=e95]
+          - generic [ref=e96]:
+            - button "LED Light Bulb (9W) 9W" [ref=e97] [cursor=pointer]:
+              - generic [ref=e98]: LED Light Bulb (9W)
+              - generic [ref=e99]: 9W
+            - button "LED Light Bulb (15W) 15W" [ref=e100] [cursor=pointer]:
+              - generic [ref=e101]: LED Light Bulb (15W)
+              - generic [ref=e102]: 15W
+            - button "Refrigerator (Energy Star) 150W" [ref=e103] [cursor=pointer]:
+              - generic [ref=e104]: Refrigerator (Energy Star)
+              - generic [ref=e105]: 150W
+            - button "Chest Freezer 100W" [ref=e106] [cursor=pointer]:
+              - generic [ref=e107]: Chest Freezer
+              - generic [ref=e108]: 100W
+            - button "Laptop 65W" [ref=e109] [cursor=pointer]:
+              - generic [ref=e110]: Laptop
+              - generic [ref=e111]: 65W
+            - button "Desktop Computer 200W" [ref=e112] [cursor=pointer]:
+              - generic [ref=e113]: Desktop Computer
+              - generic [ref=e114]: 200W
+            - button "TV (32\" LED) 30W" [ref=e115] [cursor=pointer]:
+              - generic [ref=e116]: TV (32" LED)
+              - generic [ref=e117]: 30W
+            - button "TV (55\" LED) 60W" [ref=e118] [cursor=pointer]:
+              - generic [ref=e119]: TV (55" LED)
+              - generic [ref=e120]: 60W
+        - generic [ref=e121]:
+          - heading "Add Custom Appliance" [level=2] [ref=e122]
+          - generic [ref=e123]:
+            - textbox "Appliance name" [ref=e124]
+            - generic [ref=e125]:
+              - spinbutton [ref=e126]
+              - spinbutton [ref=e127]
+              - combobox [ref=e128]:
+                - option "Lighting" [selected]
+                - option "Appliances"
+                - option "Electronics"
+                - option "Heating"
+                - option "Cooling"
+                - option "Water"
+            - generic [ref=e129]:
+              - checkbox "Critical load (essential during power outage)" [ref=e130]
+              - text: Critical load (essential during power outage)
+            - button "Add Appliance" [ref=e131] [cursor=pointer]
+        - generic [ref=e132]:
+          - heading "Your Appliances" [level=2] [ref=e133]
+          - generic [ref=e134]:
+            - generic [ref=e135]:
+              - generic [ref=e136]:
+                - generic [ref=e137]: LED Light Bulbs (15x9W)
+                - generic [ref=e138]: 135W × 7h = 945Wh/dayCritical
+              - button "Remove" [ref=e139] [cursor=pointer]
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - generic [ref=e142]: Refrigerator (Large)
+                - generic [ref=e143]: 200W × 24h = 4800Wh/dayCritical
+              - button "Remove" [ref=e144] [cursor=pointer]
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic [ref=e147]: Chest Freezer
+                - generic [ref=e148]: 100W × 24h = 2400Wh/dayCritical
+              - button "Remove" [ref=e149] [cursor=pointer]
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - generic [ref=e152]: Laptop (2x)
+                - generic [ref=e153]: 130W × 6h = 780Wh/day
+              - button "Remove" [ref=e154] [cursor=pointer]
+            - generic [ref=e155]:
+              - generic [ref=e156]:
+                - generic [ref=e157]: Desktop Computer
+                - generic [ref=e158]: 200W × 4h = 800Wh/day
+              - button "Remove" [ref=e159] [cursor=pointer]
+            - generic [ref=e160]:
+              - generic [ref=e161]:
+                - generic [ref=e162]: TV (55" LED)
+                - generic [ref=e163]: 60W × 5h = 300Wh/day
+              - button "Remove" [ref=e164] [cursor=pointer]
+            - generic [ref=e165]:
+              - generic [ref=e166]:
+                - generic [ref=e167]: Gaming Console
+                - generic [ref=e168]: 150W × 3h = 450Wh/day
+              - button "Remove" [ref=e169] [cursor=pointer]
+            - generic [ref=e170]:
+              - generic [ref=e171]:
+                - generic [ref=e172]: Microwave
+                - generic [ref=e173]: 1000W × 0.75h = 750Wh/day
+              - button "Remove" [ref=e174] [cursor=pointer]
+            - generic [ref=e175]:
+              - generic [ref=e176]:
+                - generic [ref=e177]: Coffee Maker
+                - generic [ref=e178]: 900W × 1h = 900Wh/day
+              - button "Remove" [ref=e179] [cursor=pointer]
+            - generic [ref=e180]:
+              - generic [ref=e181]:
+                - generic [ref=e182]: Water Pump (Well)
+                - generic [ref=e183]: 800W × 1.5h = 1200Wh/dayCritical
+              - button "Remove" [ref=e184] [cursor=pointer]
+            - generic [ref=e185]:
+              - generic [ref=e186]:
+                - generic [ref=e187]: Washing Machine
+                - generic [ref=e188]: 500W × 1.5h = 750Wh/day
+              - button "Remove" [ref=e189] [cursor=pointer]
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e192]: Dishwasher
+                - generic [ref=e193]: 1800W × 1h = 1800Wh/day
+              - button "Remove" [ref=e194] [cursor=pointer]
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - generic [ref=e197]: Internet Router
+                - generic [ref=e198]: 12W × 24h = 288Wh/dayCritical
+              - button "Remove" [ref=e199] [cursor=pointer]
+            - generic [ref=e200]:
+              - generic [ref=e201]:
+                - generic [ref=e202]: Phone/Tablet Chargers (4x)
+                - generic [ref=e203]: 20W × 4h = 80Wh/day
+              - button "Remove" [ref=e204] [cursor=pointer]
+            - generic [ref=e205]:
+              - generic [ref=e206]:
+                - generic [ref=e207]: Electric Heater (Winter)
+                - generic [ref=e208]: 1500W × 3h = 4500Wh/day
+              - button "Remove" [ref=e209] [cursor=pointer]
+          - button "Calculate Load Requirements" [ref=e210] [cursor=pointer]
+```

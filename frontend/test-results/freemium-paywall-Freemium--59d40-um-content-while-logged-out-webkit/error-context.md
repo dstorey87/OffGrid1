@@ -1,0 +1,44 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e13]
+  - navigation [ref=e14]:
+    - generic [ref=e16]:
+      - link "OffGrid1" [ref=e17]:
+        - /url: /
+        - img [ref=e19]
+        - generic [ref=e25]: OffGrid1
+      - generic [ref=e26]:
+        - button "Solar Calculators" [ref=e28] [cursor=pointer]:
+          - img [ref=e29]
+          - text: Solar Calculators
+          - img [ref=e35]
+        - button "Green Calculators" [ref=e38] [cursor=pointer]:
+          - img [ref=e39]
+          - text: Green Calculators
+          - img [ref=e42]
+        - button "DIY Guides" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: DIY Guides
+          - img [ref=e48]
+        - link "Portugal Guide" [ref=e50]:
+          - /url: /legal
+          - img [ref=e51]
+          - text: Portugal Guide
+        - link "Shop" [ref=e54]:
+          - /url: /solar-shop
+          - img [ref=e55]
+          - text: Shop
+        - link "System Designer" [ref=e59]:
+          - /url: /system-designer
+          - img [ref=e60]
+          - text: System Designer
+        - button "Toggle theme" [ref=e64] [cursor=pointer]:
+          - img [ref=e65]
+  - generic [ref=e73]:
+    - heading "404" [level=1] [ref=e74]
+    - heading "This page could not be found." [level=2] [ref=e76]
+```

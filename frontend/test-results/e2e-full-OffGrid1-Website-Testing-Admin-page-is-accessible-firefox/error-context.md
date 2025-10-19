@@ -1,0 +1,49 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e12]
+  - navigation [ref=e13]:
+    - generic [ref=e15]:
+      - link "OffGrid1" [ref=e16] [cursor=pointer]:
+        - /url: /
+        - img [ref=e18]
+        - generic [ref=e28]: OffGrid1
+      - generic [ref=e29]:
+        - button "Solar Calculators" [ref=e31] [cursor=pointer]:
+          - img [ref=e32]
+          - text: Solar Calculators
+          - img [ref=e42]
+        - button "Green Calculators" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: Green Calculators
+          - img [ref=e49]
+        - button "DIY Guides" [ref=e52] [cursor=pointer]:
+          - img [ref=e53]
+          - text: DIY Guides
+          - img [ref=e55]
+        - link "Portugal Guide" [ref=e57] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e58]
+          - text: Portugal Guide
+        - link "Shop" [ref=e62] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e63]
+          - text: Shop
+        - link "System Designer" [ref=e67] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e68]
+          - text: System Designer
+        - button "Toggle theme" [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+  - main [ref=e84]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - heading "Admin Access" [level=3] [ref=e87]
+        - paragraph [ref=e88]: Enter password to access admin panel
+      - generic [ref=e90]:
+        - textbox "Admin password" [ref=e91]
+        - button "Login" [ref=e92] [cursor=pointer]
+```

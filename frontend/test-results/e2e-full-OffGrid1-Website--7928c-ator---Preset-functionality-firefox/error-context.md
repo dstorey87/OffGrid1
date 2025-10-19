@@ -1,0 +1,142 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e12]
+  - navigation [ref=e13]:
+    - generic [ref=e15]:
+      - link "OffGrid1" [ref=e16] [cursor=pointer]:
+        - /url: /
+        - img [ref=e18]
+        - generic [ref=e28]: OffGrid1
+      - generic [ref=e29]:
+        - button "Solar Calculators" [active] [ref=e31] [cursor=pointer]:
+          - img [ref=e32]
+          - text: Solar Calculators
+          - img [ref=e42]
+        - button "Green Calculators" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: Green Calculators
+          - img [ref=e49]
+        - button "DIY Guides" [ref=e52] [cursor=pointer]:
+          - img [ref=e53]
+          - text: DIY Guides
+          - img [ref=e55]
+        - link "Portugal Guide" [ref=e57] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e58]
+          - text: Portugal Guide
+        - link "Shop" [ref=e62] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e63]
+          - text: Shop
+        - link "System Designer" [ref=e67] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e68]
+          - text: System Designer
+        - button "Toggle theme" [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+  - main [ref=e84]:
+    - generic [ref=e85]:
+      - generic [ref=e86]:
+        - heading "Hydroponics System Calculator" [level=1] [ref=e87]:
+          - text: Hydroponics System
+          - generic [ref=e88]: Calculator
+        - paragraph [ref=e89]:
+          - text: Design complete
+          - strong [ref=e90]: hydroponic growing systems
+          - text: with precise calculations for nutrients, lighting, pumps, and yields. Calculate costs and expected harvests for
+          - emphasis [ref=e91]: soilless growing
+          - text: operations.
+        - generic [ref=e92]:
+          - generic [ref=e93]: 🌱 Soilless Growing
+          - generic [ref=e94]: 💡 LED Lighting
+          - generic [ref=e95]: 📊 Yield Optimization
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - heading "System Configuration" [level=3] [ref=e99]
+          - paragraph [ref=e100]: Design your hydroponic system based on space, crops, and growing requirements
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]: Hydroponic System Type
+            - combobox [ref=e104]:
+              - option "NFT (Nutrient Film Technique)" [selected]
+              - option "DWC (Deep Water Culture)"
+              - option "Ebb & Flow (Flood & Drain)"
+              - option "Drip System"
+              - option "Aeroponics"
+              - option "Kratky Method (Passive)"
+          - generic [ref=e105]:
+            - generic [ref=e106]:
+              - generic [ref=e107]: Growing Area (sq ft)
+              - spinbutton [ref=e108]
+            - generic [ref=e109]:
+              - generic [ref=e110]: Plant Spacing (inches)
+              - spinbutton [ref=e111]
+          - generic [ref=e112]:
+            - generic [ref=e113]: Crop Type
+            - combobox [ref=e114]:
+              - option "Leafy Greens (lettuce, spinach, kale)" [selected]
+              - option "Herbs (basil, cilantro, parsley)"
+              - option "Tomatoes"
+              - option "Peppers"
+              - option "Cucumbers"
+              - option "Strawberries"
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - generic [ref=e117]: Growing Cycles per Year
+              - spinbutton [ref=e118]
+              - paragraph [ref=e119]: "Leafy greens: 6-12 cycles, Tomatoes: 2-3 cycles"
+            - generic [ref=e120]:
+              - generic [ref=e121]: Electricity Rate ($/kWh)
+              - spinbutton [ref=e122]: "0.12"
+          - generic [ref=e123]:
+            - generic [ref=e124]: Growing Location
+            - combobox [ref=e125]:
+              - option "Indoor (requires LED lighting)" [selected]
+              - option "Greenhouse (supplemental lighting)"
+              - option "Outdoor (natural light)"
+          - button "🌱 Calculate Hydroponic System" [ref=e126] [cursor=pointer]
+      - generic [ref=e127]:
+        - heading "🔧 Complete Your Growing System" [level=2] [ref=e128]
+        - paragraph [ref=e129]: Combine hydroponics with renewable energy and water systems for sustainable food production
+        - generic [ref=e130]:
+          - link "Greenhouse Calculator" [ref=e131] [cursor=pointer]:
+            - /url: /green-calculators/greenhouse
+          - link "Water System" [ref=e132] [cursor=pointer]:
+            - /url: /green-calculators/rainwater-harvesting
+          - link "Solar for Grow Lights" [ref=e133] [cursor=pointer]:
+            - /url: /solar-calculators/load-analysis
+      - generic [ref=e134]:
+        - heading "Hydroponic System Design Guide" [level=2] [ref=e135]
+        - paragraph [ref=e136]:
+          - strong [ref=e137]: Hydroponic systems
+          - text: allow you to grow plants without soil using nutrient-rich water solutions. Our calculator helps you design complete systems including nutrient formulations, lighting requirements, and economic projections for maximum yield and profitability.
+        - heading "System Types Explained" [level=3] [ref=e138]
+        - list [ref=e139]:
+          - listitem [ref=e140]:
+            - strong [ref=e141]: "NFT (Nutrient Film Technique):"
+            - text: Continuous thin film of nutrients
+          - listitem [ref=e142]:
+            - strong [ref=e143]: "Deep Water Culture (DWC):"
+            - text: Roots suspended in oxygenated nutrient solution
+          - listitem [ref=e144]:
+            - strong [ref=e145]: "Ebb & Flow:"
+            - text: Periodic flooding and draining of grow beds
+          - listitem [ref=e146]:
+            - strong [ref=e147]: "Drip Systems:"
+            - text: Precise nutrient delivery to each plant
+          - listitem [ref=e148]:
+            - strong [ref=e149]: "Aeroponics:"
+            - text: Nutrients delivered as mist to exposed roots
+        - paragraph [ref=e150]:
+          - text: Hydroponic systems can produce 30-50% higher yields than soil growing while using 90% less water. Combined with our
+          - link "rainwater harvesting" [ref=e151] [cursor=pointer]:
+            - /url: /green-calculators/rainwater-harvesting
+          - text: and
+          - link "solar power systems" [ref=e152] [cursor=pointer]:
+            - /url: /solar-calculators
+          - text: ", you can create a completely sustainable food production operation."
+```
