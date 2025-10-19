@@ -126,9 +126,9 @@ class EmbeddingService:
         emb2_norm = embedding2 / np.linalg.norm(embedding2)
 
         # Cosine similarity = dot product of normalized vectors
-        similarity = np.dot(emb1_norm, emb2_norm)
+        sim_score = np.dot(emb1_norm, emb2_norm)
 
-        return float(similarity)
+        return float(sim_score)
 
     def batch_similarity(
         self, query_embedding: np.ndarray, product_embeddings: np.ndarray
@@ -156,15 +156,14 @@ class EmbeddingService:
 
 
 # Global instance (lazy loaded)
-_embedding_service: EmbeddingService = None
+_embedding_service: EmbeddingService | None = None
 
 
 def get_embedding_service() -> EmbeddingService:
     """Get or create global embedding service instance"""
-    global _embedding_service
-
     if _embedding_service is None:
-        _embedding_service = EmbeddingService()
+        # Initialize on first access
+        return EmbeddingService()
 
     return _embedding_service
 

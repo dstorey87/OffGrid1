@@ -366,7 +366,7 @@ async def health_check():
             },
         }
 
-    except Exception as e:
+    except (RuntimeError, ValueError, ConnectionError) as e:
         logger.error("Health check failed: %s", e)
         return {"status": "unhealthy", "error": str(e)}
 

@@ -311,6 +311,7 @@ if __name__ == "__main__":
 
     print(f"Found {len(results['ids'][0])} products")
     for i, product_id in enumerate(results["ids"][0]):
+        metadata = results['metadatas'][0][i]
         print(
-            f"  {product_id}: {results['metadatas'][0][i]['name']} - €{results['metadatas'][0][i]['price']}"
+            f"  {product_id}: {metadata['name']} - €{metadata['price']}"
         )

@@ -151,9 +151,12 @@ class OllamaClient:
                 f"- {k}: {v}" for k, v in specifications.items()
             )
 
-        system_prompt = """You are an expert in off-grid energy systems, water systems, and sustainable living products.
-Your task is to analyze product information and generate structured metadata to improve product discovery.
-Always respond in valid JSON format."""
+        system_prompt = (
+            "You are an expert in off-grid energy systems, water systems, "
+            "and sustainable living products. Your task is to analyze product "
+            "information and generate structured metadata to improve product "
+            "discovery. Always respond in valid JSON format."
+        )
 
         user_prompt = f"""Analyze this product and extract structured information:
 
@@ -163,7 +166,8 @@ Description: {description or "N/A"}
 
 Generate a JSON response with:
 1. "tags": Array of 5-10 relevant keywords (Portuguese and English)
-2. "category": Single best category (solar-panels, batteries, inverters, water-pumps, water-tanks, tools, etc.)
+2. "category": Single best category (solar-panels, batteries, inverters,
+   water-pumps, water-tanks, tools, etc.)
 3. "summary_pt": 2-sentence Portuguese product summary
 4. "summary_en": 2-sentence English product summary
 5. "use_cases": Array of 3-5 specific use cases
@@ -173,10 +177,15 @@ Example output:
 {{
   "tags": ["solar", "painel solar", "400W", "monocrystalline", "high-efficiency"],
   "category": "solar-panels",
-  "summary_pt": "Painel solar monocristalino de 400W com eficiência de 20.9%. Ideal para sistemas off-grid residenciais.",
-  "summary_en": "400W monocrystalline solar panel with 20.9% efficiency. Ideal for residential off-grid systems.",
-  "use_cases": ["Off-grid home power", "RV solar system", "Remote cabin electricity", "Battery charging"],
-  "compatibility": "Compatible with 24V/48V systems, requires MPPT charge controller"
+  "summary_pt": "Painel solar monocristalino de 400W com eficiência de 20.9%. "
+                "Ideal para sistemas off-grid residenciais.",
+  "summary_en": "400W monocrystalline solar panel with 20.9% efficiency. "
+                "Ideal for residential off-grid systems.",
+  "use_cases": [
+    "Off-grid home power", "RV solar system",
+    "Remote cabin electricity", "Battery charging"
+  ],
+  "compatibility": "Compatible with 24V/48V systems, requires MPPT controller"
 }}"""
 
         try:
@@ -220,9 +229,11 @@ Example output:
                 - keywords: List of important keywords
                 - intent: User's intent (buy, compare, learn)
         """
-        system_prompt = """You are an AI assistant that extracts product requirements from user queries.
-Analyze the query and identify technical requirements, budget, and intent.
-Always respond in valid JSON format."""
+        system_prompt = (
+            "You are an AI assistant that extracts product requirements from user queries. "
+            "Analyze the query and identify technical requirements, budget, and intent. "
+            "Always respond in valid JSON format."
+        )
 
         user_prompt = f"""Extract product requirements from this query:
 
@@ -302,9 +313,11 @@ Output:
 
         products_text = "\n\n".join(product_list)
 
-        system_prompt = """You are an expert product advisor for off-grid and sustainable living products.
-Analyze the user's query and product candidates, then rank products by relevance and value.
-Always respond in valid JSON format."""
+        system_prompt = (
+            "You are an expert product advisor for off-grid and sustainable living products. "
+            "Analyze the user's query and product candidates, then rank products by "
+            "relevance and value. Always respond in valid JSON format."
+        )
 
         user_prompt = f"""Rank these products for the user's query:
 

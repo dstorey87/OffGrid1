@@ -14,7 +14,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 logger = logging.getLogger(__name__)
 
 
-def setup_logging(app: FastAPI) -> None:
+def setup_logging(_app: FastAPI) -> None:
     """Configure structured logging for the application"""
 
     # Configure logging format

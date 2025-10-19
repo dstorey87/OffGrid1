@@ -2,6 +2,7 @@
 Health check tests for the AI service
 Tests basic functionality and error handling
 """
+# pylint: disable=redefined-outer-name  # pytest fixtures are intentionally reused
 
 import pytest
 from fastapi.testclient import TestClient
@@ -95,7 +96,7 @@ def test_error_handling_logs_properly(client: TestClient, caplog: pytest.LogCapt
     # Trigger an error by requesting a non-existent endpoint
     with caplog.at_level("INFO"):
         response = client.get("/this-does-not-exist")
-    
+
     # Verify the endpoint returned 404
     assert response.status_code == 404
     # Note: FastAPI may not log 404s by default, so we just verify the response
