@@ -62,3 +62,10 @@ htmlcov/
 # Testing
 coverage/
 .nyc_output/
+
+# Continuous Testing
+logs/*.json
+logs/*.log
+reports/*.md
+!reports/.gitkeep
+!logs/.gitkeep

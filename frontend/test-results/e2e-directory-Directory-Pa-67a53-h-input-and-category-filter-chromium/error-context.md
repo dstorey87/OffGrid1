@@ -1,0 +1,54 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e11]:
+      - button "Open issues overlay" [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: "0"
+          - generic [ref=e15]: "1"
+        - generic [ref=e16]: Issue
+      - button "Collapse issues badge" [ref=e17]:
+        - img [ref=e18]
+  - alert [ref=e20]
+  - navigation [ref=e21]:
+    - generic [ref=e23]:
+      - link "OffGrid1" [ref=e24] [cursor=pointer]:
+        - /url: /
+        - img [ref=e26]
+        - generic [ref=e32]: OffGrid1
+      - generic [ref=e33]:
+        - button "Solar Calculators" [ref=e35] [cursor=pointer]:
+          - img [ref=e36]
+          - text: Solar Calculators
+          - img [ref=e42]
+        - button "Green Calculators" [ref=e45] [cursor=pointer]:
+          - img [ref=e46]
+          - text: Green Calculators
+          - img [ref=e49]
+        - button "DIY Guides" [ref=e52] [cursor=pointer]:
+          - img [ref=e53]
+          - text: DIY Guides
+          - img [ref=e55]
+        - link "Portugal Guide" [ref=e57] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e58]
+          - text: Portugal Guide
+        - link "Shop" [ref=e61] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e62]
+          - text: Shop
+        - link "System Designer" [ref=e66] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e67]
+          - text: System Designer
+        - button "Toggle theme" [ref=e71] [cursor=pointer]:
+          - img [ref=e72]
+  - generic [ref=e80]:
+    - heading "Error Loading Content" [level=2] [ref=e81]
+    - paragraph [ref=e82]: Failed to fetch
+    - button "Try Again" [ref=e83] [cursor=pointer]
+```

@@ -1,0 +1,374 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Solar Calculators" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Solar Calculators
+          - img [ref=e33]
+        - button "Green Calculators" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - text: Green Calculators
+          - img [ref=e40]
+        - button "DIY Guides" [ref=e43] [cursor=pointer]:
+          - img [ref=e44]
+          - text: DIY Guides
+          - img [ref=e46]
+        - link "Portugal Guide" [ref=e48] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e49]
+          - text: Portugal Guide
+        - link "Shop" [ref=e52] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e53]
+          - text: Shop
+        - link "System Designer" [ref=e57] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e58]
+          - text: System Designer
+        - button "Toggle theme" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+  - main [ref=e70]:
+    - generic [ref=e71]:
+      - generic [ref=e72]:
+        - img "Power meter and energy monitoring for load analysis" [ref=e74]
+        - generic [ref=e76]:
+          - link "← Back to Solar Calculators" [ref=e77] [cursor=pointer]:
+            - /url: /solar-calculators
+          - heading "Free Load Analysis Calculator - Solar Power Needs" [level=1] [ref=e78]
+          - paragraph [ref=e79]:
+            - strong [ref=e80]: Calculate your exact power consumption
+            - text: for accurate off-grid solar system sizing. The foundation of solar design - analyze appliances, seasonal usage, and get personalized
+            - strong [ref=e81]: solar equipment recommendations
+            - text: with instant shopping baskets.
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]: "Currency:"
+          - combobox "Currency:" [ref=e86]:
+            - option "USD ($)"
+            - option "GBP (£)" [selected]
+            - option "EUR (€)"
+        - generic [ref=e87]:
+          - generic [ref=e88]: "Units:"
+          - combobox "Units:" [ref=e89]:
+            - option "Metric (L, m², kg)" [selected]
+            - option "Imperial (gal, ft², lbs)"
+      - generic [ref=e90]:
+        - heading "Auto-Fill for Your Household" [level=2] [ref=e91]:
+          - img [ref=e93]
+          - text: Auto-Fill for Your Household
+        - paragraph [ref=e101]: Quick start with pre-configured appliances for different household sizes
+        - generic [ref=e102]:
+          - button "Single Person 1 person, minimal appliances 9 appliances" [ref=e103] [cursor=pointer]:
+            - generic [ref=e104]: Single Person
+            - generic [ref=e105]: 1 person, minimal appliances
+            - generic [ref=e106]: 9 appliances
+          - button "Couple (2 People) 2 adults, standard appliances 11 appliances" [ref=e107] [cursor=pointer]:
+            - generic [ref=e108]: Couple (2 People)
+            - generic [ref=e109]: 2 adults, standard appliances
+            - generic [ref=e110]: 11 appliances
+          - button "Small Family (2 Adults + 2 Kids) 2 adults, 2 children, typical family home 15 appliances" [ref=e111] [cursor=pointer]:
+            - generic [ref=e112]: Small Family (2 Adults + 2 Kids)
+            - generic [ref=e113]: 2 adults, 2 children, typical family home
+            - generic [ref=e114]: 15 appliances
+          - button "Large Family (2 Adults + 3+ Kids) 2 adults, 3+ children, larger home 17 appliances" [ref=e115] [cursor=pointer]:
+            - generic [ref=e116]: Large Family (2 Adults + 3+ Kids)
+            - generic [ref=e117]: 2 adults, 3+ children, larger home
+            - generic [ref=e118]: 17 appliances
+          - button "Off-Grid Minimal Essential appliances only, energy-conscious 7 appliances" [ref=e119] [cursor=pointer]:
+            - generic [ref=e120]: Off-Grid Minimal
+            - generic [ref=e121]: Essential appliances only, energy-conscious
+            - generic [ref=e122]: 7 appliances
+          - button "Off-Grid Comfort Balanced off-grid lifestyle with modern conveniences 11 appliances" [ref=e123] [cursor=pointer]:
+            - generic [ref=e124]: Off-Grid Comfort
+            - generic [ref=e125]: Balanced off-grid lifestyle with modern conveniences
+            - generic [ref=e126]: 11 appliances
+      - generic [ref=e127]:
+        - generic [ref=e128]:
+          - generic [ref=e129]:
+            - heading "Quick Add Common Appliances" [level=2] [ref=e130]
+            - generic [ref=e131]:
+              - button "LED Light Bulb (9W) 9W" [ref=e132] [cursor=pointer]:
+                - generic [ref=e133]: LED Light Bulb (9W)
+                - generic [ref=e134]: 9W
+              - button "LED Light Bulb (15W) 15W" [ref=e135] [cursor=pointer]:
+                - generic [ref=e136]: LED Light Bulb (15W)
+                - generic [ref=e137]: 15W
+              - button "Refrigerator (Energy Star) 150W" [ref=e138] [cursor=pointer]:
+                - generic [ref=e139]: Refrigerator (Energy Star)
+                - generic [ref=e140]: 150W
+              - button "Chest Freezer 100W" [ref=e141] [cursor=pointer]:
+                - generic [ref=e142]: Chest Freezer
+                - generic [ref=e143]: 100W
+              - button "Laptop 65W" [ref=e144] [cursor=pointer]:
+                - generic [ref=e145]: Laptop
+                - generic [ref=e146]: 65W
+              - button "Desktop Computer 200W" [ref=e147] [cursor=pointer]:
+                - generic [ref=e148]: Desktop Computer
+                - generic [ref=e149]: 200W
+              - button "TV (32\" LED) 30W" [ref=e150] [cursor=pointer]:
+                - generic [ref=e151]: TV (32" LED)
+                - generic [ref=e152]: 30W
+              - button "TV (55\" LED) 60W" [ref=e153] [cursor=pointer]:
+                - generic [ref=e154]: TV (55" LED)
+                - generic [ref=e155]: 60W
+          - generic [ref=e156]:
+            - heading "Add Custom Appliance" [level=2] [ref=e157]
+            - generic [ref=e158]:
+              - textbox "Appliance name" [ref=e159]
+              - generic [ref=e160]:
+                - spinbutton [ref=e161]
+                - spinbutton [ref=e162]
+                - combobox [ref=e163]:
+                  - option "Lighting" [selected]
+                  - option "Appliances"
+                  - option "Electronics"
+                  - option "Heating"
+                  - option "Cooling"
+                  - option "Water"
+              - generic [ref=e164]:
+                - checkbox "Critical load (essential during power outage)" [ref=e165]
+                - text: Critical load (essential during power outage)
+              - button "Add Appliance" [ref=e166] [cursor=pointer]
+          - generic [ref=e167]:
+            - heading "Your Appliances" [level=2] [ref=e168]
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - generic [ref=e171]:
+                  - generic [ref=e172]: LED Light Bulbs (15x9W)
+                  - generic [ref=e173]: 135W × 7h = 945Wh/dayCritical
+                - button "Remove" [ref=e174] [cursor=pointer]
+              - generic [ref=e175]:
+                - generic [ref=e176]:
+                  - generic [ref=e177]: Refrigerator (Large)
+                  - generic [ref=e178]: 200W × 24h = 4800Wh/dayCritical
+                - button "Remove" [ref=e179] [cursor=pointer]
+              - generic [ref=e180]:
+                - generic [ref=e181]:
+                  - generic [ref=e182]: Chest Freezer
+                  - generic [ref=e183]: 100W × 24h = 2400Wh/dayCritical
+                - button "Remove" [ref=e184] [cursor=pointer]
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - generic [ref=e187]: Laptop (2x)
+                  - generic [ref=e188]: 130W × 6h = 780Wh/day
+                - button "Remove" [ref=e189] [cursor=pointer]
+              - generic [ref=e190]:
+                - generic [ref=e191]:
+                  - generic [ref=e192]: Desktop Computer
+                  - generic [ref=e193]: 200W × 4h = 800Wh/day
+                - button "Remove" [ref=e194] [cursor=pointer]
+              - generic [ref=e195]:
+                - generic [ref=e196]:
+                  - generic [ref=e197]: TV (55" LED)
+                  - generic [ref=e198]: 60W × 5h = 300Wh/day
+                - button "Remove" [ref=e199] [cursor=pointer]
+              - generic [ref=e200]:
+                - generic [ref=e201]:
+                  - generic [ref=e202]: Gaming Console
+                  - generic [ref=e203]: 150W × 3h = 450Wh/day
+                - button "Remove" [ref=e204] [cursor=pointer]
+              - generic [ref=e205]:
+                - generic [ref=e206]:
+                  - generic [ref=e207]: Microwave
+                  - generic [ref=e208]: 1000W × 0.75h = 750Wh/day
+                - button "Remove" [ref=e209] [cursor=pointer]
+              - generic [ref=e210]:
+                - generic [ref=e211]:
+                  - generic [ref=e212]: Coffee Maker
+                  - generic [ref=e213]: 900W × 1h = 900Wh/day
+                - button "Remove" [ref=e214] [cursor=pointer]
+              - generic [ref=e215]:
+                - generic [ref=e216]:
+                  - generic [ref=e217]: Water Pump (Well)
+                  - generic [ref=e218]: 800W × 1.5h = 1200Wh/dayCritical
+                - button "Remove" [ref=e219] [cursor=pointer]
+              - generic [ref=e220]:
+                - generic [ref=e221]:
+                  - generic [ref=e222]: Washing Machine
+                  - generic [ref=e223]: 500W × 1.5h = 750Wh/day
+                - button "Remove" [ref=e224] [cursor=pointer]
+              - generic [ref=e225]:
+                - generic [ref=e226]:
+                  - generic [ref=e227]: Dishwasher
+                  - generic [ref=e228]: 1800W × 1h = 1800Wh/day
+                - button "Remove" [ref=e229] [cursor=pointer]
+              - generic [ref=e230]:
+                - generic [ref=e231]:
+                  - generic [ref=e232]: Internet Router
+                  - generic [ref=e233]: 12W × 24h = 288Wh/dayCritical
+                - button "Remove" [ref=e234] [cursor=pointer]
+              - generic [ref=e235]:
+                - generic [ref=e236]:
+                  - generic [ref=e237]: Phone/Tablet Chargers (4x)
+                  - generic [ref=e238]: 20W × 4h = 80Wh/day
+                - button "Remove" [ref=e239] [cursor=pointer]
+              - generic [ref=e240]:
+                - generic [ref=e241]:
+                  - generic [ref=e242]: Electric Heater (Winter)
+                  - generic [ref=e243]: 1500W × 3h = 4500Wh/day
+                - button "Remove" [ref=e244] [cursor=pointer]
+            - button "Calculate Load Requirements" [active] [ref=e245] [cursor=pointer]
+        - generic [ref=e246]:
+          - generic [ref=e247]:
+            - heading "Load Analysis Results" [level=2] [ref=e248]
+            - generic [ref=e249]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: "Daily Energy Usage:"
+                - generic [ref=e252]: 20.74 kWh
+              - generic [ref=e253]:
+                - generic [ref=e254]: "Peak Power Demand:"
+                - generic [ref=e255]: 5255 W
+              - generic [ref=e256]:
+                - generic [ref=e257]: "Critical Loads Only:"
+                - generic [ref=e258]: 9.63 kWh
+              - generic [ref=e259]:
+                - generic [ref=e260]: "Seasonal Peak Usage:"
+                - generic [ref=e261]: 41.49 kWh
+              - generic [ref=e263]:
+                - generic [ref=e264]: "Recommended System Size:"
+                - generic [ref=e265]: 53.93 kWh/day
+          - generic [ref=e266]:
+            - heading "Custom Pricing" [level=3] [ref=e268]
+            - generic [ref=e270]:
+              - checkbox "Use Custom Pricing" [ref=e271]
+              - generic [ref=e272]: Use Custom Pricing
+          - generic [ref=e273]:
+            - heading "🛒 Recommended Shopping Basket" [level=2] [ref=e274]
+            - paragraph [ref=e275]: Curated products based on your load analysis. Multiple affiliate sources available - prices may vary by retailer.
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - generic [ref=e278]:
+                  - generic [ref=e279]:
+                    - generic [ref=e280]: 169x 400W Monocrystalline Solar Panels
+                    - generic [ref=e281]: Solar Panels
+                  - generic [ref=e283]: £26,702.00
+                - generic [ref=e284]:
+                  - generic [ref=e285]: "Buy from:"
+                  - generic [ref=e286]:
+                    - link "Amazon →" [ref=e287] [cursor=pointer]:
+                      - /url: https://amzn.to/solar-panels-400w
+                    - link "eBay →" [ref=e288] [cursor=pointer]:
+                      - /url: https://ebay.us/solar-panel-400w
+                    - link "Signature Solar →" [ref=e289] [cursor=pointer]:
+                      - /url: https://signaturesolar.com/solar-panels
+                    - link "Current Connected →" [ref=e290] [cursor=pointer]:
+                      - /url: https://currentconnected.com/solar-panels
+              - generic [ref=e291]:
+                - generic [ref=e292]:
+                  - generic [ref=e293]:
+                    - generic [ref=e294]: 14x 100Ah LiFePO4 Battery
+                    - generic [ref=e295]: Battery Storage
+                  - generic [ref=e297]: £4,424.00
+                - generic [ref=e298]:
+                  - generic [ref=e299]: "Buy from:"
+                  - generic [ref=e300]:
+                    - link "Amazon →" [ref=e301] [cursor=pointer]:
+                      - /url: https://amzn.to/lifepo4-100ah
+                    - link "eBay →" [ref=e302] [cursor=pointer]:
+                      - /url: https://ebay.us/lifepo4-battery
+                    - link "AliExpress →" [ref=e303] [cursor=pointer]:
+                      - /url: https://s.click.aliexpress.com/lifepo4-100ah
+                    - link "SOK Battery →" [ref=e304] [cursor=pointer]:
+                      - /url: https://sokbattery.com/lifepo4
+              - generic [ref=e305]:
+                - generic [ref=e306]:
+                  - generic [ref=e307]:
+                    - generic [ref=e308]: 7000W Pure Sine Wave Inverter
+                    - generic [ref=e309]: Inverter
+                  - generic [ref=e311]: £4,424.00
+                - generic [ref=e312]:
+                  - generic [ref=e313]: "Buy from:"
+                  - generic [ref=e314]:
+                    - link "Amazon →" [ref=e315] [cursor=pointer]:
+                      - /url: https://amzn.to/pure-sine-inverter
+                    - link "eBay →" [ref=e316] [cursor=pointer]:
+                      - /url: https://ebay.us/inverter-pure-sine
+                    - link "Victron Energy →" [ref=e317] [cursor=pointer]:
+                      - /url: https://www.victronenergy.com/inverters
+                    - link "Aims Power →" [ref=e318] [cursor=pointer]:
+                      - /url: https://aimscorp.net/inverters
+              - generic [ref=e319]:
+                - generic [ref=e320]:
+                  - generic [ref=e321]:
+                    - generic [ref=e322]: 3521A MPPT Charge Controller
+                    - generic [ref=e323]: Charge Controller
+                  - generic [ref=e325]: £22,252.72
+                - generic [ref=e326]:
+                  - generic [ref=e327]: "Buy from:"
+                  - generic [ref=e328]:
+                    - link "Amazon →" [ref=e329] [cursor=pointer]:
+                      - /url: https://amzn.to/mppt-controller
+                    - link "eBay →" [ref=e330] [cursor=pointer]:
+                      - /url: https://ebay.us/mppt-charge-controller
+                    - link "Renogy →" [ref=e331] [cursor=pointer]:
+                      - /url: https://www.renogy.com/charge-controllers
+                    - link "Victron Energy →" [ref=e332] [cursor=pointer]:
+                      - /url: https://www.victronenergy.com/solar-charge-controllers
+              - generic [ref=e333]:
+                - generic [ref=e334]:
+                  - generic [ref=e335]:
+                    - generic [ref=e336]: Battery Monitor with Bluetooth
+                    - generic [ref=e337]: Monitoring
+                  - generic [ref=e339]: £118.50
+                - generic [ref=e340]:
+                  - generic [ref=e341]: "Buy from:"
+                  - generic [ref=e342]:
+                    - link "Amazon →" [ref=e343] [cursor=pointer]:
+                      - /url: https://amzn.to/battery-monitor
+                    - link "eBay →" [ref=e344] [cursor=pointer]:
+                      - /url: https://ebay.us/battery-monitor
+                    - link "Victron Energy →" [ref=e345] [cursor=pointer]:
+                      - /url: https://www.victronenergy.com/battery-monitors
+            - generic [ref=e346]:
+              - generic [ref=e347]:
+                - generic [ref=e348]: "Estimated Total Cost:"
+                - generic [ref=e349]: £57,921.22
+              - paragraph [ref=e350]: "*Prices are estimates. Click affiliate links for current pricing and availability. Prices shown in selected currency."
+          - generic [ref=e351]:
+            - heading "Next Steps" [level=3] [ref=e352]
+            - generic [ref=e353]:
+              - generic [ref=e354]:
+                - generic [ref=e355]: ✓
+                - generic [ref=e356]: Complete your load analysis
+              - generic [ref=e357]:
+                - generic [ref=e358]: →
+                - generic [ref=e359]: Use Panel Sizing Calculator for location-specific solar production
+              - generic [ref=e360]:
+                - generic [ref=e361]: →
+                - generic [ref=e362]: Refine battery requirements with Battery Calculator
+              - generic [ref=e363]:
+                - generic [ref=e364]: →
+                - generic [ref=e365]: Verify electrical components with Wire & Safety Calculator
+              - generic [ref=e366]:
+                - generic [ref=e367]: →
+                - generic [ref=e368]: Create complete system design with System Designer
+            - link "Continue to Panel Sizing Calculator →" [ref=e370] [cursor=pointer]:
+              - /url: /solar-calculators/panel-sizing
+          - generic [ref=e371]:
+            - heading "Data Sources & References" [level=3] [ref=e372]
+            - generic [ref=e373]:
+              - paragraph [ref=e374]:
+                - strong [ref=e375]: "Equipment Specifications:"
+                - text: Based on industry-standard solar components from manufacturers including Renogy, Victron Energy, Battle Born Batteries, and Aims Power.
+              - paragraph [ref=e376]:
+                - strong [ref=e377]: "Pricing Data:"
+                - text: Average retail pricing from Amazon, eBay, specialist solar retailers (Signature Solar, SOK Battery, Current Connected), and manufacturer MSRPs as of 2025.
+              - paragraph [ref=e378]:
+                - strong [ref=e379]: "Calculation Methods:"
+                - text: Load analysis formulas follow NREL (National Renewable Energy Laboratory) guidelines and IEEE standards for off-grid system design.
+              - paragraph [ref=e380]:
+                - strong [ref=e381]: "Efficiency Factors:"
+                - text: System losses (20%), depth of discharge (DOD), and safety margins based on Solar Energy International (SEI) best practices.
+              - paragraph [ref=e382]: "*Prices and specifications are estimates for planning purposes. Always verify current specifications and compatibility with manufacturers before purchase. This calculator is for educational purposes and should not replace professional solar system design consultation."
+```

@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Solar Calculators" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Solar Calculators
+          - img [ref=e33]
+        - button "Green Calculators" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - text: Green Calculators
+          - img [ref=e40]
+        - button "DIY Guides" [ref=e43] [cursor=pointer]:
+          - img [ref=e44]
+          - text: DIY Guides
+          - img [ref=e46]
+        - link "Portugal Guide" [ref=e48] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e49]
+          - text: Portugal Guide
+        - link "Shop" [ref=e52] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e53]
+          - text: Shop
+        - link "System Designer" [ref=e57] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e58]
+          - text: System Designer
+        - button "Toggle theme" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+  - main [ref=e70]:
+    - generic [ref=e74]:
+      - generic [ref=e75]:
+        - img [ref=e77]
+        - generic [ref=e79]:
+          - heading "Our Offgrid Journey Portugal" [level=1] [ref=e80]
+          - paragraph [ref=e81]: Sustainable Living & Renewable Energy Resources
+        - img [ref=e83]
+      - paragraph [ref=e85]:
+        - text: Descubra soluções sustentáveis para viver off-grid em Portugal
+        - text: Discover sustainable solutions for off-grid living in Portugal
+      - generic [ref=e86]:
+        - generic [ref=e87]: 🇵🇹 Portugal Focus
+        - generic [ref=e88]: ☀️ Energia Solar
+        - generic [ref=e89]: 💨 Energia Eólica
+        - generic [ref=e90]: 💧 Água Sustentável
+        - generic [ref=e91]: 🏡 Vida Off-Grid
+    - generic [ref=e93]:
+      - generic [ref=e94]:
+        - img [ref=e95]
+        - textbox "Pesquisar artigos... • Search articles..." [ref=e98]
+      - combobox [ref=e99] [cursor=pointer]:
+        - generic: Todas as Categorias • All Categories
+        - img [ref=e100]
+```

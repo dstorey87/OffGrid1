@@ -1,0 +1,66 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e7] [cursor=pointer]:
+    - img [ref=e8]
+  - alert [ref=e11]
+  - navigation [ref=e12]:
+    - generic [ref=e14]:
+      - link "OffGrid1" [ref=e15] [cursor=pointer]:
+        - /url: /
+        - img [ref=e17]
+        - generic [ref=e23]: OffGrid1
+      - generic [ref=e24]:
+        - button "Solar Calculators" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Solar Calculators
+          - img [ref=e33]
+        - button "Green Calculators" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - text: Green Calculators
+          - img [ref=e40]
+        - button "DIY Guides" [ref=e43] [cursor=pointer]:
+          - img [ref=e44]
+          - text: DIY Guides
+          - img [ref=e46]
+        - link "Portugal Guide" [ref=e48] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e49]
+          - text: Portugal Guide
+        - link "Shop" [ref=e52] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e53]
+          - text: Shop
+        - link "System Designer" [ref=e57] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e58]
+          - text: System Designer
+        - button "Toggle theme" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+  - generic [ref=e71]:
+    - generic [ref=e72]:
+      - heading "Sign In" [level=1] [ref=e73]
+      - paragraph [ref=e74]: Access your premium features and saved designs
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - generic [ref=e78]: Email
+          - textbox "Email" [ref=e79]:
+            - /placeholder: you@example.com
+        - generic [ref=e80]:
+          - generic [ref=e81]: Password
+          - textbox "Password" [ref=e82]:
+            - /placeholder: ••••••••
+        - button "Sign In" [ref=e83] [cursor=pointer]
+      - generic [ref=e84]:
+        - generic [ref=e89]: Or continue with
+        - button "Sign in with Google" [ref=e90] [cursor=pointer]:
+          - generic [ref=e91]:
+            - img [ref=e92]
+            - text: Sign in with Google
+      - paragraph [ref=e97]:
+        - text: Don't have an account?
+        - link "Sign up" [ref=e98] [cursor=pointer]:
+          - /url: /auth/signup
+```

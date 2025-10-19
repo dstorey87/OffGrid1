@@ -1,0 +1,74 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e12]:
+      - button "Open issues overlay" [ref=e13]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: "0"
+          - generic [ref=e16]: "1"
+        - generic [ref=e17]: Issue
+      - button "Collapse issues badge" [ref=e18]:
+        - img [ref=e19]
+  - alert [ref=e21]
+  - navigation [ref=e22]:
+    - generic [ref=e24]:
+      - link "OffGrid1" [ref=e25] [cursor=pointer]:
+        - /url: /
+        - img [ref=e27]
+        - generic [ref=e37]: OffGrid1
+      - generic [ref=e38]:
+        - button "Solar Calculators" [ref=e40] [cursor=pointer]:
+          - img [ref=e41]
+          - text: Solar Calculators
+          - img [ref=e51]
+        - button "Green Calculators" [ref=e54] [cursor=pointer]:
+          - img [ref=e55]
+          - text: Green Calculators
+          - img [ref=e58]
+        - button "DIY Guides" [ref=e61] [cursor=pointer]:
+          - img [ref=e62]
+          - text: DIY Guides
+          - img [ref=e64]
+        - link "Portugal Guide" [ref=e66] [cursor=pointer]:
+          - /url: /legal
+          - img [ref=e67]
+          - text: Portugal Guide
+        - link "Shop" [ref=e71] [cursor=pointer]:
+          - /url: /solar-shop
+          - img [ref=e72]
+          - text: Shop
+        - link "System Designer" [ref=e76] [cursor=pointer]:
+          - /url: /system-designer
+          - img [ref=e77]
+          - text: System Designer
+        - button "Toggle theme" [ref=e81] [cursor=pointer]:
+          - img [ref=e82]
+  - main [ref=e93]:
+    - generic [ref=e97]:
+      - generic [ref=e98]:
+        - img [ref=e100]
+        - generic [ref=e102]:
+          - heading "Our Offgrid Journey Portugal" [level=1] [ref=e103]
+          - paragraph [ref=e104]: Sustainable Living & Renewable Energy Resources
+        - img [ref=e106]
+      - paragraph [ref=e108]:
+        - text: Descubra soluções sustentáveis para viver off-grid em Portugal
+        - text: Discover sustainable solutions for off-grid living in Portugal
+      - generic [ref=e109]:
+        - generic [ref=e110]: 🇵🇹 Portugal Focus
+        - generic [ref=e111]: ☀️ Energia Solar
+        - generic [ref=e112]: 💨 Energia Eólica
+        - generic [ref=e113]: 💧 Água Sustentável
+        - generic [ref=e114]: 🏡 Vida Off-Grid
+    - generic [ref=e116]:
+      - generic [ref=e117]:
+        - img [ref=e118]
+        - textbox "Pesquisar artigos... • Search articles..." [ref=e121]
+      - combobox [ref=e122] [cursor=pointer]:
+        - generic: Todas as Categorias • All Categories
+        - img [ref=e123]
+```

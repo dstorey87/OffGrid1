@@ -1,0 +1,214 @@
+```
+🔁 CONTINUOUS AI TEST LOOP - VISUAL FLOW
+═══════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────┐
+│  START: python ai_runner.py                             │
+└─────────────────┬───────────────────────────────────────┘
+                  │
+                  ▼
+         ┌────────────────┐
+         │   Run Tests    │
+         │  (headless +   │
+         │    headed)     │
+         └────────┬───────┘
+                  │
+         ┌────────▼────────────────────────┐
+         │ Save JSON to logs/              │
+         │ - playwright_headless_*.json    │
+         │ - playwright_headed_*.json      │
+         └────────┬────────────────────────┘
+                  │
+         ┌────────▼────────┐
+         │  Count Results  │
+         │  Pass/Fail/Total│
+         └────────┬────────┘
+                  │
+         ┌────────▼────────────────────┐
+         │  Update reports/            │
+         │  test_runs.md               │
+         │  (add new row to table)     │
+         └────────┬────────────────────┘
+                  │
+                  ▼
+         ┌────────────────┐
+         │  Any failures? │
+         └────┬───────┬───┘
+              │       │
+        YES ──┘       └── NO
+         │                │
+         ▼                │
+    ┌────────────┐        │
+    │ Call Ollama│        │
+    │  (qwen2.5) │        │
+    └─────┬──────┘        │
+          │               │
+          ▼               │
+    ┌───────────────┐     │
+    │ Read README   │     │
+    │ for context   │     │
+    └───────┬───────┘     │
+            │             │
+            ▼             │
+    ┌────────────────┐    │
+    │ Generate AI    │    │
+    │ Analysis:      │    │
+    │ - Root Cause   │    │
+    │ - Fixes        │    │
+    │ - Priority     │    │
+    └───────┬────────┘    │
+            │             │
+            ▼             │
+    ┌────────────────┐    │
+    │ Append to      │    │
+    │ ai_suggestions │    │
+    │      .md       │    │
+    └───────┬────────┘    │
+            │             │
+            └──────┬──────┘
+                   │
+                   ▼
+            ┌──────────────┐
+            │ Sleep 15 min │
+            └──────┬───────┘
+                   │
+                   ▼
+            ┌──────────────┐
+            │   REPEAT     │
+            │   FOREVER    │
+            └──────────────┘
+
+
+📁 FILE STRUCTURE
+═══════════════════════════════════════════════════════════
+
+OffGrid1/
+│
+├── ai_runner.py                 ← Main orchestrator
+├── ai_reviewer.py               ← On-demand analyzer
+│
+├── start_continuous_tests.ps1   ← Quick start
+├── analyze_latest.ps1           ← Analyze recent
+├── status.ps1                   ← Show status
+│
+├── logs/                        ← Auto-generated
+│   ├── playwright_headless_20250119_143015.json
+│   ├── playwright_headed_20250119_143520.json
+│   └── runner_20250119.log
+│
+└── reports/                     ← Auto-generated
+    ├── test_runs.md             ← All test runs (table)
+    └── ai_suggestions.md        ← AI analysis on failures
+
+
+🎯 TYPICAL SESSION
+═══════════════════════════════════════════════════════════
+
+Terminal 1 (Dev Server):
+  cd frontend
+  npm run dev
+  → Runs on http://localhost:3000
+
+Terminal 2 (Test Runner):
+  .\start_continuous_tests.ps1
+  → Checks prerequisites
+  → Starts ai_runner.py
+  → Runs forever until Ctrl+C
+
+Terminal 3 (Monitor):
+  .\status.ps1
+  → Shows current state
+  → Number of runs
+  → Latest results
+  
+  .\analyze_latest.ps1
+  → On-demand AI analysis of most recent test
+
+
+📊 OUTPUT FILES
+═══════════════════════════════════════════════════════════
+
+reports/test_runs.md:
+  ┌────┬──────────────────┬──────────┬──────────┐
+  │Run │ Time             │ Headless │  Headed  │
+  ├────┼──────────────────┼──────────┼──────────┤
+  │ 1  │ 2025-01-19 14:30 │  8/2/10  │ 10/0/10  │
+  │ 2  │ 2025-01-19 14:45 │  9/1/10  │ 10/0/10  │
+  │ 3  │ 2025-01-19 15:00 │ 10/0/10  │ 10/0/10  │ ← All pass!
+  └────┴──────────────────┴──────────┴──────────┘
+
+reports/ai_suggestions.md:
+  ## Analysis at 2025-01-19 14:35:22
+  
+  **Root Cause**: Authentication timeout
+  
+  **Suggested Fixes**:
+  1. Increase timeout in playwright.config.ts
+  2. Add explicit waits for auth state
+  3. Verify NextAuth environment variables
+  
+  **Priority**: High
+
+
+🤖 AI ANALYSIS FLOW
+═══════════════════════════════════════════════════════════
+
+Test Failure Detected
+         │
+         ▼
+Read test JSON + README.md
+         │
+         ▼
+Build prompt with:
+  - Test results
+  - Error messages
+  - Project context
+         │
+         ▼
+Call: ollama run qwen2.5 <prompt>
+         │
+         ▼
+Parse AI response:
+  - Root cause
+  - Suggested fixes
+  - Priority level
+         │
+         ▼
+Append to ai_suggestions.md
+         │
+         ▼
+Done! Continue to next run
+
+
+⚙️  CONFIGURATION OPTIONS
+═══════════════════════════════════════════════════════════
+
+In ai_runner.py:
+
+  SLEEP_MINUTES = 15          ← Time between runs
+  OLLAMA_MODEL = "qwen2.5"    ← AI model
+  TEST_DIR = Path("frontend") ← Test location
+
+In playwright.config.ts:
+
+  timeout: 60000              ← Test timeout (60s)
+  retries: 2                  ← Retry on failure
+  reporters: [..., 'json']    ← JSON output required
+
+
+✅ PREREQUISITES
+═══════════════════════════════════════════════════════════
+
+✅ Python 3.8+ (you have 3.11.8)
+✅ Ollama with qwen2.5 model
+✅ Playwright installed (frontend/node_modules)
+✅ Dev server running (port 3000)
+
+
+🚀 READY TO RUN!
+═══════════════════════════════════════════════════════════
+
+  .\start_continuous_tests.ps1
+
+Then sit back and let AI find your bugs. 🤖✨
+```
