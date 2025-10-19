@@ -1,0 +1,126 @@
+// Prisma Schema for OffGrid1 Freemium Platform
+// Zero-cost self-hosted authentication and user management
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // For email/password authentication
+  
+  // Subscription information
+  subscriptionTier String @default("free") // free, pro, expert
+  subscriptionStatus String @default("inactive") // inactive, active, cancelled, past_due
+  subscriptionId String? // Stripe subscription ID (when we enable payments)
+  currentPeriodEnd DateTime? // Subscription renewal date
+  
+  // Usage tracking
+  calculatorUsageCount Int @default(0)
+  lastCalculatorUse DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  accounts      Account[]
+  sessions      Session[]
+  savedDesigns  SavedDesign[]
+  emailCaptures EmailCapture[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// Saved solar system designs
+model SavedDesign {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name      String   // User-provided name for the design
+  type      String   // "panel-sizing", "battery-sizing", "complete-system", etc.
+  
+  // Design data (JSON)
+  inputs    Json     // User inputs (location, energy needs, etc.)
+  results   Json     // Calculated results (# panels, battery size, costs, etc.)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+}
+
+// Email captures (lead magnets, PDF downloads)
+model EmailCapture {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  email     String
+  source    String   // "calculator-pdf", "checklist-download", "save-design", etc.
+  metadata  Json?    // Additional context (which calculator, etc.)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([email])
+  @@index([source])
+}
+
+// Track calculator usage for freemium limits
+model CalculatorUsage {
+  id           String   @id @default(cuid())
+  sessionId    String   // Anonymous tracking before signup
+  userId       String?  // Linked after signup
+  
+  calculatorType String // "panel-sizing", "battery-sizing", etc.
+  completed    Boolean  @default(false)
+  
+  createdAt    DateTime @default(now())
+  
+  @@index([sessionId])
+  @@index([userId])
+  @@index([createdAt])
+}
