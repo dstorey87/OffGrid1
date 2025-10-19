@@ -3,18 +3,21 @@ Health check endpoints
 """
 
 from datetime import datetime
+from typing import Any
 
 import redis.asyncio as redis
 from fastapi import APIRouter, Depends
 
-from app.core.redis_client import get_redis_client
 from app.core.config import settings
+from app.core.redis_client import get_redis_client
 
 router = APIRouter()
 
 
 @router.get("")
-async def health_check(redis_client: redis.Redis = Depends(get_redis_client)):
+async def health_check(
+    redis_client: redis.Redis = Depends(get_redis_client),
+) -> dict[str, Any]:
     """
     Health check endpoint
     Returns the service status and dependencies including Vault
@@ -33,20 +36,22 @@ async def health_check(redis_client: redis.Redis = Depends(get_redis_client)):
         "vault_enabled": settings.USE_VAULT,
         "dependencies": {"redis": redis_status},
     }
-    
+
     # Check Vault connectivity if enabled
     if settings.USE_VAULT:
         try:
             from app.core.vault import VaultClient
-            
+
             vault_client = VaultClient()
             vault_healthy = vault_client.is_healthy()
-            
-            health_response["dependencies"]["vault"] = "connected" if vault_healthy else "disconnected"
-            
+
+            health_response["dependencies"]["vault"] = (
+                "connected" if vault_healthy else "disconnected"
+            )
+
             if not vault_healthy:
                 health_response["status"] = "degraded"
-                
+
         except Exception as e:
             health_response["status"] = "degraded"
             health_response["dependencies"]["vault"] = f"error: {str(e)}"
@@ -55,7 +60,9 @@ async def health_check(redis_client: redis.Redis = Depends(get_redis_client)):
 
 
 @router.get("/ready")
-async def readiness_check(redis_client: redis.Redis = Depends(get_redis_client)):
+async def readiness_check(
+    redis_client: redis.Redis = Depends(get_redis_client),
+) -> dict[str, str]:
     """
     Readiness check for Kubernetes
     """
@@ -67,7 +74,7 @@ async def readiness_check(redis_client: redis.Redis = Depends(get_redis_client))
 
 
 @router.get("/live")
-async def liveness_check():
+async def liveness_check() -> dict[str, str]:
     """
     Liveness check for Kubernetes
     """

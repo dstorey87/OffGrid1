@@ -3,10 +3,11 @@ ChromaDB Client for Vector Storage and Retrieval
 Stores product embeddings for semantic search
 """
 
-import chromadb
-from typing import List, Dict, Optional, Any
 import logging
 from pathlib import Path
+from typing import Any
+
+import chromadb
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +49,10 @@ class ChromaDBClient:
 
     def add_products(
         self,
-        ids: List[str],
-        embeddings: List[List[float]],
-        metadatas: List[Dict[str, Any]],
-        documents: List[str],
+        ids: list[str],
+        embeddings: list[list[float]],
+        metadatas: list[dict[str, Any]],
+        documents: list[str],
     ) -> None:
         """
         Add products to the collection
@@ -72,11 +73,11 @@ class ChromaDBClient:
 
     def search(
         self,
-        query_embedding: List[float],
+        query_embedding: list[float],
         n_results: int = 10,
-        where: Optional[Dict[str, Any]] = None,
-        where_document: Optional[Dict[str, str]] = None,
-    ) -> Dict[str, Any]:
+        where: dict[str, Any] | None = None,
+        where_document: dict[str, str] | None = None,
+    ) -> dict[str, Any]:
         """
         Search for products by embedding similarity
 
@@ -106,15 +107,15 @@ class ChromaDBClient:
 
     def search_with_filters(
         self,
-        query_embedding: List[float],
-        category: Optional[str] = None,
-        min_price: Optional[float] = None,
-        max_price: Optional[float] = None,
-        in_stock: Optional[bool] = None,
-        ships_portugal: Optional[bool] = None,
-        tags: Optional[List[str]] = None,
+        query_embedding: list[float],
+        category: str | None = None,
+        min_price: float | None = None,
+        max_price: float | None = None,
+        in_stock: bool | None = None,
+        ships_portugal: bool | None = None,
+        tags: list[str] | None = None,
         n_results: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Search with common filters
 
@@ -198,9 +199,9 @@ class ChromaDBClient:
     def update_product(
         self,
         product_id: str,
-        embedding: Optional[List[float]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        document: Optional[str] = None,
+        embedding: list[float] | None = None,
+        metadata: dict[str, Any] | None = None,
+        document: str | None = None,
     ) -> None:
         """
         Update a product in the collection
@@ -218,12 +219,12 @@ class ChromaDBClient:
             documents=[document] if document else None,
         )
 
-    def delete_products(self, ids: List[str]) -> None:
+    def delete_products(self, ids: list[str]) -> None:
         """Delete products from collection"""
         self.collection.delete(ids=ids)
         logger.info(f"Deleted {len(ids)} products")
 
-    def get_product(self, product_id: str) -> Optional[Dict[str, Any]]:
+    def get_product(self, product_id: str) -> dict[str, Any] | None:
         """Get a single product by ID"""
         results = self.collection.get(
             ids=[product_id], include=["metadatas", "documents", "embeddings"]

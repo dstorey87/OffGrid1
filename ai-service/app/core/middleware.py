@@ -4,7 +4,7 @@ Middleware for logging and exception handling
 
 import logging
 import time
-from typing import Callable
+from collections.abc import Callable
 
 from fastapi import FastAPI, Request, Response, status
 from fastapi.exceptions import RequestValidationError

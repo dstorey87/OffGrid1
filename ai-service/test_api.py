@@ -3,7 +3,6 @@ Test AI Product Search API
 """
 
 import requests
-import json
 
 BASE_URL = "http://localhost:8001/api/v1/ai"
 
@@ -131,7 +130,7 @@ def test_enrich():
         print(f"Tags: {', '.join(data['tags'])}")
         print(f"\nSummary (Portuguese): {data['summary_pt']}")
         print(f"Summary (English): {data['summary_en']}")
-        print(f"\nUse Cases:")
+        print("\nUse Cases:")
         for use_case in data["use_cases"]:
             print(f"  - {use_case}")
         print(f"\nCompatibility: {data['compatibility']}")

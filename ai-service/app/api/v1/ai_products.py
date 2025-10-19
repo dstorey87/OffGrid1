@@ -3,13 +3,14 @@ AI Products API Endpoints
 Handles AI-powered product discovery, enrichment, search, and recommendations
 """
 
+import logging
+from typing import Any
+
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
-from typing import List, Optional, Dict, Any
-import logging
 
-from app.core.embeddings import get_embedding_service
 from app.core.chromadb_client import get_chromadb_client
+from app.core.embeddings import get_embedding_service
 from app.core.ollama_client import get_ollama_client
 
 logger = logging.getLogger(__name__)
@@ -24,18 +25,18 @@ class ProductEnrichRequest(BaseModel):
     """Request to enrich a product with AI"""
 
     name: str = Field(..., description="Product name")
-    description: Optional[str] = Field(None, description="Product description")
-    specifications: Optional[Dict[str, Any]] = Field(None, description="Product specifications")
+    description: str | None = Field(None, description="Product description")
+    specifications: dict[str, Any] | None = Field(None, description="Product specifications")
 
 
 class ProductEnrichResponse(BaseModel):
     """Enriched product data"""
 
-    tags: List[str]
+    tags: list[str]
     category: str
     summary_pt: str
     summary_en: str
-    use_cases: List[str]
+    use_cases: list[str]
     compatibility: str
 
 
@@ -43,12 +44,12 @@ class ProductSearchRequest(BaseModel):
     """Request to search products"""
 
     query: str = Field(..., description="Search query (natural language)")
-    category: Optional[str] = Field(None, description="Filter by category")
-    min_price: Optional[float] = Field(None, description="Minimum price (EUR)")
-    max_price: Optional[float] = Field(None, description="Maximum price (EUR)")
-    in_stock: Optional[bool] = Field(None, description="Only in-stock products")
-    ships_portugal: Optional[bool] = Field(None, description="Only ships to Portugal")
-    tags: Optional[List[str]] = Field(None, description="Filter by tags")
+    category: str | None = Field(None, description="Filter by category")
+    min_price: float | None = Field(None, description="Minimum price (EUR)")
+    max_price: float | None = Field(None, description="Maximum price (EUR)")
+    in_stock: bool | None = Field(None, description="Only in-stock products")
+    ships_portugal: bool | None = Field(None, description="Only ships to Portugal")
+    tags: list[str] | None = Field(None, description="Filter by tags")
     n_results: int = Field(10, ge=1, le=50, description="Number of results")
 
 
@@ -61,16 +62,16 @@ class ProductResult(BaseModel):
     currency: str
     category: str
     description: str
-    image_url: Optional[str]
+    image_url: str | None
     affiliate_link: str
     supplier: str
     in_stock: bool
     ships_portugal: bool
-    tags: List[str]
+    tags: list[str]
     similarity_score: float
-    ai_rank: Optional[int] = None
-    ai_relevance: Optional[float] = None
-    ai_reason: Optional[str] = None
+    ai_rank: int | None = None
+    ai_relevance: float | None = None
+    ai_reason: str | None = None
 
 
 class ProductSearchResponse(BaseModel):
@@ -78,20 +79,20 @@ class ProductSearchResponse(BaseModel):
 
     query: str
     total_results: int
-    products: List[ProductResult]
+    products: list[ProductResult]
     search_time_ms: float
-    requirements: Optional[Dict[str, Any]] = None
+    requirements: dict[str, Any] | None = None
 
 
 class RecommendationRequest(BaseModel):
     """Request for product recommendations"""
 
-    calculator_type: Optional[str] = Field(
+    calculator_type: str | None = Field(
         None, description="Calculator type (e.g., 'solar-panel-sizing')"
     )
-    calculator_results: Optional[Dict[str, Any]] = Field(None, description="Calculator output")
-    user_query: Optional[str] = Field(None, description="User's natural language query")
-    budget: Optional[float] = Field(None, description="Maximum budget (EUR)")
+    calculator_results: dict[str, Any] | None = Field(None, description="Calculator output")
+    user_query: str | None = Field(None, description="User's natural language query")
+    budget: float | None = Field(None, description="Maximum budget (EUR)")
     n_results: int = Field(10, ge=1, le=20, description="Number of recommendations")
 
 
@@ -123,7 +124,7 @@ async def enrich_product(request: ProductEnrichRequest):
 
     except Exception as e:
         logger.error(f"Product enrichment failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Enrichment failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Enrichment failed: {str(e)}") from e
 
 
 @router.post("/embed")
@@ -151,7 +152,7 @@ async def generate_embedding(
 
     except Exception as e:
         logger.error(f"Embedding generation failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Embedding failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Embedding failed: {str(e)}") from e
 
 
 @router.post("/search", response_model=ProductSearchResponse)
@@ -261,7 +262,7 @@ async def search_products(request: ProductSearchRequest):
 
     except Exception as e:
         logger.error(f"Product search failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}") from e
 
 
 @router.post("/recommend", response_model=ProductSearchResponse)
@@ -278,10 +279,10 @@ async def recommend_products(request: RecommendationRequest):
     """
     import time
 
-    start_time = time.time()
+    time.time()
 
     try:
-        ollama = get_ollama_client()
+        get_ollama_client()
 
         # Build query from calculator results or user query
         if request.calculator_results:
@@ -326,7 +327,7 @@ async def recommend_products(request: RecommendationRequest):
         raise
     except Exception as e:
         logger.error(f"Product recommendation failed: {e}")
-        raise HTTPException(status_code=500, detail=f"Recommendation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Recommendation failed: {str(e)}") from e
 
 
 @router.get("/health")

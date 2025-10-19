@@ -2,9 +2,7 @@
 Configuration settings for the AI service
 """
 
-import os
 from pydantic_settings import BaseSettings
-from typing import Optional
 
 
 class Settings(BaseSettings):
@@ -16,8 +14,8 @@ class Settings(BaseSettings):
 
     # Vault Configuration
     VAULT_ADDR: str = "http://localhost:8200"
-    AI_SERVICE_ROLE_ID: Optional[str] = None
-    AI_SERVICE_SECRET_ID: Optional[str] = None
+    AI_SERVICE_ROLE_ID: str | None = None
+    AI_SERVICE_SECRET_ID: str | None = None
     USE_VAULT: bool = True
 
     # Redis
@@ -42,7 +40,7 @@ class Settings(BaseSettings):
         env_file = ".env.vault"
         case_sensitive = True
 
-    def load_from_vault(self):
+    def load_secrets(self) -> None:
         """Load secrets from Vault if enabled."""
         if not self.USE_VAULT:
             return
@@ -52,17 +50,12 @@ class Settings(BaseSettings):
 
             vault_client = get_vault_client()
 
-            # AI credentials are placeholders for local AI
-            # But we still verify Vault connectivity
-            ai_creds = vault_client.get_ai_credentials()
-
-            # In future, if you switch to cloud AI, these will be real:
-            # self.OPENAI_API_KEY = ai_creds.get("openai_api_key")
-            # self.ANTHROPIC_API_KEY = ai_creds.get("anthropic_api_key")
+            # Verify Vault connectivity (no cloud AI credentials needed)
+            vault_client.get_ai_credentials()
 
         except Exception as e:
             if self.ENVIRONMENT == "production":
-                raise RuntimeError(f"Failed to load secrets from Vault: {e}")
+                raise RuntimeError(f"Failed to load secrets from Vault: {e}") from e
             else:
                 # In development, warn but continue with fallback values
                 print(f"Warning: Could not connect to Vault: {e}")
@@ -73,5 +66,4 @@ settings = Settings()
 
 # Load secrets from Vault on startup
 if settings.USE_VAULT:
-    settings.load_from_vault()
-
+    settings.load_secrets()

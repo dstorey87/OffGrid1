@@ -1,135 +1,74 @@
 """
-AI Provider Service - handles communication with different AI providers
+AI Provider Service - Local Ollama only (no cloud AI providers)
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from anthropic import AsyncAnthropic
-from openai import AsyncOpenAI
-
-from app.core.config import settings
+from app.core.ollama_client import get_ollama_client
 
 logger = logging.getLogger(__name__)
 
 
 class AIProviderService:
-    """Service for interacting with AI providers"""
+    """Service for interacting with local Ollama AI"""
 
-    def __init__(self):
-        self.openai_client = None
-        self.anthropic_client = None
-
-        if settings.OPENAI_API_KEY:
-            self.openai_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-
-        if settings.ANTHROPIC_API_KEY:
-            self.anthropic_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
+    def __init__(self) -> None:
+        """Initialize service - only local Ollama is supported"""
+        self.ollama_client = get_ollama_client()
 
     async def get_completion(
         self,
-        messages: List[Dict[str, str]],
-        provider: str = "openai",
-        model: Optional[str] = None,
+        messages: list[dict[str, str]],
+        provider: str = "ollama",
+        model: str | None = None,
         temperature: float = 0.7,
         max_tokens: int = 1000,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
-        Get completion from specified AI provider
+        Get completion from local Ollama
 
         Args:
             messages: List of message dicts with 'role' and 'content'
-            provider: AI provider name ('openai' or 'anthropic')
-            model: Model name (provider-specific)
+            provider: Must be 'ollama' (only local AI supported)
+            model: Ollama model name (defaults to qwen2.5:7b)
             temperature: Sampling temperature
             max_tokens: Maximum tokens to generate
 
         Returns:
             Dict with 'message', 'provider', 'model', and 'usage' keys
         """
-        if provider == "openai":
-            return await self._openai_completion(messages, model, temperature, max_tokens)
-        elif provider == "anthropic":
-            return await self._anthropic_completion(messages, model, temperature, max_tokens)
-        else:
-            raise ValueError(f"Unsupported provider: {provider}")
-
-    async def _openai_completion(
-        self,
-        messages: List[Dict[str, str]],
-        model: Optional[str],
-        temperature: float,
-        max_tokens: int,
-    ) -> Dict[str, Any]:
-        """Get completion from OpenAI"""
-        if not self.openai_client:
-            raise ValueError("OpenAI API key not configured")
-
-        model = model or "gpt-4"
-
-        try:
-            response = await self.openai_client.chat.completions.create(
-                model=model,
-                messages=messages,  # type: ignore[arg-type]
-                temperature=temperature,
-                max_tokens=max_tokens,
+        if provider != "ollama":
+            raise ValueError(
+                f"Only 'ollama' provider is supported (local AI only), got: {provider}"
             )
 
-            return {
-                "message": response.choices[0].message.content,
-                "provider": "openai",
-                "model": model,
-                "usage": {
-                    "prompt_tokens": response.usage.prompt_tokens,  # type: ignore[union-attr]
-                    "completion_tokens": response.usage.completion_tokens,  # type: ignore[union-attr]
-                    "total_tokens": response.usage.total_tokens,  # type: ignore[union-attr]
-                },
-            }
-        except Exception as e:
-            logger.error(f"OpenAI API error: {str(e)}")
-            raise
+        model = model or self.ollama_client.model
 
-    async def _anthropic_completion(
-        self,
-        messages: List[Dict[str, str]],
-        model: Optional[str],
-        temperature: float,
-        max_tokens: int,
-    ) -> Dict[str, Any]:
-        """Get completion from Anthropic Claude"""
-        if not self.anthropic_client:
-            raise ValueError("Anthropic API key not configured")
-
-        model = model or "claude-3-sonnet-20240229"
-
-        # Extract system message if present
-        system_message = None
-        chat_messages = []
-
+        # Convert messages to prompt format
+        prompt_parts = []
+        system_prompt = None
         for msg in messages:
             if msg["role"] == "system":
-                system_message = msg["content"]
-            else:
-                chat_messages.append(msg)
+                system_prompt = msg["content"]
+            elif msg["role"] == "user":
+                prompt_parts.append(f"User: {msg['content']}")
+            elif msg["role"] == "assistant":
+                prompt_parts.append(f"Assistant: {msg['content']}")
 
-        try:
-            response = await self.anthropic_client.messages.create(  # type: ignore[attr-defined]
-                model=model,
-                messages=chat_messages,
-                system=system_message,
-                temperature=temperature,
-                max_tokens=max_tokens,
-            )
+        prompt = "\n".join(prompt_parts)
 
-            return {
-                "message": response.content[0].text,
-                "provider": "anthropic",
-                "model": model,
-                "usage": {
-                    "input_tokens": response.usage.input_tokens,
-                    "output_tokens": response.usage.output_tokens,
-                },
-            }
-        except Exception as e:
-            logger.error(f"Anthropic API error: {str(e)}")
-            raise
+        # Use Ollama generate method
+        response = self.ollama_client.generate(
+            prompt=prompt,
+            system=system_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
+
+        return {
+            "message": response.text,
+            "provider": "ollama",
+            "model": model,
+            "usage": {},
+        }

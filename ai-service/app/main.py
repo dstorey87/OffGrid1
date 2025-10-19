@@ -3,10 +3,12 @@ AI Service - Main Application Entry Point
 Serves AI-powered product discovery endpoints
 """
 
+import logging
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import logging
-from pathlib import Path
+
+from app.api.v1.ai_products import router as ai_products_router
 
 # Configure logging
 logging.basicConfig(
@@ -19,14 +21,14 @@ app = FastAPI(
     title="OffGrid AI Product Discovery",
     description="""
     AI-powered product discovery system for off-grid and sustainable living products.
-    
+
     Features:
     - Semantic product search (multilingual)
     - AI product enrichment (tags, categories, summaries)
     - Intelligent recommendations (LLM-powered ranking)
     - Calculator integration (solar, water, battery sizing)
     - Affiliate monetization (Amazon, Awin, ShareASale)
-    
+
     Technology Stack:
     - LLM: Qwen2.5-7B-Instruct (via Ollama)
     - Embeddings: multilingual-e5-large (sentence-transformers)
@@ -66,8 +68,8 @@ async def startup_event():
         # Pre-load AI models
         logger.info("Loading AI models...")
 
-        from app.core.embeddings import get_embedding_service
         from app.core.chromadb_client import get_chromadb_client
+        from app.core.embeddings import get_embedding_service
         from app.core.ollama_client import get_ollama_client
 
         # Initialize embedding service
@@ -107,8 +109,6 @@ async def shutdown_event():
 
 
 # ==================== Include Routers ====================
-
-from app.api.v1.ai_products import router as ai_products_router
 
 app.include_router(ai_products_router, prefix="/api/v1")
 

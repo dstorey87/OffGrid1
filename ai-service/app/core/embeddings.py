@@ -3,12 +3,11 @@ Sentence Transformer Embeddings for Product Search
 Uses multilingual-e5-large for Portuguese + English support
 """
 
-from sentence_transformers import SentenceTransformer
-import torch
-import numpy as np
-from typing import List, Union
-from functools import lru_cache
 import logging
+
+import numpy as np
+import torch
+from sentence_transformers import SentenceTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +36,7 @@ class EmbeddingService:
         logger.info(f"Embedding dimension: {self.embedding_dim}")
 
     def encode(
-        self, texts: Union[str, List[str]], normalize: bool = True, batch_size: int = 32
+        self, texts: str | list[str], normalize: bool = True, batch_size: int = 32
     ) -> np.ndarray:
         """
         Generate embeddings for text(s)
@@ -77,7 +76,7 @@ class EmbeddingService:
         return embeddings
 
     def encode_product(
-        self, name: str, description: str = "", tags: List[str] = None, category: str = ""
+        self, name: str, description: str = "", tags: list[str] = None, category: str = ""
     ) -> np.ndarray:
         """
         Generate embedding for a product
@@ -110,19 +109,6 @@ class EmbeddingService:
         combined_text = " | ".join(text_parts)
 
         return self.encode(combined_text)
-
-    @lru_cache(maxsize=1000)
-    def encode_cached(self, text: str) -> np.ndarray:
-        """
-        Generate embedding with caching for frequent queries
-
-        Args:
-            text: Text to embed
-
-        Returns:
-            Embedding vector
-        """
-        return self.encode(text)
 
     def similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
         """

@@ -7,13 +7,12 @@ import sys
 import time
 from pathlib import Path
 
+from app.core.chromadb_client import ChromaDBClient
+from app.core.embeddings import EmbeddingService
+from app.core.ollama_client import OllamaClient
+
 # Add ai-service to path
 sys.path.insert(0, str(Path(__file__).parent))
-
-from app.core.embeddings import EmbeddingService
-from app.core.chromadb_client import ChromaDBClient
-from app.core.ollama_client import OllamaClient
-import numpy as np
 
 
 def print_test_header(test_name):
@@ -85,7 +84,7 @@ def test_embeddings():
         # Test batch similarity
         similarities = service.batch_similarity(query_emb, embeddings)
         print_success(f"Batch similarity: {similarities.shape}")
-        print(f"   Top matches:")
+        print("   Top matches:")
         for i, score in enumerate(similarities):
             print(f"      {i+1}. {texts[i]}: {score:.3f}")
 
@@ -203,7 +202,7 @@ def test_chromadb():
         print(f"   Query: '{query}'")
         print(f"   Top {len(results['ids'][0])} results:")
 
-        for i, product_id in enumerate(results["ids"][0]):
+        for i, _product_id in enumerate(results["ids"][0]):
             metadata = results["metadatas"][0][i]
             distance = results["distances"][0][i]
             similarity = 1.0 - distance
@@ -221,7 +220,7 @@ def test_chromadb():
         )
 
         print_success(f"Filtered search: {len(filtered_results['ids'][0])} results")
-        print(f"   Filters: category=solar-panels, max_price=€200, in_stock=true")
+        print("   Filters: category=solar-panels, max_price=€200, in_stock=true")
 
         # Test product retrieval
         product = client.get_product("test-solar-1")
@@ -315,7 +314,7 @@ def test_ollama():
         duration = (time.time() - start) * 1000
 
         print_success(f"Ranking completed in {duration:.0f}ms")
-        print(f"   Top 3 recommendations:")
+        print("   Top 3 recommendations:")
         for p in ranked:
             print(
                 f"      {p.get('ai_rank')}. {p['name']} - €{p['price']} ({p.get('ai_relevance', 0):.2f})"
@@ -416,7 +415,7 @@ def test_full_rag_pipeline():
 
         # Performance summary
         total_time = step1_time + step2_time + step3_time + step4_time
-        print(f"\n   PERFORMANCE:")
+        print("\n   PERFORMANCE:")
         print(f"      Step 1 (Requirements): {step1_time:.0f}ms")
         print(f"      Step 2 (Embedding): {step2_time:.0f}ms")
         print(f"      Step 3 (Search): {step3_time:.0f}ms")

@@ -5,9 +5,10 @@ Handles product enrichment, requirement extraction, and ranking
 
 import json
 import logging
-from typing import List, Dict, Any, Optional
-import requests
 from dataclasses import dataclass
+from typing import Any
+
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +71,9 @@ class OllamaClient:
     def generate(
         self,
         prompt: str,
-        system: Optional[str] = None,
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        system: str | None = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
         json_mode: bool = False,
     ) -> OllamaResponse:
         """
@@ -125,8 +126,8 @@ class OllamaClient:
             raise
 
     def enrich_product(
-        self, name: str, description: str = "", specifications: Dict[str, Any] = None
-    ) -> Dict[str, Any]:
+        self, name: str, description: str = "", specifications: dict[str, Any] = None
+    ) -> dict[str, Any]:
         """
         Enrich product data with AI-generated insights
 
@@ -202,7 +203,7 @@ Example output:
                 "compatibility": "Unknown",
             }
 
-    def extract_requirements(self, user_query: str) -> Dict[str, Any]:
+    def extract_requirements(self, user_query: str) -> dict[str, Any]:
         """
         Extract product requirements from natural language query
 
@@ -277,8 +278,8 @@ Output:
             }
 
     def rank_products(
-        self, query: str, products: List[Dict[str, Any]], top_k: int = 10
-    ) -> List[Dict[str, Any]]:
+        self, query: str, products: list[dict[str, Any]], top_k: int = 10
+    ) -> list[dict[str, Any]]:
         """
         Re-rank products by relevance and compatibility
 

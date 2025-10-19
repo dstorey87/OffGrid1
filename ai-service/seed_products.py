@@ -5,11 +5,11 @@ Seed ChromaDB with test solar products for demonstration
 import sys
 from pathlib import Path
 
-# Add app to path
-sys.path.insert(0, str(Path(__file__).parent))
-
 from app.core.chromadb_client import get_chromadb_client
 from app.core.embeddings import get_embedding_service
+
+# Add app to path
+sys.path.insert(0, str(Path(__file__).parent))
 
 
 def seed_products():
@@ -171,8 +171,8 @@ def seed_products():
     query_embedding = embedding_service.encode("400W solar panel").tolist()
     results = chromadb.search_with_filters(query_embedding=query_embedding, n_results=3)
 
-    print(f"\nTop 3 results:")
-    for i, product_id in enumerate(results["ids"][0]):
+    print("\nTop 3 results:")
+    for i, _product_id in enumerate(results["ids"][0]):
         metadata = results["metadatas"][0][i]
         distance = results["distances"][0][i]
         similarity = 1.0 - distance

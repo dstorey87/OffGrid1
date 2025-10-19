@@ -3,7 +3,7 @@ Chat API endpoints
 """
 
 import logging
-from typing import List, Literal, Optional
+from typing import Literal
 
 import redis.asyncio as redis
 from fastapi import APIRouter, Depends, HTTPException
@@ -26,11 +26,11 @@ class Message(BaseModel):
 class ChatRequest(BaseModel):
     """Chat request model"""
 
-    messages: List[Message]
-    provider: Optional[str] = Field(default="openai", description="AI provider (openai, anthropic)")
-    model: Optional[str] = Field(default=None, description="Model name")
-    temperature: Optional[float] = Field(default=0.7, ge=0.0, le=2.0)
-    max_tokens: Optional[int] = Field(default=1000, ge=1, le=4000)
+    messages: list[Message]
+    provider: str | None = Field(default="openai", description="AI provider (openai, anthropic)")
+    model: str | None = Field(default=None, description="Model name")
+    temperature: float | None = Field(default=0.7, ge=0.0, le=2.0)
+    max_tokens: int | None = Field(default=1000, ge=1, le=4000)
     stream: bool = Field(default=False, description="Enable streaming response")
 
 
@@ -44,13 +44,14 @@ class ChatResponse(BaseModel):
 
 
 @router.post("/", response_model=ChatResponse)
-async def chat(request: ChatRequest, redis_client: redis.Redis = Depends(get_redis_client)):
+async def chat(
+    request: ChatRequest, redis_client: redis.Redis = Depends(get_redis_client)
+) -> ChatResponse:
     """
-    Chat endpoint - proxy to AI providers
+    Chat endpoint - Local Ollama only
 
     Supports:
-    - OpenAI (GPT-4, GPT-3.5-turbo)
-    - Anthropic (Claude)
+    - Ollama (qwen2.5:7b, llama3.2, mistral, etc.)
     """
     try:
         ai_service = AIProviderService()
@@ -80,26 +81,21 @@ async def chat(request: ChatRequest, redis_client: redis.Redis = Depends(get_red
 
     except ValueError as e:
         logger.error(f"Invalid request: {str(e)}")
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
     except Exception as e:
         logger.error(f"Chat error: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal server error")
+        raise HTTPException(status_code=500, detail="Internal server error") from e
 
 
 @router.get("/models")
-async def list_models():
+async def list_models() -> dict[str, list[str]]:
     """
-    List available models from all providers
+    List available models - only local Ollama models
     """
     return {
-        "openai": [
-            "gpt-4",
-            "gpt-4-turbo-preview",
-            "gpt-3.5-turbo",
-        ],
-        "anthropic": [
-            "claude-3-opus-20240229",
-            "claude-3-sonnet-20240229",
-            "claude-3-haiku-20240307",
+        "ollama": [
+            "qwen2.5:7b",
+            "llama3.2:latest",
+            "mistral:latest",
         ],
     }
