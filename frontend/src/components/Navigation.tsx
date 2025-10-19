@@ -10,9 +10,11 @@ export const Navigation = memo(function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [solarDropdownOpen, setSolarDropdownOpen] = useState(false);
   const [greenDropdownOpen, setGreenDropdownOpen] = useState(false);
+  const [diyDropdownOpen, setDiyDropdownOpen] = useState(false);
 
   const toggleSolarDropdown = useCallback(() => setSolarDropdownOpen((prev) => !prev), []);
   const toggleGreenDropdown = useCallback(() => setGreenDropdownOpen((prev) => !prev), []);
+  const toggleDiyDropdown = useCallback(() => setDiyDropdownOpen((prev) => !prev), []);
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -144,6 +146,57 @@ export const Navigation = memo(function Navigation() {
               )}
             </div>
 
+            {/* DIY Guides Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setDiyDropdownOpen(true)}
+              onMouseLeave={() => setDiyDropdownOpen(false)}
+            >
+              <button
+                onClick={toggleDiyDropdown}
+                className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                <ToolsIcon size="sm" />
+                DIY Guides
+                <ChevronDown className="h-4 w-4" />
+              </button>
+              {diyDropdownOpen && (
+                <div className="absolute left-0 top-full mt-1 w-64 rounded-lg border bg-popover p-2 shadow-lg">
+                  <Link
+                    href="/diy-guides/battery-building"
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    🔋 DIY Solar Battery Building
+                  </Link>
+                  <Link
+                    href="/diy-guides/solar-installation"
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    ☀️ Solar Panel Installation
+                  </Link>
+                  <Link
+                    href="/diy-guides/inverter-setup"
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    ⚡ Inverter Setup
+                  </Link>
+                  <Link
+                    href="/diy-guides/wiring"
+                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                  >
+                    🔌 Electrical Wiring
+                  </Link>
+                  <div className="my-1 border-t"></div>
+                  <Link
+                    href="/diy-guides"
+                    className="block rounded-md px-3 py-2 text-sm font-medium text-primary hover:bg-accent"
+                  >
+                    View All DIY Guides →
+                  </Link>
+                </div>
+              )}
+            </div>
+
             {/* Portugal Guide */}
             <Link
               href="/legal"
@@ -164,11 +217,11 @@ export const Navigation = memo(function Navigation() {
 
             {/* Services */}
             <Link
-              href="/services"
-              className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
+              href="/system-designer"
+              className="flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              <ToolsIcon size="sm" />
-              Services
+              <TargetIcon size="sm" />
+              System Designer
             </Link>
 
             {/* Theme Toggle */}
@@ -276,8 +329,50 @@ export const Navigation = memo(function Navigation() {
                 </Link>
               </div>
 
+              {/* DIY Guides */}
+              <div className="space-y-1 pt-2">
+                <div className="px-3 py-2 text-sm font-semibold text-muted-foreground">
+                  DIY Guides
+                </div>
+                <Link
+                  href="/diy-guides/battery-building"
+                  className="block rounded-md px-6 py-2 text-sm hover:bg-accent"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🔋 DIY Solar Battery Building
+                </Link>
+                <Link
+                  href="/diy-guides/solar-installation"
+                  className="block rounded-md px-6 py-2 text-sm hover:bg-accent"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  ☀️ Solar Panel Installation
+                </Link>
+                <Link
+                  href="/diy-guides/inverter-setup"
+                  className="block rounded-md px-6 py-2 text-sm hover:bg-accent"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  ⚡ Inverter Setup
+                </Link>
+                <Link
+                  href="/diy-guides/wiring"
+                  className="block rounded-md px-6 py-2 text-sm hover:bg-accent"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🔌 Electrical Wiring
+                </Link>
+              </div>
+
               {/* Other Links */}
               <div className="space-y-1 border-t pt-2">
+                <Link
+                  href="/system-designer"
+                  className="block rounded-md bg-primary px-3 py-2 text-sm font-bold text-primary-foreground hover:bg-primary/90"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  🎯 System Designer
+                </Link>
                 <Link
                   href="/legal"
                   className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
@@ -291,13 +386,6 @@ export const Navigation = memo(function Navigation() {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   Shop
-                </Link>
-                <Link
-                  href="/services"
-                  className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Services
                 </Link>
                 <Link
                   href="/pricing"
