@@ -8,10 +8,14 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
-client = TestClient(app)
+
+@pytest.fixture
+def client():
+    """Create a test client fixture"""
+    return TestClient(app)
 
 
-def test_health_endpoint_returns_healthy() -> None:
+def test_health_endpoint_returns_healthy(client: TestClient) -> None:
     """Test that the health endpoint returns a healthy status"""
     response = client.get("/health")
 
@@ -22,7 +26,7 @@ def test_health_endpoint_returns_healthy() -> None:
     assert "version" in data
 
 
-def test_liveness_endpoint() -> None:
+def test_liveness_endpoint(client: TestClient) -> None:
     """Test the liveness probe endpoint"""
     response = client.get("/health/live")
 
@@ -31,7 +35,7 @@ def test_liveness_endpoint() -> None:
     assert data["status"] == "alive"
 
 
-def test_readiness_endpoint() -> None:
+def test_readiness_endpoint(client: TestClient) -> None:
     """Test the readiness probe endpoint"""
     response = client.get("/health/ready")
 
@@ -40,14 +44,14 @@ def test_readiness_endpoint() -> None:
     assert data["status"] in ["ready", "not_ready"]
 
 
-def test_not_found_endpoint() -> None:
+def test_not_found_endpoint(client: TestClient) -> None:
     """Test that non-existent endpoints return 404"""
     response = client.get("/this-does-not-exist")
 
     assert response.status_code == 404
 
 
-def test_validation_error() -> None:
+def test_validation_error(client: TestClient) -> None:
     """Test that invalid requests return proper validation errors"""
     response = client.post(
         "/api/v1/chat/",
@@ -62,7 +66,7 @@ def test_validation_error() -> None:
     assert "detail" in data
 
 
-def test_missing_required_fields() -> None:
+def test_missing_required_fields(client: TestClient) -> None:
     """Test that requests with missing required fields fail validation"""
     response = client.post(
         "/api/v1/chat/",
@@ -75,7 +79,7 @@ def test_missing_required_fields() -> None:
     assert response.status_code == 422
 
 
-def test_cors_headers() -> None:
+def test_cors_headers(client: TestClient) -> None:
     """Test that CORS headers are present"""
     response = client.options(
         "/health",
@@ -86,7 +90,7 @@ def test_cors_headers() -> None:
     assert "access-control-allow-origin" in response.headers
 
 
-def test_error_handling_logs_properly(caplog: pytest.LogCaptureFixture) -> None:
+def test_error_handling_logs_properly(client: TestClient, caplog: pytest.LogCaptureFixture) -> None:
     """Test that errors are logged correctly"""
     # Trigger an error by requesting a non-existent endpoint
     with caplog.at_level("WARNING"):
@@ -105,7 +109,7 @@ async def test_unhandled_exception_returns_500() -> None:
     assert hasattr(app, "exception_handlers")
 
 
-def test_rate_limiting_headers() -> None:
+def test_rate_limiting_headers(client: TestClient) -> None:
     """Test that rate limiting information is available"""
     response = client.get("/health")
 
@@ -114,7 +118,7 @@ def test_rate_limiting_headers() -> None:
     assert response.status_code == 200
 
 
-def test_request_id_in_logs(caplog: pytest.LogCaptureFixture) -> None:
+def test_request_id_in_logs(client: TestClient, caplog: pytest.LogCaptureFixture) -> None:
     """Test that requests are logged with identifiable information"""
     with caplog.at_level("INFO"):
         client.get("/health")
@@ -124,7 +128,7 @@ def test_request_id_in_logs(caplog: pytest.LogCaptureFixture) -> None:
     assert any("health" in record.message.lower() for record in caplog.records)
 
 
-def test_timeout_handling() -> None:
+def test_timeout_handling(client: TestClient) -> None:
     """Test that timeout settings are configured"""
     # This is a smoke test to ensure the app starts
     # Actual timeout testing would require mock slow endpoints
@@ -132,7 +136,7 @@ def test_timeout_handling() -> None:
     assert response.status_code == 200
 
 
-def test_json_response_format() -> None:
+def test_json_response_format(client: TestClient) -> None:
     """Test that all responses are in JSON format"""
     response = client.get("/health")
 

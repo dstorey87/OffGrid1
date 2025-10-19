@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.ai_products import router as ai_products_router
+from app.api.v1.health import router as health_router
 
 # Configure logging
 logging.basicConfig(
@@ -110,6 +111,7 @@ async def shutdown_event():
 
 # ==================== Include Routers ====================
 
+app.include_router(health_router, prefix="/health", tags=["health"])
 app.include_router(ai_products_router, prefix="/api/v1")
 
 
@@ -138,12 +140,6 @@ async def root():
             "orchestration": "LangChain",
         },
     }
-
-
-@app.get("/health")
-async def health_check():
-    """Simple health check"""
-    return {"status": "healthy", "service": "ai-product-discovery"}
 
 
 # ==================== Example Usage ====================
